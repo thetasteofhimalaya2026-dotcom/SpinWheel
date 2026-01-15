@@ -4,26 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TeamSpin Pro | Random Name Picker & Decision Wheel</title>
-    <meta name="description" content="Free, fair, and fast random name picker wheel. Multi-language support for English, Hindi, and Nepali. Perfect for giveaways, teachers, and groups.">
-    <meta name="keywords" content="random name picker, wheel spinner, team generator, online wheel, भाग्यशाली चक्का, नाम चयनकर्ता">
+    <meta name="description" content="Free, fair, and fast random name picker wheel. Support for English, Hindi, and Nepali. Perfect for teachers, gamers, and giveaways.">
+    <meta name="keywords" content="random name picker, wheel spinner, team generator, भाग्यशाली चक्का, नाम चयनकर्ता">
     
     <link rel="alternate" hreflang="en" href="https://yourdomain.com/" />
     <link rel="alternate" hreflang="hi" href="https://yourdomain.com/?lang=hi" />
     <link rel="alternate" hreflang="ne" href="https://yourdomain.com/?lang=ne" />
     <link rel="canonical" href="https://yourdomain.com/" />
-
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "WebApplication",
-      "name": "TeamSpin Pro",
-      "url": "https://yourdomain.com",
-      "description": "The ultimate multi-language random wheel spinner for fair decisions.",
-      "applicationCategory": "UtilitiesApplication",
-      "operatingSystem": "All",
-      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
-    }
-    </script>
 
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-Y42GR0TCBM"></script>
     <script>
@@ -37,100 +24,139 @@
     
     <style>
         :root {
-            --bg: #f8fafc; --card: #ffffff; --text: #1e293b; --primary: #6366f1; --accent: #ef4444;
+            --bg: #f8fafc; --card: #ffffff; --text: #1e293b; --primary: #6366f1; --accent: #ef4444; --gold: #f59e0b;
         }
         [data-theme="dark"] {
             --bg: #0f172a; --card: #1e293b; --text: #f8fafc; --primary: #818cf8;
         }
-        body { margin: 0; font-family: 'Inter', sans-serif; background-color: var(--bg); color: var(--text); transition: 0.3s; }
-        
-        nav { background: var(--card); padding: 10px 40px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 100; }
-        .nav-brand { font-size: 22px; font-weight: 900; color: var(--primary); text-decoration: none; cursor: pointer; }
-        
-        .lang-switcher select { padding: 5px; border-radius: 5px; border: 1px solid #cbd5e1; background: var(--card); color: var(--text); }
+        body { margin: 0; font-family: 'Inter', sans-serif; background-color: var(--bg); color: var(--text); transition: 0.3s; overflow-x: hidden; }
 
-        .container { max-width: 1400px; margin: 20px auto; padding: 0 20px; }
-        .main-grid { display: grid; grid-template-columns: 1fr 350px; gap: 30px; }
+        /* Navigation */
+        nav { background: var(--card); padding: 15px 50px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 100; }
+        .nav-brand { font-size: 24px; font-weight: 900; color: var(--primary); cursor: pointer; text-decoration: none; }
+        .nav-links { display: flex; align-items: center; gap: 20px; }
+        .nav-links a { color: var(--text); text-decoration: none; font-weight: 500; cursor: pointer; }
 
-        .wheel-section { background: var(--card); padding: 30px; border-radius: 20px; text-align: center; position: relative; }
-        .wheel-wrapper { position: relative; width: 500px; height: 500px; margin: 0 auto; cursor: pointer; }
+        .container { max-width: 1600px; margin: 0 auto; padding: 20px; }
+        .page { display: none; }
+        .page.active { display: block; animation: fadeIn 0.4s ease; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        /* Layout Grid */
+        .main-grid { display: grid; grid-template-columns: 1fr 380px; gap: 30px; }
+
+        /* WHEEL AREA */
+        .wheel-section { background: var(--card); padding: 40px; border-radius: 24px; display: flex; flex-direction: column; align-items: center; box-shadow: 0 4px 20px rgba(0,0,0,0.05); position: relative; }
+        .wheel-wrapper { position: relative; width: 600px; height: 600px; cursor: pointer; }
         canvas { width: 100%; height: 100%; }
-        .pointer { 
-            position: absolute; top: -15px; left: 50%; transform: translateX(-50%); 
-            width: 0; height: 0; border-left: 20px solid transparent; border-right: 20px solid transparent; 
-            border-top: 40px solid var(--accent); z-index: 10; filter: drop-shadow(0 4px 4px rgba(0,0,0,0.2));
-        }
-
-        .sidebar-card { background: var(--card); padding: 20px; border-radius: 20px; margin-bottom: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
-        textarea { width: 100%; height: 200px; padding: 15px; border-radius: 10px; border: 2px solid #e2e8f0; box-sizing: border-box; resize: none; font-size: 16px; background: var(--bg); color: var(--text); }
         
-        .btn { padding: 12px 20px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.2s; }
-        .btn-primary { background: var(--primary); color: white; width: 100%; margin-top: 10px; font-size: 1.1rem; }
-        .btn-secondary { background: #e2e8f0; color: #475569; font-size: 0.9rem; margin: 5px; }
-
-        .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.85); display: none; justify-content: center; align-items: center; z-index: 2000; }
-        .modal-content { background: var(--card); padding: 40px; border-radius: 20px; text-align: center; max-width: 400px; width: 90%; }
-
-        @media (max-width: 900px) { 
-            .main-grid { grid-template-columns: 1fr; }
-            .wheel-wrapper { width: 320px; height: 320px; }
+        .pointer { 
+            position: absolute; top: -25px; left: 50%; transform: translateX(-50%); 
+            width: 0; height: 0; border-left: 35px solid transparent; border-right: 35px solid transparent; 
+            border-top: 70px solid var(--accent); z-index: 40; 
+            filter: drop-shadow(0px 10px 5px rgba(0,0,0,0.2));
         }
+
+        .center-spin-btn { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 100px; height: 100px; background: white; border-radius: 50%; z-index: 25; display: flex; justify-content: center; align-items: center; font-weight: 900; color: var(--primary); border: 8px solid var(--primary); font-size: 20px; }
+
+        /* SIDEBAR & CONTROLS */
+        .sidebar-card { background: var(--card); padding: 20px; border-radius: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 20px; }
+        .flex-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+        
+        textarea { width: 100%; height: 250px; padding: 15px; border-radius: 10px; border: 2px solid #e2e8f0; font-size: 16px; box-sizing: border-box; background: var(--bg); color: var(--text); outline: none; transition: 0.2s; resize: none; }
+        
+        .btn-spin { width: 100%; padding: 18px; background: var(--primary); color: white; border: none; border-radius: 12px; font-weight: bold; cursor: pointer; font-size: 1.2rem; margin-top: 10px; }
+        .btn-small { padding: 5px 12px; border-radius: 6px; border: 1px solid var(--primary); background: transparent; color: var(--primary); cursor: pointer; font-size: 12px; font-weight: bold; }
+
+        /* MODAL */
+        .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.9); display: none; justify-content: center; align-items: center; z-index: 1000; }
+        .modal-content { background: var(--card); padding: 50px; border-radius: 30px; text-align: center; max-width: 500px; width: 90%; }
+
+        @media (max-width: 1100px) { .main-grid { grid-template-columns: 1fr; } .wheel-wrapper { width: 80vw; height: 80vw; } }
     </style>
 </head>
 <body>
 
 <nav>
-    <a class="nav-brand" onclick="location.reload()">🎡 TeamSpin Pro</a>
-    <div style="display: flex; align-items: center; gap: 15px;">
-        <div class="lang-switcher">
-            <select id="langSelect" onchange="changeLanguage(this.value)">
-                <option value="en">English</option>
-                <option value="hi">हिन्दी (Hindi)</option>
-                <option value="ne">नेपाली (Nepali)</option>
-            </select>
-        </div>
-        <button onclick="toggleTheme()" style="background:none; border:none; cursor:pointer; font-size:1.5rem;">🌓</button>
+    <a class="nav-brand" onclick="showPage('home')">🎡 TeamSpin Pro</a>
+    <div class="nav-links">
+        <select id="langSelect" onchange="changeLanguage(this.value)" style="padding: 5px; border-radius: 5px;">
+            <option value="en">English</option>
+            <option value="hi">हिन्दी</option>
+            <option value="ne">नेपाली</option>
+        </select>
+        <a onclick="showPage('home')">Wheel</a>
+        <a onclick="showPage('customize')">Customize</a>
+        <a onclick="showPage('about')">About</a>
+        <a onclick="showPage('feedback')">Feedback</a>
+        <button onclick="toggleTheme()" style="background:none; border:none; cursor:pointer; font-size:1.4rem;">🌓</button>
     </div>
 </nav>
 
 <div class="container">
-    <div class="main-grid">
-        <div class="wheel-section">
-            <h1 id="main-title">Random Name Picker Wheel</h1>
-            <div class="wheel-wrapper" onclick="startSpin()">
-                <div class="pointer"></div>
-                <canvas id="wheelCanvas" width="1000" height="1000"></canvas>
+    <div id="home" class="page active">
+        <div class="main-grid">
+            <div class="wheel-section">
+                <div class="wheel-wrapper" onclick="startSpin()">
+                    <div class="pointer"></div>
+                    <div class="center-spin-btn" id="centerLabel">SPIN</div>
+                    <canvas id="wheelCanvas" width="1200" height="1200"></canvas>
+                </div>
             </div>
-            <div style="margin-top:20px">
-                <button class="btn btn-secondary" onclick="shuffleNames()" id="btn-shuffle">🔀 Shuffle</button>
-                <button class="btn btn-secondary" onclick="toggleFullscreen()">📺 Fullscreen</button>
-            </div>
-        </div>
 
-        <div class="sidebar">
-            <div class="sidebar-card">
-                <h3 id="label-participants">Participants</h3>
-                <textarea id="nameInput" oninput="draw()"></textarea>
-                <button class="btn btn-primary" onclick="startSpin()" id="btn-spin">SPIN NOW</button>
-            </div>
-            <div class="sidebar-card">
-                <h4 id="label-history">History</h4>
-                <ul id="history" style="text-align: left; padding-left: 20px;"></ul>
+            <div class="sidebar">
+                <div class="sidebar-card">
+                    <div class="flex-header">
+                        <h3 id="label-participants" style="margin:0">Participants</h3>
+                        <button class="btn-small" onclick="shuffleNames()" id="btn-shuffle">🔀 Shuffle</button>
+                    </div>
+                    <textarea id="nameInput" placeholder="Enter names..." oninput="draw()"></textarea>
+                    <button class="btn-spin" onclick="startSpin()" id="btn-spin">SPIN NOW</button>
+                </div>
+
+                <div class="sidebar-card">
+                    <h4 id="label-history">History</h4>
+                    <ul id="history"></ul>
+                </div>
             </div>
         </div>
     </div>
 
-    <div class="sidebar-card" style="margin-top: 30px; line-height: 1.8;">
-        <h2 id="seo-h2">Why use our Picker Wheel?</h2>
-        <p id="seo-p">TeamSpin Pro is a professional-grade randomizer. We use high-entropy physics simulation to ensure every spin is fair. Perfect for Hindi, Nepali, and English speaking communities for YouTube giveaways and classroom name picking.</p>
+    <div id="customize" class="page">
+        <div class="sidebar-card">
+            <h1>Customize Wheel</h1>
+            <label>Theme Palette:</label>
+            <select id="palette" onchange="draw()" style="padding: 10px; width: 100%; margin-top: 10px;">
+                <option value="classic">Classic Pro</option>
+                <option value="neon">Neon Night</option>
+                <option value="pastel">Soft Pastel</option>
+            </select>
+            <button class="btn-spin" onclick="showPage('home')">Apply & Go Back</button>
+        </div>
+    </div>
+
+    <div id="about" class="page">
+        <div class="sidebar-card">
+            <h1 id="about-title">About TeamSpin Pro</h1>
+            <p id="about-text">TeamSpin Pro is a fast, fair, and fun tool for picking names and making decisions. We support English, Hindi, and Nepali communities.</p>
+        </div>
+    </div>
+
+    <div id="feedback" class="page">
+        <div class="sidebar-card">
+            <h1>Feedback</h1>
+            <p>Tell us how we can improve TeamSpin Pro!</p>
+            <textarea placeholder="Type your message here..."></textarea>
+            <button class="btn-spin" onclick="alert('Thank you for your feedback!')">Send Feedback</button>
+        </div>
     </div>
 </div>
 
 <div class="modal" id="winnerModal">
     <div class="modal-content">
-        <h2 id="modal-congrats">Congratulations!</h2>
-        <div id="winnerName" style="font-size: 3rem; font-weight: 900; color: var(--primary); margin: 20px 0;"></div>
-        <button class="btn btn-primary" onclick="closeModal()">OK</button>
+        <h2 id="modal-congrats">WINNER</h2>
+        <div id="winnerName" style="font-size: 3.5rem; font-weight: 900; color: var(--primary); margin: 20px 0;"></div>
+        <button class="btn-spin" onclick="closeModal()">OK</button>
     </div>
 </div>
 
@@ -138,15 +164,20 @@
 
 <script>
     const translations = {
-        en: { title: "Random Name Picker Wheel", participants: "Participants", spin: "SPIN NOW", history: "History", congrats: "Winner!", shuffle: "Shuffle", h2: "Why use our Picker Wheel?", p: "Professional fair randomizer for decisions." },
-        hi: { title: "नाम चुनने वाला चक्का", participants: "प्रतिभागी", spin: "घुमाएं", history: "इतिहास", congrats: "विजेता!", shuffle: "रैंडम करें", h2: "हमारे पिकर व्हील का उपयोग क्यों करें?", p: "निर्णय लेने के लिए पेशेवर और निष्पक्ष चक्का।" },
-        ne: { title: "नाम छान्ने चक्का", participants: "सहभागीहरू", spin: "घुमाउनुहोस्", history: "इतिहास", congrats: "विजेता!", shuffle: "मिसाउनुहोस्", h2: "किन हाम्रो चक्का प्रयोग गर्ने?", p: "निर्णयहरूका लागि व्यावसायिक र निष्पक्ष चक्का।" }
+        en: { participants: "Participants", spin: "SPIN NOW", history: "History", congrats: "Winner!", shuffle: "Shuffle", center: "SPIN" },
+        hi: { participants: "प्रतिभागी", spin: "घुमाएं", history: "इतिहास", congrats: "विजेता!", shuffle: "रैंडम", center: "चलाएं" },
+        ne: { participants: "सहभागीहरू", spin: "घुमाउनुहोस्", history: "इतिहास", congrats: "विजेता!", shuffle: "मिसाउनुहोस्", center: "घुमाउनुहोस्" }
     };
 
     const canvas = document.getElementById('wheelCanvas');
     const ctx = canvas.getContext('2d');
     const nameInput = document.getElementById('nameInput');
-    const palette = ['#6366f1', '#a855f7', '#ec4899', '#f43f5e', '#f59e0b', '#10b981', '#06b6d4'];
+    const palettes = {
+        classic: ['#6366f1', '#a855f7', '#ec4899', '#f43f5e', '#f59e0b', '#10b981'],
+        neon: ['#ff00ff', '#00ffff', '#ffff00', '#00ff00', '#ff0000'],
+        pastel: ['#ffb3ba', '#bae1ff', '#baffc9', '#ffffba', '#ffdfba']
+    };
+    
     let currentRotation = 0;
     let isSpinning = false;
 
@@ -156,15 +187,12 @@
     };
 
     function changeLanguage(lang) {
-        document.documentElement.lang = lang;
-        document.getElementById('main-title').innerText = translations[lang].title;
         document.getElementById('label-participants').innerText = translations[lang].participants;
         document.getElementById('btn-spin').innerText = translations[lang].spin;
         document.getElementById('label-history').innerText = translations[lang].history;
         document.getElementById('modal-congrats').innerText = translations[lang].congrats;
         document.getElementById('btn-shuffle').innerText = translations[lang].shuffle;
-        document.getElementById('seo-h2').innerText = translations[lang].h2;
-        document.getElementById('seo-p').innerText = translations[lang].p;
+        document.getElementById('centerLabel').innerText = translations[lang].center;
         draw();
     }
 
@@ -172,20 +200,22 @@
         const names = nameInput.value.split('\n').filter(n => n.trim() !== '');
         const size = canvas.width;
         const center = size / 2;
-        const radius = center - 20;
+        const radius = center - 30;
         ctx.clearRect(0, 0, size, size);
         if (names.length === 0) return;
 
         const arcSize = (2 * Math.PI) / names.length;
+        const currentPalette = palettes[document.getElementById('palette').value];
+
         names.forEach((name, i) => {
             const angle = currentRotation + (i * arcSize);
             ctx.beginPath();
-            ctx.fillStyle = palette[i % palette.length];
+            ctx.fillStyle = currentPalette[i % currentPalette.length];
             ctx.moveTo(center, center);
             ctx.arc(center, center, radius, angle, angle + arcSize);
             ctx.fill();
             ctx.strokeStyle = "white";
-            ctx.lineWidth = 2;
+            ctx.lineWidth = 4;
             ctx.stroke();
 
             ctx.save();
@@ -193,8 +223,8 @@
             ctx.rotate(angle + arcSize / 2);
             ctx.textAlign = "right";
             ctx.fillStyle = "white";
-            ctx.font = "bold 35px Inter";
-            ctx.fillText(name.substring(0, 15), radius - 40, 10);
+            ctx.font = "bold 40px Inter";
+            ctx.fillText(name.substring(0, 15), radius - 60, 15);
             ctx.restore();
         });
     }
@@ -202,18 +232,16 @@
     function startSpin() {
         if (isSpinning || nameInput.value.trim() === "") return;
         isSpinning = true;
-        const spinSound = document.getElementById('spinSound');
-        spinSound.play().catch(() => {});
-
-        const totalRot = (Math.random() * 10 + 20) * 2 * Math.PI;
+        document.getElementById('spinSound').play().catch(()=>{});
+        const totalRot = (Math.random() * 8 + 15) * 2 * Math.PI;
         const start = performance.now();
-        const duration = 4000;
+        const duration = 5000;
         const initialRot = currentRotation;
 
         function animate(now) {
             const elapsed = now - start;
             const progress = Math.min(elapsed / duration, 1);
-            const easeOut = 1 - Math.pow(1 - progress, 4);
+            const easeOut = 1 - Math.pow(1 - progress, 5);
             currentRotation = initialRot + (totalRot * easeOut);
             draw();
             if (progress < 1) requestAnimationFrame(animate);
@@ -233,8 +261,7 @@
 
         document.getElementById('winnerName').innerText = names[idx];
         document.getElementById('winnerModal').style.display = 'flex';
-        confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
-
+        confetti({ particleCount: 200, spread: 100, origin: { y: 0.6 } });
         const li = document.createElement('li');
         li.innerText = names[idx];
         document.getElementById('history').prepend(li);
@@ -247,13 +274,18 @@
         draw();
     }
 
+    function showPage(id) {
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+        if(id === 'home') draw();
+    }
+
     function toggleTheme() {
         document.body.setAttribute('data-theme', document.body.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
         draw();
     }
 
     function closeModal() { document.getElementById('winnerModal').style.display = 'none'; }
-    function toggleFullscreen() { if (!document.fullscreenElement) document.documentElement.requestFullscreen(); else document.exitFullscreen(); }
 </script>
 </body>
 </html>
