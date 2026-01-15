@@ -19,44 +19,35 @@
         [data-theme="dark"] { --bg: #0f172a; --card: #1e293b; --text: #f8fafc; --primary: #818cf8; }
 
         body { margin: 0; font-family: 'Inter', sans-serif; background-color: var(--bg); color: var(--text); transition: 0.3s; }
-        
         nav { background: var(--card); padding: 10px 20px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 8px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 100; }
-        
         .nav-brand { display: flex; align-items: center; gap: 10px; font-weight: 900; color: var(--primary); cursor: pointer; font-size: 1.2rem; }
         .brand-img { width: 35px; height: 35px; border-radius: 8px; object-fit: cover; }
-
         .nav-links { display: flex; gap: 15px; align-items: center; }
-        .nav-links a { font-size: 0.9rem; color: var(--text); text-decoration: none; cursor: pointer; font-weight: 500; }
         .lang-select { padding: 4px; border-radius: 5px; border: 1px solid #cbd5e1; background: var(--card); color: var(--text); font-size: 0.8rem; }
 
         .container { max-width: 1200px; margin: 0 auto; padding: 15px; }
         .page { display: none; }
         .active { display: block; }
 
-        .ad-slot { background: #f1f5f9; border: 1px dashed #cbd5e1; border-radius: 10px; text-align: center; color: #94a3b8; font-size: 11px; padding: 15px; margin: 15px 0; }
-
-        .main-grid { display: grid; grid-template-columns: 1fr; gap: 20px; }
-        @media (min-width: 1024px) { .main-grid { grid-template-columns: 1fr 380px; } }
-
         .card { background: var(--card); padding: 25px; border-radius: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); margin-bottom: 20px; }
-        
         .wheel-wrapper { position: relative; width: 100%; max-width: 450px; aspect-ratio: 1/1; margin: 0 auto; cursor: pointer; }
         canvas { width: 100% !important; height: 100% !important; }
         .pointer { position: absolute; top: -15px; left: 50%; transform: translateX(-50%); width: 0; height: 0; border-left: 20px solid transparent; border-right: 20px solid transparent; border-top: 40px solid var(--accent); z-index: 50; }
 
         textarea { width: 100%; height: 150px; padding: 15px; border-radius: 12px; border: 2px solid #e2e8f0; font-size: 16px; box-sizing: border-box; background: var(--bg); color: var(--text); resize: none; }
-        .btn-spin { width: 100%; padding: 16px; background: var(--primary); color: white; border: none; border-radius: 12px; font-weight: bold; font-size: 1.1rem; cursor: pointer; margin-top: 15px; }
-        
+        .btn-spin { width: 100%; padding: 16px; background: var(--primary); color: white; border: none; border-radius: 12px; font-weight: bold; font-size: 1.1rem; cursor: pointer; margin-top: 15px; transition: 0.3s; }
+        .btn-spin:disabled { background: #cbd5e1; cursor: not-allowed; }
+
+        .validation-msg { font-size: 0.8rem; color: var(--accent); margin-top: 5px; min-height: 1.2rem; }
         .history-list { list-style: none; padding: 0; margin-top: 15px; max-height: 150px; overflow-y: auto; }
         .history-item { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #f1f5f9; font-size: 0.9rem; }
-        .history-time { color: #94a3b8; font-size: 0.8rem; }
-
+        
         .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.85); display: none; justify-content: center; align-items: center; z-index: 1000; }
         .modal-content { background: var(--card); padding: 40px; border-radius: 24px; text-align: center; max-width: 400px; width: 90%; }
         
-        /* SEO Content Styling */
+        /* Updated SEO Styling: Removed the border-bottom (underline) */
         .seo-section { line-height: 1.8; color: #64748b; font-size: 0.95rem; }
-        .seo-section h2 { color: var(--text); margin-top: 25px; border-bottom: 2px solid var(--primary); display: inline-block; padding-bottom: 5px; }
+        .seo-section h2 { color: var(--text); margin-top: 25px; display: block; padding-bottom: 5px; border-bottom: none; }
     </style>
 </head>
 <body>
@@ -71,17 +62,12 @@
             <option value="en">English</option>
             <option value="hi">हिन्दी</option>
             <option value="ne">नेपाली</option>
-            <option value="es">Español</option>
         </select>
-        <a onclick="showPage('home')" data-i18n="nav_wheel">Wheel</a>
-        <a onclick="showPage('privacy')" data-i18n="nav_privacy">Privacy</a>
         <button onclick="toggleTheme()" style="background:none; border:none; cursor:pointer; font-size:1.2rem;">🌓</button>
     </div>
 </nav>
 
 <div class="container">
-    <div class="ad-slot">ADVERTISEMENT SLOT</div>
-
     <div id="home" class="page active">
         <div class="main-grid">
             <div class="card" style="text-align:center;">
@@ -90,7 +76,8 @@
                     <div class="pointer"></div>
                     <canvas id="wheelCanvas" width="800" height="800"></canvas>
                 </div>
-                <button class="btn-spin" onclick="startSpin()" data-i18n="btn_spin">SPIN NOW</button>
+                <button id="spinBtn" class="btn-spin" onclick="startSpin()" data-i18n="btn_spin">SPIN NOW</button>
+                <div id="spinError" class="validation-msg"></div>
             </div>
 
             <div class="sidebar">
@@ -99,7 +86,8 @@
                         <strong data-i18n="label_participants">Participants</strong>
                         <button onclick="shuffleNames()" style="font-size:11px; padding:4px 8px; cursor:pointer;" data-i18n="btn_shuffle">🔀 Shuffle</button>
                     </div>
-                    <textarea id="nameInput" onkeyup="draw()"></textarea>
+                    <textarea id="nameInput" onkeyup="draw()" placeholder="One name per line..."></textarea>
+                    <div id="duplicateError" class="validation-msg"></div>
                 </div>
 
                 <div class="card">
@@ -113,23 +101,11 @@
 
         <div class="card seo-section">
             <h2 data-i18n="seo_title1">How to Use the Random Name Picker Wheel?</h2>
-            <p>TeamSpin Pro is a highly optimized <strong>online random name picker</strong>. To use it, simply enter your list of names into the participant box. The wheel will update in <strong>real-time</strong>. Once you're ready, click "Spin Now" to choose a winner fairly. This tool is perfect for teachers, event organizers, and social media giveaways.</p>
+            <p>TeamSpin Pro is a professional <strong>online random name picker</strong>. To get started, type your list of names into the participant box. You will see the wheel update in <strong>real-time</strong>. Once your list is ready, click "Spin Now" to pick a winner fairly. This tool is perfect for teachers and giveaway organizers.</p>
             
-            <h2 data-i18n="seo_title2">Why Choose TeamSpin Pro?</h2>
-            <p>Our wheel uses advanced randomization algorithms to ensure a <strong>100% fair result</strong>. Unlike other tools, we offer <strong>multi-language support</strong> including Hindi and Nepali, making it accessible for global users. Furthermore, your data is processed locally, meaning your names never leave your computer, ensuring total privacy.</p>
-
-            <h2 data-i18n="seo_title3">About TeamSpin Pro</h2>
-            <p>TeamSpin Pro is a professional-grade random decision tool. Our wheel spinner is 100% fair and processes all data locally on your device, ensuring maximum privacy and speed for teachers and event organizers.</p>
-            
-            <h2 data-i18n="seo_title4">Terms of Use</h2>
-            <p>This tool is provided for entertainment and organizational purposes. By using TeamSpin Pro, you agree that results are random and we are not liable for decisions made based on spins.</p>
+            <h2 data-i18n="seo_title2">Features of TeamSpin Pro</h2>
+            <p>Our wheel automatically identifies duplicate entries (case-insensitive) to ensure fairness. Additionally, the system ensures you cannot spin with only one name, maintaining the integrity of your random draw.</p>
         </div>
-    </div>
-
-    <div id="privacy" class="page card" style="line-height:1.6;">
-        <h1 data-i18n="nav_privacy">Privacy Policy</h1>
-        <p data-i18n="privacy_text">At TeamSpin Pro, we do not store the names you enter on our servers. All data remains in your browser's local memory. We use Google AdSense to serve ads, which may use cookies to personalize your experience.</p>
-        <button onclick="showPage('home')" class="btn-spin" style="width:auto; padding:10px 25px;">Back to Wheel</button>
     </div>
 </div>
 
@@ -145,79 +121,92 @@
     const canvas = document.getElementById('wheelCanvas');
     const ctx = canvas.getContext('2d');
     const nameInput = document.getElementById('nameInput');
+    const spinBtn = document.getElementById('spinBtn');
+    const duplicateError = document.getElementById('duplicateError');
+    const spinError = document.getElementById('spinError');
     const palette = ['#6366f1', '#a855f7', '#ec4899', '#f43f5e', '#f59e0b', '#10b981'];
     let currentRotation = 0;
     let isSpinning = false;
+    let currentLang = 'en';
 
-    // Translations Dictionary
     const translations = {
         en: {
-            nav_wheel: "Wheel", nav_privacy: "Privacy", hero_title: "Random Name Picker Wheel",
-            btn_spin: "SPIN NOW", label_participants: "Participants", btn_shuffle: "🔀 Shuffle",
+            hero_title: "Random Name Picker Wheel", btn_spin: "SPIN NOW", label_participants: "Participants",
             label_winners: "Previous Winners", no_winners: "No winners yet", modal_winner_title: "WINNER!",
-            privacy_text: "At TeamSpin Pro, we do not store the names you enter on our servers.",
-            seo_title1: "How to Use?", seo_title2: "Why Us?", seo_title3: "About Us", seo_title4: "Terms"
+            err_min: "Please enter at least 2 names to spin.", err_dup: "Warning: Duplicate names detected!",
+            seo_title1: "How to Use the Random Name Picker Wheel?", seo_title2: "Features of TeamSpin Pro", btn_shuffle: "🔀 Shuffle"
         },
         hi: {
-            nav_wheel: "पहिया", nav_privacy: "गोपनीयता", hero_title: "नाम चुनने वाला पहिया",
-            btn_spin: "घुमाएं", label_participants: "प्रतिभागी", btn_shuffle: "🔀 फेरबदल",
+            hero_title: "नाम चुनने वाला पहिया", btn_spin: "घुमाएं", label_participants: "प्रतिभागी",
             label_winners: "पिछले विजेता", no_winners: "कोई विजेता नहीं", modal_winner_title: "विजेता!",
-            seo_title1: "उपयोग कैसे करें?", seo_title2: "हमें क्यों चुनें?", seo_title3: "हमारे बारे में", seo_title4: "नियम"
+            err_min: "घुमाने के लिए कम से कम 2 नाम दर्ज करें।", err_dup: "चेतावनी: डुप्लिकेट नाम मिले!",
+            seo_title1: "रैंडम नाम पिकर व्हील का उपयोग कैसे करें?", seo_title2: "TeamSpin Pro की विशेषताएं", btn_shuffle: "🔀 फेरबदल"
         },
         ne: {
-            nav_wheel: "चक्का", nav_privacy: "गोपनीयता", hero_title: "नाम छान्ने चक्का",
-            btn_spin: "घुमाउनुहोस्", label_participants: "सहभागीहरू", btn_shuffle: "🔀 मिसाउनुहोस्",
+            hero_title: "नाम छान्ने चक्का", btn_spin: "घुमाउनुहोस्", label_participants: "सहभागीहरू",
             label_winners: "अघिल्लो विजेताहरू", no_winners: "कोही विजेता छैन", modal_winner_title: "विजेता!",
-            seo_title1: "कसरी प्रयोग गर्ने?", seo_title2: "हामीलाई किन रोज्ने?", seo_title3: "हाम्रो बारेमा", seo_title4: "सर्तहरू"
+            err_min: "घुमाउनको लागि कम्तिमा २ नामहरू प्रविष्ट गर्नुहोस्।", err_dup: "चेतावनी: उस्तै नामहरू फेला पर्यो!",
+            seo_title1: "नाम छान्ने चक्का कसरी प्रयोग गर्ने?", seo_title2: "TeamSpin Pro का विशेषताहरू", btn_shuffle: "🔀 मिसाउनुहोस्"
         }
     };
 
-    function changeLanguage(lang) {
-        document.querySelectorAll('[data-i18n]').forEach(el => {
-            const key = el.getAttribute('data-i18n');
-            if (translations[lang] && translations[lang][key]) el.innerText = translations[lang][key];
-        });
-        draw();
-    }
-
-    window.onload = () => {
-        nameInput.value = "Alice\nBob\nCharlie\nDiana\nEdward";
-        draw();
-    };
-
     function draw() {
-        const names = nameInput.value.split('\n').filter(n => n.trim() !== '');
+        const rawNames = nameInput.value.split('\n').map(n => n.trim()).filter(n => n !== '');
+        const lowerNames = rawNames.map(n => n.toLowerCase());
+        const uniqueNames = [...new Set(lowerNames)];
+
+        // Notify duplicates (case-insensitive)
+        duplicateError.innerText = (rawNames.length !== uniqueNames.length) ? translations[currentLang].err_dup : "";
+
+        // Check for minimum 2 names
+        if (rawNames.length < 2) {
+            spinBtn.disabled = true;
+            spinError.innerText = translations[currentLang].err_min;
+        } else {
+            spinBtn.disabled = false;
+            spinError.innerText = "";
+        }
+
         const size = canvas.width;
         const center = size / 2;
         const radius = center - 20;
         ctx.clearRect(0, 0, size, size);
-        if (names.length === 0) return;
+        
+        if (rawNames.length === 0) {
+             ctx.beginPath(); ctx.arc(center, center, radius, 0, 2 * Math.PI);
+             ctx.fillStyle = "#e2e8f0"; ctx.fill(); return;
+        }
 
-        const arcSize = (2 * Math.PI) / names.length;
-        names.forEach((name, i) => {
+        const arcSize = (2 * Math.PI) / rawNames.length;
+        rawNames.forEach((name, i) => {
             const angle = currentRotation + (i * arcSize);
             ctx.beginPath();
             ctx.fillStyle = palette[i % palette.length];
             ctx.moveTo(center, center);
             ctx.arc(center, center, radius, angle, angle + arcSize);
             ctx.fill();
-            ctx.strokeStyle = "white";
-            ctx.lineWidth = 2;
-            ctx.stroke();
-
+            ctx.strokeStyle = "white"; ctx.lineWidth = 2; ctx.stroke();
             ctx.save();
             ctx.translate(center, center);
             ctx.rotate(angle + arcSize / 2);
-            ctx.textAlign = "right";
-            ctx.fillStyle = "white";
-            ctx.font = "bold 32px 'Inter', Arial, sans-serif";
+            ctx.textAlign = "right"; ctx.fillStyle = "white";
+            ctx.font = "bold 32px 'Inter', sans-serif";
             ctx.fillText(name.substring(0, 15), radius - 40, 12);
             ctx.restore();
         });
     }
 
+    function changeLanguage(lang) {
+        currentLang = lang;
+        document.querySelectorAll('[data-i18n]').forEach(el => {
+            const key = el.getAttribute('data-i18n');
+            if (translations[lang][key]) el.innerText = translations[lang][key];
+        });
+        draw();
+    }
+
     function startSpin() {
-        if (isSpinning || nameInput.value.trim() === "") return;
+        if (isSpinning) return;
         isSpinning = true;
         const totalRot = (Math.random() * 5 + 10) * 2 * Math.PI;
         const start = performance.now();
@@ -231,22 +220,23 @@
             currentRotation = initialRot + (totalRot * easeOut);
             draw();
             if (progress < 1) requestAnimationFrame(animate);
-            else finishSpin();
+            else {
+                isSpinning = false;
+                finishSpin();
+            }
         }
         requestAnimationFrame(animate);
     }
 
     function finishSpin() {
-        isSpinning = false;
-        const names = nameInput.value.split('\n').filter(n => n.trim() !== '');
+        const names = nameInput.value.split('\n').map(n => n.trim()).filter(n => n !== '');
         const arcSize = (2 * Math.PI) / names.length;
         const normalized = (currentRotation % (2 * Math.PI));
         const pointerPos = (1.5 * Math.PI);
         let idx = Math.floor((pointerPos - normalized) / arcSize) % names.length;
         if (idx < 0) idx += names.length;
         
-        const winner = names[idx];
-        document.getElementById('winnerName').innerText = winner;
+        document.getElementById('winnerName').innerText = names[idx];
         document.getElementById('winnerModal').style.display = 'flex';
         confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
 
@@ -254,21 +244,8 @@
         if (historyList.innerText.includes('No winners') || historyList.innerText.includes('कोही विजेता')) historyList.innerHTML = '';
         const li = document.createElement('li');
         li.className = 'history-item';
-        li.innerHTML = `<span><strong>${winner}</strong></span><span class="history-time">${new Date().toLocaleTimeString()}</span>`;
+        li.innerHTML = `<span><strong>${names[idx]}</strong></span><span style="color:#94a3b8; font-size:0.8rem;">${new Date().toLocaleTimeString()}</span>`;
         historyList.prepend(li);
-    }
-
-    function shuffleNames() {
-        let names = nameInput.value.split('\n').filter(n => n.trim() !== '');
-        names.sort(() => Math.random() - 0.5);
-        nameInput.value = names.join('\n');
-        draw();
-    }
-
-    function showPage(id) {
-        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-        document.getElementById(id).classList.add('active');
-        if(id === 'home') draw();
     }
 
     function toggleTheme() {
@@ -277,6 +254,14 @@
     }
 
     function closeModal() { document.getElementById('winnerModal').style.display = 'none'; }
+    function shuffleNames() {
+        let names = nameInput.value.split('\n').filter(n => n.trim() !== '');
+        names.sort(() => Math.random() - 0.5);
+        nameInput.value = names.join('\n');
+        draw();
+    }
+
+    window.onload = () => { nameInput.value = "Alice\nBob\nCharlie\nDiana"; draw(); };
 </script>
 </body>
 </html>
