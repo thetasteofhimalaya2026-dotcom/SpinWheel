@@ -5,133 +5,162 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     
     <title>TeamSpin Pro | Spin the Wheel & Best Name of Wheels Picker 2026</title>
-    <meta name="description" content="Use TeamSpin Pro, the ultimate Team Spin Wheel. A professional 3D spin the wheel tool with shuffle and sort features. Choose from various Name of Wheels patterns in 32 languages.">
-    <meta name="keywords" content="spin the wheel, team spin wheel, name of wheels, random name picker, wheel of names, 3D spinner, shuffle names, sort names, raffle wheel 2026">
+    <meta name="description" content="TeamSpin Pro: The world's fastest Team Spin Wheel. Features shuffle, A-Z sort, duplicate detection, and 32-language support. Perfect for giveaways and classrooms.">
+    <meta name="keywords" content="spin the wheel, team spin wheel, name of wheels, random name picker, duplicate name detector, wheel of names, 3D spinner, 2026 giveaway tool">
     
     <link rel="icon" type="image/jpeg" href="logo.jpg">
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-YOUR_ID" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
     <style>
-        :root { --bg: #f8fafc; --card: #ffffff; --text: #1e293b; --primary: #6366f1; --shadow: rgba(0,0,0,0.1); }
-        [data-theme="dark"] { --bg: #0f172a; --card: #1e293b; --text: #f8fafc; --primary: #818cf8; --shadow: rgba(0,0,0,0.4); }
-        [data-theme="ocean"] { --bg: #0c4a6e; --card: #075985; --text: #f0f9ff; --primary: #38bdf8; --shadow: rgba(0,0,0,0.3); }
-        [data-theme="forest"] { --bg: #064e3b; --card: #065f46; --text: #ecfdf5; --primary: #34d399; --shadow: rgba(0,0,0,0.3); }
-        [data-theme="sunset"] { --bg: #450a0a; --card: #7f1d1d; --text: #fff7ed; --primary: #fbbf24; --shadow: rgba(0,0,0,0.4); }
+        :root { --bg: #f1f5f9; --card: #ffffff; --text: #0f172a; --primary: #6366f1; --accent: #ef4444; --border: #e2e8f0; }
+        [data-theme="dark"] { --bg: #0f172a; --card: #1e293b; --text: #f8fafc; --primary: #818cf8; --border: #334155; }
+        [data-theme="ocean"] { --bg: #0c4a6e; --card: #075985; --text: #f0f9ff; --primary: #38bdf8; --border: #0ea5e9; }
+        [data-theme="forest"] { --bg: #064e3b; --card: #065f46; --text: #ecfdf5; --primary: #34d399; --border: #059669; }
+        [data-theme="sunset"] { --bg: #450a0a; --card: #7f1d1d; --text: #fff7ed; --primary: #fbbf24; --border: #b91c1c; }
 
-        body { margin: 0; font-family: 'Inter', sans-serif; background-color: var(--bg); color: var(--text); transition: 0.3s; overflow-x: hidden; }
-        nav { background: var(--card); padding: 10px 20px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px var(--shadow); position: sticky; top: 0; z-index: 1000; }
-        .container { max-width: 1300px; margin: 0 auto; padding: 15px; }
-        .card { background: var(--card); padding: 25px; border-radius: 20px; box-shadow: 0 4px 20px var(--shadow); margin-bottom: 20px; }
+        body { margin: 0; font-family: 'Inter', system-ui, sans-serif; background-color: var(--bg); color: var(--text); transition: 0.3s; overflow-x: hidden; -webkit-tap-highlight-color: transparent; }
+        
+        /* MOBILE OPTIMIZED NAV */
+        nav { background: var(--card); padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 1000; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .nav-brand { font-weight: 900; color: var(--primary); display: flex; align-items: center; gap: 10px; cursor: pointer; }
+        .nav-links { display: flex; gap: 8px; }
 
-        /* WHEEL DESIGN */
-        #wheelContainer { display: flex; flex-direction: column; align-items: center; justify-content: center; }
-        .wheel-wrapper { position: relative; width: 100%; max-width: 480px; aspect-ratio: 1/1; margin: 15px auto; cursor: pointer; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 10px; }
+        .card { background: var(--card); padding: 20px; border-radius: 24px; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.05); margin-bottom: 15px; border: 1px solid var(--border); }
+
+        /* THE WHEEL SYSTEM */
+        .wheel-section { position: relative; display: flex; flex-direction: column; align-items: center; }
+        .wheel-wrapper { position: relative; width: 100%; max-width: 420px; aspect-ratio: 1/1; margin: 10px auto; }
+        canvas { width: 100% !important; height: 100% !important; border-radius: 50%; border: 6px solid var(--card); filter: drop-shadow(0 15px 30px rgba(0,0,0,0.15)); }
         .pointer-3d { 
-            position: absolute; top: -12px; left: 50%; transform: translateX(-50%); 
-            width: 35px; height: 55px; z-index: 100;
+            position: absolute; top: -10px; left: 50%; transform: translateX(-50%); 
+            width: 30px; height: 50px; z-index: 100;
             background: linear-gradient(145deg, #ef4444, #991b1b);
             clip-path: polygon(50% 100%, 0% 0%, 100% 0%);
-            filter: drop-shadow(0 4px 4px rgba(0,0,0,0.5));
+            filter: drop-shadow(0 5px 5px rgba(0,0,0,0.3));
         }
-        canvas { width: 100% !important; height: 100% !important; border-radius: 50%; border: 8px solid var(--card); box-shadow: 0 0 20px var(--shadow); }
 
-        /* BUTTONS & CONTROLS */
-        .toolbar { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; margin-bottom: 20px; }
-        .btn { padding: 10px 14px; border-radius: 10px; border: 1px solid #e2e8f0; cursor: pointer; font-weight: 700; background: var(--card); color: var(--text); font-size: 13px; transition: 0.2s; }
-        .btn:hover { border-color: var(--primary); }
-        .btn-spin { background: var(--primary); color: white; border: none; width: 100%; max-width: 480px; padding: 18px; font-size: 1.3rem; border-radius: 15px; margin-top: 15px; cursor: pointer; }
+        /* DUPLICATE WARNING */
+        #duplicateWarning { display: none; background: #fee2e2; color: #991b1b; padding: 12px; border-radius: 12px; margin-top: 10px; font-size: 0.85rem; border: 1px solid #f87171; text-align: center; }
+
+        /* INPUTS & MOBILE UX */
+        .toolbar { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; margin-bottom: 15px; }
+        .btn { padding: 10px 14px; border-radius: 12px; border: 1px solid var(--border); cursor: pointer; font-weight: 700; background: var(--card); color: var(--text); font-size: 0.85rem; }
+        .btn-spin { background: var(--primary); color: white; border: none; width: 100%; padding: 18px; font-size: 1.3rem; border-radius: 18px; margin-top: 15px; cursor: pointer; transition: 0.2s; box-shadow: 0 8px 15px -5px var(--primary); }
+        .btn-spin:active { transform: scale(0.98); }
         
-        textarea { width: 100%; height: 180px; padding: 15px; border-radius: 15px; border: 2px solid #e2e8f0; background: var(--bg); color: var(--text); resize: none; box-sizing: border-box; font-size: 14px; }
-        
-        .main-grid { display: grid; grid-template-columns: 1fr; gap: 20px; }
-        @media (min-width: 1024px) { .main-grid { grid-template-columns: 1fr 400px; } }
+        textarea { width: 100%; height: 180px; padding: 15px; border-radius: 18px; border: 2px solid var(--border); background: var(--bg); color: var(--text); resize: none; box-sizing: border-box; font-size: 16px; margin-top: 10px; }
+
+        .main-grid { display: grid; grid-template-columns: 1fr; gap: 15px; }
+        @media (min-width: 1024px) { .main-grid { grid-template-columns: 1fr 420px; } }
+
+        /* PAGES */
+        .page { display: none; }
+        .active { display: block; animation: slideUp 0.3s ease-out; }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .blog-post { margin-bottom: 25px; }
+        .blog-post h3 { color: var(--primary); margin-bottom: 8px; }
 
         /* MODAL */
-        .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.9); display: none; justify-content: center; align-items: center; z-index: 2000; }
-        .modal-content { background: var(--card); padding: 40px; border-radius: 30px; text-align: center; max-width: 450px; width: 90%; }
-        
-        .page { display: none; } .active { display: block; }
-        .seo-section h2 { color: var(--primary); border-bottom: 2px solid #eee; padding-bottom: 10px; }
+        .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.85); display: none; justify-content: center; align-items: center; z-index: 2000; padding: 20px; }
+        .modal-content { background: var(--card); padding: 35px; border-radius: 28px; text-align: center; width: 100%; max-width: 400px; }
     </style>
 </head>
 <body data-theme="light">
 
 <nav>
     <div class="nav-brand" onclick="showPage('home')">
-        <img src="logo.jpg" alt="Logo" style="width:30px; border-radius:5px;">
+        <img src="logo.jpg" alt="Logo" style="width:28px; border-radius:6px;">
         <span>TeamSpin PRO</span>
     </div>
     <div class="nav-links">
-        <button class="btn" onclick="showPage('home')">Wheel</button>
-        <button class="btn" onclick="showPage('guidelines')">Guidelines</button>
-        <button class="btn" onclick="showPage('topics')">Topics</button>
+        <button class="btn" onclick="showPage('blog')" data-tr="nav_blog">Blog</button>
+        <button class="btn" onclick="showPage('guide')" data-tr="nav_guide">Guide</button>
     </div>
 </nav>
 
 <div class="container">
+    
     <div id="home" class="page active">
         <div class="toolbar">
             <select id="themePicker" class="btn" onchange="setTheme(this.value)">
-                <option value="light">☀️ Light Theme</option>
-                <option value="dark">🌙 Dark Theme</option>
-                <option value="ocean">🌊 Ocean Blue</option>
-                <option value="forest">🌲 Forest Green</option>
-                <option value="sunset">🌇 Sunset Red</option>
+                <option value="light">☀️ Light</option>
+                <option value="dark">🌙 Dark</option>
+                <option value="ocean">🌊 Ocean</option>
+                <option value="forest">🌲 Forest</option>
+                <option value="sunset">🌇 Sunset</option>
             </select>
             <select id="patternPicker" class="btn" onchange="setPattern(this.value)">
-                <option value="classic">Pattern: Classic Duo</option>
-                <option value="rainbow">Pattern: Rainbow Spin</option>
-                <option value="monochrome">Pattern: Monochrome</option>
-                <option value="neon">Pattern: Neon Pulse</option>
-                <option value="pastel">Pattern: Pastel Soft</option>
+                <option value="classic">Classic</option>
+                <option value="rainbow">Rainbow</option>
+                <option value="neon">Neon</option>
+                <option value="pastel">Pastel</option>
             </select>
-            <select id="langPicker" class="btn" onchange="changeLang(this.value)"></select>
-            <button class="btn" onclick="toggleFullScreen()">⛶ Full Screen</button>
+            <select id="langPicker" class="btn" onchange="translateUI(this.value)"></select>
+            <button class="btn" onclick="toggleFullScreen()">⛶ Full</button>
         </div>
 
         <div class="main-grid">
-            <section class="card" id="wheelContainer">
+            <section class="card wheel-section">
                 <div class="wheel-wrapper" onclick="startSpin()">
                     <div class="pointer-3d"></div>
                     <canvas id="wheelCanvas" width="1000" height="1000"></canvas>
                 </div>
-                <button id="spinBtn" class="btn btn-spin" onclick="startSpin()">SPIN THE WHEEL</button>
+                <button class="btn-spin" onclick="startSpin()" data-tr="spin_btn">SPIN THE WHEEL</button>
             </section>
 
             <aside>
                 <div class="card">
-                    <strong>Team Spin Wheel Entries</strong>
-                    <textarea id="nameInput" onkeyup="updateWheel()" placeholder="One name per line..."></textarea>
-                    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-top:15px;">
+                    <strong data-tr="entries_title">Participants</strong>
+                    <textarea id="nameInput" onkeyup="handleInput()" placeholder="One name per line..."></textarea>
+                    
+                    <div id="duplicateWarning">
+                        <span data-tr="dup_msg">Duplicates detected!</span><br>
+                        <button class="btn" style="margin-top:8px; width: 100%;" onclick="removeDuplicates()" data-tr="fix_dup">Remove Duplicates</button>
+                    </div>
+
+                    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px; margin-top:15px;">
                         <button class="btn" onclick="sortNames(true)">Sort A-Z</button>
                         <button class="btn" onclick="sortNames(false)">Sort Z-A</button>
-                        <button class="btn" onclick="shuffleNames()">🔀 Shuffle</button>
-                        <button class="btn" onclick="saveToDevice()">💾 Save List</button>
+                        <button class="btn" onclick="shuffleNames()" data-tr="shuffle">Shuffle</button>
+                        <button class="btn" onclick="saveToDevice()" style="background:var(--primary); color:white; border:none;">💾 Save List</button>
                     </div>
                 </div>
             </aside>
         </div>
     </div>
 
-    <div id="guidelines" class="page card seo-section">
-        <h2>Guidelines: How to Use Team Spin Wheel</h2>
-        <p>Using <strong>TeamSpin Pro</strong> is the best way to <strong>spin the wheel</strong> for names. Enter your <strong>name of wheels</strong> entries into the text area. You can <strong>shuffle</strong> the list to ensure extra randomness or use the <strong>A-Z Sort</strong> to organize participants before the big draw.</p>
-        <p><strong>Note:</strong> To close ads, look for the 'X' icon provided by Google AdSense on the ad banners.</p>
-        <button class="btn btn-spin" onclick="showPage('home')">Return to Wheel</button>
+    <div id="blog" class="page card">
+        <h1 data-tr="blog_title">TeamSpin Pro Blog</h1>
+        <article class="blog-post">
+            <h3>How to use a Team Spin Wheel for Classroom Games</h3>
+            <p>Educational experts suggest that using a <strong>name of wheels</strong> tool creates a "fair-play" environment. Students are more engaged when the <strong>spin the wheel</strong> selection is digital and random.</p>
+        </article>
+        <article class="blog-post">
+            <h3>Top 3 Benefits of Random Pickers in Business</h3>
+            <p>From choosing meeting starters to lucky draws, a <strong>team spin wheel</strong> adds transparency and fun to the workplace. Use our duplicate detector to ensure every participant has exactly one chance.</p>
+        </article>
+        <button class="btn-spin" onclick="showPage('home')">Back to Wheel</button>
     </div>
 
-    <div id="topics" class="page card seo-section">
-        <h2>Topics & Name of Wheels Use Cases</h2>
-        <p>Our <strong>Spin the Wheel</strong> tool is used globally by teachers for classroom management and by businesses for giveaway raffles in 2026. The <strong>Team Spin Wheel</strong> technology ensures that every user gets a fair, visible result every time.</p>
+    <div id="guide" class="page card">
+        <h2 data-tr="guide_title">Complete User Guide</h2>
+        <p>1. Enter names in the text box (one per line).<br>
+           2. Check for <strong>duplicate name</strong> warnings to stay fair.<br>
+           3. Use <strong>Shuffle</strong> to mix the names before spinning.<br>
+           4. Change the <strong>theme</strong> or <strong>pattern</strong> to match your brand colors.</p>
+        <button class="btn-spin" onclick="showPage('home')">Back to Wheel</button>
     </div>
+
 </div>
 
 <div class="modal" id="winnerModal">
     <div class="modal-content">
-        <h2>WINNER!</h2>
-        <div id="winnerName" style="font-size: 3rem; font-weight: 900; color: var(--primary); margin: 20px 0; text-shadow: 2px 2px 10px rgba(0,0,0,0.1);"></div>
-        <button class="btn btn-spin" onclick="closeModal()">Next Spin</button>
+        <h2 data-tr="win_msg">WINNER!</h2>
+        <div id="winnerName" style="font-size: 3rem; font-weight: 900; color: var(--primary); margin: 20px 0; word-break: break-all;"></div>
+        <button class="btn-spin" onclick="closeModal()" data-tr="close">Close</button>
     </div>
 </div>
 
@@ -144,23 +173,49 @@
     let isSpinning = false;
     let currentPattern = ['#6366f1', '#ec4899'];
 
+    const translations = {
+        en: { nav_blog: "Blog", nav_guide: "Guide", spin_btn: "SPIN THE WHEEL", entries_title: "Participants", dup_msg: "Duplicate names detected!", fix_dup: "Remove Duplicates", shuffle: "Shuffle", win_msg: "WE HAVE A WINNER!", close: "Close", blog_title: "TeamSpin Blog", guide_title: "User Guide" },
+        hi: { nav_blog: "ब्लॉग", nav_guide: "गाइड", spin_btn: "व्हील घुमाएं", entries_title: "प्रतिभागी", dup_msg: "डुप्लिकेट नाम पाए गए!", fix_dup: "डुप्लिकेट हटाएं", shuffle: "शफल", win_msg: "विजेता!", close: "बंद करें", blog_title: "ब्लॉग पोस्ट", guide_title: "उपयोगकर्ता गाइड" },
+        ne: { nav_blog: "ब्लग", nav_guide: "गाइड", spin_btn: "घुमाउनुहोस्", entries_title: "सहभागीहरू", dup_msg: "नक्कल नामहरू भेटियो!", fix_dup: "नक्कल हटाउनुहोस्", shuffle: "शफल", win_msg: "विजेता घोषणा!", close: "बन्द गर्नुहोस्", blog_title: "ब्लग लेखहरू", guide_title: "निर्देशिका" }
+    };
+
     const patterns = {
         classic: ['#6366f1', '#ec4899'],
-        rainbow: ['#ff4d4d', '#ffaf40', '#fffa65', '#32ff7e', '#7efff5', '#18dcff', '#7d5fff'],
-        monochrome: ['#2c3e50', '#7f8c8d', '#bdc3c7', '#34495e'],
+        rainbow: ['#ff5f6d', '#ffc371', '#fffa65', '#32ff7e', '#18dcff', '#7d5fff'],
         neon: ['#ff0055', '#00fbff', '#00ff44', '#ffea00'],
         pastel: ['#ffb3ba', '#bae1ff', '#baffc9', '#ffffba', '#ffdfba']
     };
 
     const languages = [
-        {c:'en', n:'English'}, {c:'hi', n:'हिन्दी'}, {c:'ne', n:'नेपाली'}, {c:'es', n:'Español'}, {c:'fr', n:'Français'},
-        {c:'de', n:'Deutsch'}, {c:'it', n:'Italiano'}, {c:'pt', n:'Português'}, {c:'ru', n:'Русский'}, {c:'ja', n:'日本語'},
-        {c:'zh', n:'中文'}, {c:'ko', n:'한국어'}, {c:'ar', n:'العربية'}, {c:'tr', n:'Türkçe'}, {c:'vi', n:'Tiếng Việt'},
-        {c:'th', n:'ไทย'}, {c:'id', n:'Indonesian'}, {c:'bn', n:'বাংলা'}, {c:'pa', n:'ਪੰਜਾਬੀ'}, {c:'ur', n:'اردو'},
-        {c:'ta', n:'தமிழ்'}, {c:'te', n:'తెలుగు'}, {c:'mr', n:'मराठी'}, {c:'gu', n:'ગુજરાતી'}, {c:'kn', n:'ಕನ್ನಡ'},
-        {c:'ml', n:'മലയാളം'}, {c:'pl', n:'Polski'}, {c:'nl', n:'Nederlands'}, {c:'sv', n:'Svenska'}, {c:'fi', n:'Suomi'},
-        {c:'no', n:'Norsk'}, {c:'da', n:'Dansk'}
+        {c:'en', n:'English'}, {c:'hi', n:'हिन्दी (Hindi)'}, {c:'ne', n:'नेपाली (Nepali)'}, {c:'es', n:'Español'}, {c:'fr', n:'Français'}
     ];
+
+    function translateUI(lang) {
+        const dict = translations[lang] || translations.en;
+        document.querySelectorAll('[data-tr]').forEach(el => {
+            el.innerText = dict[el.getAttribute('data-tr')];
+        });
+        updateWheel();
+    }
+
+    function handleInput() {
+        const val = nameInput.value;
+        const lines = val.split('\n').filter(n => n.trim() !== '');
+        // Duplicate detection
+        const hasDuplicates = new Set(lines.map(n => n.toLowerCase().trim())).size !== lines.length;
+        document.getElementById('duplicateWarning').style.display = hasDuplicates ? 'block' : 'none';
+        
+        // Auto-Save
+        localStorage.setItem('ts_names', val);
+        updateWheel();
+    }
+
+    function removeDuplicates() {
+        const lines = nameInput.value.split('\n').filter(n => n.trim() !== '');
+        const unique = [...new Set(lines)];
+        nameInput.value = unique.join('\n');
+        handleInput();
+    }
 
     function updateWheel() {
         const names = nameInput.value.split('\n').filter(n => n.trim() !== '');
@@ -180,10 +235,8 @@
             ctx.save();
             ctx.translate(center, center); ctx.rotate(angle + arc / 2);
             ctx.textAlign = "right"; ctx.fillStyle = "white";
-            
-            // SHADOW FOR READABILITY ON PASTEL THEMES
-            ctx.shadowColor = "rgba(0,0,0,0.6)"; ctx.shadowBlur = 6;
-            ctx.font = "bold 40px Inter";
+            ctx.shadowColor = "rgba(0,0,0,0.4)"; ctx.shadowBlur = 4;
+            ctx.font = "bold 38px Inter";
             ctx.fillText(name.substring(0, 15), radius - 60, 15);
             ctx.restore();
         });
@@ -214,53 +267,50 @@
         confetti({ particleCount: 200, spread: 70, origin: { y: 0.6 } });
     }
 
-    /* FEATURE: SORT & SHUFFLE */
-    function sortNames(asc = true) {
-        let names = nameInput.value.split('\n').filter(n => n.trim() !== '');
-        names.sort(); if (!asc) names.reverse();
-        nameInput.value = names.join('\n'); updateWheel();
-    }
-    function shuffleNames() {
-        let names = nameInput.value.split('\n').filter(n => n.trim() !== '');
-        for (let i = names.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [names[i], names[j]] = [names[j], names[i]];
-        }
-        nameInput.value = names.join('\n'); updateWheel();
-    }
-
-    function setTheme(theme) { document.body.setAttribute('data-theme', theme); updateWheel(); }
+    function setTheme(t) { document.body.setAttribute('data-theme', t); updateWheel(); }
     function setPattern(p) { currentPattern = patterns[p]; updateWheel(); }
     function showPage(id) {
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
         document.getElementById(id).classList.add('active');
         window.scrollTo(0,0);
     }
-    function closeModal() { document.getElementById('winnerModal').style.display = 'none'; }
-    function toggleFullScreen() {
-        const elem = document.getElementById('wheelContainer');
-        if (!document.fullscreenElement) elem.requestFullscreen();
-        else document.exitFullscreen();
+    function sortNames(asc) {
+        let n = nameInput.value.split('\n').filter(x => x.trim() !== '').sort();
+        if(!asc) n.reverse();
+        nameInput.value = n.join('\n'); handleInput();
+    }
+    function shuffleNames() {
+        let n = nameInput.value.split('\n').filter(x => x.trim() !== '');
+        n.sort(() => Math.random() - 0.5);
+        nameInput.value = n.join('\n'); handleInput();
     }
     function saveToDevice() {
         const blob = new Blob([nameInput.value], {type: 'text/plain'});
         const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'teamspin-list.txt'; a.click();
     }
+    function closeModal() { document.getElementById('winnerModal').style.display = 'none'; }
+    function toggleFullScreen() {
+        const el = document.getElementById('home');
+        if (!document.fullscreenElement) el.requestFullscreen();
+        else document.exitFullscreen();
+    }
 
     window.onload = () => {
-        const picker = document.getElementById('langPicker');
+        const p = document.getElementById('langPicker');
         languages.forEach(l => {
-            const opt = document.createElement('option'); opt.value = l.c; opt.innerText = l.n;
-            picker.appendChild(opt);
+            const o = document.createElement('option'); o.value = l.c; o.innerText = l.n;
+            p.appendChild(o);
         });
         
-        // Language detection from Sitemap
-        const urlParams = new URLSearchParams(window.location.search);
-        const langParam = urlParams.get('lang');
-        if (langParam) picker.value = langParam;
+        const saved = localStorage.getItem('ts_names');
+        if(saved) nameInput.value = saved;
+        else nameInput.value = "Apple\nBeta\nCharlie\nDelta\nEcho";
 
-        nameInput.value = "Apple\nBeta\nCharlie\nDelta\nEcho";
-        updateWheel();
+        const urlParams = new URLSearchParams(window.location.search);
+        const lang = urlParams.get('lang') || 'en';
+        p.value = lang;
+        translateUI(lang);
+        handleInput();
     };
 </script>
 </body>
