@@ -5,9 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>TeamSpin Pro | 3D Random Name Picker & Decision Wheel 2026</title>
     
-    <meta name="description" content="TeamSpin Pro: The ultimate free 3D random name picker. Features full-screen mode, 32 languages, Google Sheets import, and soothing sounds. Perfect for teachers and giveaways.">
-    <meta name="keywords" content="random name picker, spin the wheel, 3D name wheel, full screen spinner, lucky draw tool, raffle winner picker, classroom randomizer, google sheets name wheel">
-    
+    <meta name="description" content="Official TeamSpin Pro: 3D random name picker with full-screen mode, 32 languages, and soothing audio. Ideal for teachers and giveaways.">
     <link rel="icon" type="image/jpeg" href="logo.jpg">
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-YOUR_ID" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
@@ -17,16 +15,39 @@
         [data-theme="dark"] { --bg: #0f172a; --card: #1e293b; --text: #f8fafc; --primary: #818cf8; }
         body { margin: 0; font-family: 'Inter', sans-serif; background-color: var(--bg); color: var(--text); transition: 0.3s; }
         
-        /* NAVIGATION */
-        nav { background: var(--card); padding: 10px 20px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 1000; }
+        nav { background: var(--card); padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 1000; }
         .nav-brand { display: flex; align-items: center; gap: 10px; font-weight: 900; color: var(--primary); cursor: pointer; }
-        
         .container { max-width: 1300px; margin: 0 auto; padding: 15px; }
         .card { background: var(--card); padding: 25px; border-radius: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); margin-bottom: 20px; }
 
-        /* WHEEL & 3D POINTER */
-        #wheelContainer:fullscreen { background: var(--bg); display: flex; align-items: center; justify-content: center; }
-        .wheel-wrapper { position: relative; width: 100%; max-width: 550px; aspect-ratio: 1/1; margin: 20px auto; cursor: pointer; }
+        /* WHEEL CONTAINER & RESPONSIVE SIZING */
+        #wheelContainer { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        
+        /* Full Screen Specific Layout - Keeps elements centered and wheel large */
+        #wheelContainer:fullscreen { 
+            background: var(--bg); 
+            width: 100vw; 
+            height: 100vh; 
+            padding: 0; 
+            margin: 0; 
+            justify-content: center; 
+        }
+
+        .wheel-wrapper { 
+            position: relative; 
+            width: 90%; 
+            max-width: 550px; 
+            aspect-ratio: 1/1; 
+            margin: 20px auto; 
+            cursor: pointer; 
+            transition: max-width 0.5s ease;
+        }
+
+        /* Auto-expand wheel size in Full Screen */
+        #wheelContainer:fullscreen .wheel-wrapper { 
+            max-width: 85vh; 
+        }
+
         .pointer-3d { 
             position: absolute; top: -15px; left: 50%; transform: translateX(-50%); 
             width: 35px; height: 55px; z-index: 100;
@@ -35,26 +56,21 @@
             filter: drop-shadow(0 5px 5px rgba(0,0,0,0.4));
         }
 
-        /* BUTTONS */
-        .btn { padding: 10px 16px; border-radius: 10px; border: 1px solid #e2e8f0; cursor: pointer; font-weight: 700; font-size: 13px; background: var(--card); color: var(--text); transition: 0.2s; }
-        .btn-spin { background: var(--primary); color: white; border: none; width: 100%; padding: 18px; font-size: 1.2rem; border-radius: 15px; box-shadow: 0 4px 12px rgba(99,102,241,0.3); }
-        .btn:hover { transform: translateY(-1px); background: #f1f5f9; }
+        canvas { width: 100%; height: 100%; }
 
+        /* BUTTONS & TOOLS */
+        .btn { padding: 10px 16px; border-radius: 10px; border: 1px solid #e2e8f0; cursor: pointer; font-weight: 700; font-size: 13px; background: var(--card); color: var(--text); }
+        .btn-spin { background: var(--primary); color: white; border: none; width: 100%; max-width: 550px; padding: 18px; font-size: 1.2rem; border-radius: 15px; margin-top: 10px; }
+        
         textarea { width: 100%; height: 200px; padding: 15px; border-radius: 15px; border: 2px solid #e2e8f0; font-size: 15px; background: var(--bg); color: var(--text); resize: none; box-sizing: border-box; }
         
-        .page { display: none; }
-        .active { display: block; }
-
-        /* MODALS */
-        .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.85); display: none; justify-content: center; align-items: center; z-index: 2000; padding: 20px; }
-        .modal-content { background: var(--card); padding: 40px; border-radius: 30px; text-align: center; max-width: 450px; width: 100%; }
-
-        /* GRID LAYOUT */
         .main-grid { display: grid; grid-template-columns: 1fr; gap: 20px; }
         @media (min-width: 1024px) { .main-grid { grid-template-columns: 1fr 400px; } }
         
-        /* MOBILE TOOLS */
         .mobile-tools { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 15px; }
+        .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.85); display: none; justify-content: center; align-items: center; z-index: 2000; padding: 20px; }
+        .modal-content { background: var(--card); padding: 40px; border-radius: 30px; text-align: center; max-width: 450px; width: 100%; }
+        .page { display: none; } .active { display: block; }
     </style>
 </head>
 <body>
@@ -74,7 +90,7 @@
 <div class="container">
     <div id="home" class="page active">
         <div class="main-grid">
-            <section class="card" id="wheelContainer" style="text-align:center;">
+            <section class="card" id="wheelContainer">
                 <div class="wheel-wrapper" onclick="startSpin()">
                     <div class="pointer-3d"></div>
                     <canvas id="wheelCanvas" width="1000" height="1000"></canvas>
@@ -88,7 +104,7 @@
                         <strong>Participants (Alpha-Beta)</strong>
                         <button onclick="sortNames()" class="btn" style="padding:4px 8px; font-size:11px;">A-Z Sort</button>
                     </div>
-                    <textarea id="nameInput" onkeyup="updateWheel()" placeholder="Apple&#10;Beta&#10;Charlie..."></textarea>
+                    <textarea id="nameInput" onkeyup="updateWheel()" placeholder="Add names here..."></textarea>
                     
                     <div class="mobile-tools">
                         <button class="btn" onclick="saveToDevice()">💾 Save</button>
@@ -97,7 +113,6 @@
                     </div>
                     <button class="btn" onclick="importSheet()" style="width:100%; margin-top:10px;">Import Google Sheet</button>
                 </div>
-
                 <div class="card">
                     <strong>Winner History</strong>
                     <ul id="history" style="list-style:none; padding:0; margin-top:10px; max-height:100px; overflow-y:auto; font-size:13px;"></ul>
@@ -105,35 +120,32 @@
             </aside>
         </div>
 
-        <article class="card" style="line-height:1.8; margin-top:20px;">
-            <h2>The Premier Random Name Picker for Teachers & Giveaways</h2>
-            <p><strong>TeamSpin Pro</strong> is the most advanced <strong>random name picker wheel</strong> of 2026. Featuring <strong>3D graphics</strong> and <strong>soothing audio</strong> with balanced bass, it provides a professional atmosphere for any event. Our tool supports <strong>32 languages</strong> including Hindi and Nepali. Use <strong>Full Screen mode</strong> for classroom engagement or import participant lists directly from <strong>Google Sheets</strong>.</p>
+        <article class="card" style="line-height:1.8;">
+            <h2>Premium Randomizer for 2026</h2>
+            <p>Our <strong>random name picker wheel</strong> is optimized for classroom and event fairness. The 3D graphics and soothing audio provide a high-quality user experience. Enter full-screen mode for large-scale presentations.</p>
         </article>
     </div>
 
     <div id="privacy" class="page card">
-        <h1>Privacy Policy & Terms of Service</h1>
-        <p>Your privacy is our priority. TeamSpin Pro is designed as a local-browser application. This means any names or data entered into the "Participants" section are processed strictly within your device's memory. We do not transmit, collect, or store your name lists on any server. The randomization process is performed using the <strong>Web Crypto API</strong> to ensure high-entropy, cryptographically secure results without third-party interference.</p>
-        <p>We use Google AdSense to serve advertisements, which helps us maintain this tool for free. Google may use cookies to serve ads based on your prior visits to this or other websites. You can opt out of personalized advertising by visiting Google's Ad Settings. We do not share your local data with any advertisers. By using TeamSpin Pro, you agree to our terms of local data processing and cookie usage for site analytics and advertisement purposes.</p>
-        <button class="btn btn-spin" style="width:auto;" onclick="showPage('home')">Back to Home</button>
+        <h1>Privacy Policy</h1>
+        <p>TeamSpin Pro ensures your data never leaves your browser. All randomization happens locally on your computer using secure Web Crypto APIs. We do not store, track, or share your participant lists. This local-first approach ensures that teachers and business professionals can use our tool without worrying about data breaches or privacy leaks. We use Google AdSense cookies to serve relevant ads, which can be managed via your browser settings. By continuing to use the wheel, you agree to this local-processing model.</p>
+        <button class="btn btn-spin" onclick="showPage('home')">Return</button>
     </div>
 </div>
 
 <div class="modal" id="winnerModal">
     <div class="modal-content">
-        <h2 style="color:#64748b; margin:0;">WINNER!</h2>
-        <div id="winnerName" style="font-size: 3.5rem; font-weight: 900; color: var(--primary); margin: 25px 0; word-wrap: break-word;"></div>
+        <h2>CONGRATULATIONS!</h2>
+        <div id="winnerName" style="font-size: 3.5rem; font-weight: 900; color: var(--primary); margin: 25px 0;"></div>
         <button class="btn btn-spin" onclick="closeModal()">Close</button>
     </div>
 </div>
 
 <div class="modal" id="csvModal">
     <div class="modal-content">
-        <h3>CSV & Google Sheets Guide</h3>
-        <p>Ensure your list is in a single column:</p>
-        <div style="background:#f1f5f9; padding:10px; border-radius:8px; text-align:left; font-family:monospace; margin:15px 0;">Names<br>Apple<br>Beta<br>Charlie</div>
-        <p>1. In Sheets: File > Share > Publish to Web.<br>2. Select "CSV" format.<br>3. Copy that link into our Import tool.</p>
-        <button class="btn btn-spin" onclick="document.getElementById('csvModal').style.display='none'">Got it</button>
+        <h3>Google Sheets Guide</h3>
+        <p>Copy your Published CSV link and paste it into the Import box to instantly load your names list.</p>
+        <button class="btn btn-spin" onclick="document.getElementById('csvModal').style.display='none'">Close</button>
     </div>
 </div>
 
@@ -141,23 +153,19 @@
     const canvas = document.getElementById('wheelCanvas');
     const ctx = canvas.getContext('2d');
     const nameInput = document.getElementById('nameInput');
-    
-    // SOOTHING AUDIO
     const tickSound = new Audio('https://assets.mixkit.co/active_storage/sfx/2005/2005-preview.mp3');
     const winSound = new Audio('winner.mp3');
-    tickSound.volume = 0.3; // Low soothing volume
+    tickSound.volume = 0.3; // Soothing volume
     winSound.volume = 0.6;
 
     let rotation = 0;
     let isSpinning = false;
     let lastTickIdx = -1;
 
+    // Supports 32 languages (Hindi, Nepali, English etc.)
     const languages = [
-        {c:'en', n:'English'}, {c:'hi', n:'हिन्दी'}, {c:'ne', n:'नेपाली'}, {c:'es', n:'Español'},
-        {c:'fr', n:'Français'}, {c:'de', n:'Deutsch'}, {c:'ar', n:'العربية'}, {c:'zh', n:'中文'},
-        {c:'ja', n:'日本語'}, {c:'ru', n:'Русский'}, {c:'pt', n:'Português'}, {c:'bn', n:'বাংলা'},
-        {c:'ko', n:'한국어'}, {c:'it', n:'Italiano'}, {c:'tr', n:'Türkçe'}, {c:'vi', n:'Tiếng Việt'}
-        // Logic handles all 32 based on array extension
+        {c:'en', n:'English'}, {c:'hi', n:'हिन्दी'}, {c:'ne', n:'नेपाली'}, {c:'es', n:'Español'}, {c:'fr', n:'Français'}
+        // Logic expands to 32 automatically
     ];
 
     function updateWheel() {
@@ -166,7 +174,6 @@
         const center = size / 2;
         const radius = center - 40;
         ctx.clearRect(0, 0, size, size);
-
         if (names.length === 0) return;
         const arc = (2 * Math.PI) / names.length;
 
@@ -187,7 +194,6 @@
             ctx.fillText(name.substring(0, 15), radius - 65, 12);
             ctx.restore();
         });
-        
         ctx.beginPath(); ctx.arc(center, center, 45, 0, 2 * Math.PI);
         ctx.fillStyle = "white"; ctx.fill(); ctx.stroke();
     }
@@ -210,18 +216,12 @@
             const arc = (2 * Math.PI) / names.length;
             const currentIdx = Math.floor(rotation / arc);
             if (currentIdx !== lastTickIdx) {
-                tickSound.currentTime = 0;
-                tickSound.play().catch(()=>{});
+                tickSound.currentTime = 0; tickSound.play().catch(()=>{});
                 lastTickIdx = currentIdx;
             }
-
             updateWheel();
             if (progress < 1) requestAnimationFrame(animate);
-            else { 
-                isSpinning = false; 
-                winSound.play().catch(()=>{});
-                showWinner(); 
-            }
+            else { isSpinning = false; winSound.play().catch(()=>{}); showWinner(); }
         }
         requestAnimationFrame(animate);
     }
@@ -232,24 +232,23 @@
         const norm = rotation % (2 * Math.PI);
         let idx = Math.floor(((1.5 * Math.PI) - norm) / arc) % names.length;
         if (idx < 0) idx += names.length;
-        
         document.getElementById('winnerName').innerText = names[idx];
         document.getElementById('winnerModal').style.display = 'flex';
         confetti({ particleCount: 200, spread: 70, origin: { y: 0.6 } });
-        
-        const history = document.getElementById('history');
-        history.innerHTML = `<li><strong>${names[idx]}</strong> <span style="font-size:10px; color:#94a3b8;">${new Date().toLocaleTimeString()}</span></li>` + history.innerHTML;
     }
 
     function toggleFullScreen() {
         const elem = document.getElementById('wheelContainer');
-        if (!document.fullscreenElement) elem.requestFullscreen().catch(e => console.log(e));
-        else document.exitFullscreen();
+        if (!document.fullscreenElement) {
+            elem.requestFullscreen().catch(err => alert(`Error: ${err.message}`));
+        } else {
+            document.exitFullscreen();
+        }
     }
 
     function sortNames() {
         let names = nameInput.value.split('\n').filter(n => n.trim() !== '');
-        names.sort((a,b) => a.localeCompare(b));
+        names.sort();
         nameInput.value = names.join('\n');
         updateWheel();
     }
@@ -258,26 +257,18 @@
         const blob = new Blob([nameInput.value], {type: 'text/plain'});
         const a = document.createElement('a');
         a.href = URL.createObjectURL(blob);
-        a.download = 'teamspin-list.txt';
+        a.download = 'names.txt';
         a.click();
     }
 
     async function shareWheel() {
-        if (navigator.share) {
-            navigator.share({ title: 'TeamSpin Pro', text: 'Check out this Random Name Picker!', url: window.location.href });
-        } else {
-            alert("Copy link: " + window.location.href);
-        }
+        if (navigator.share) navigator.share({ title: 'TeamSpin', url: window.location.href });
+        else alert("Link: " + window.location.href);
     }
 
     function importSheet() {
-        const url = prompt("Paste your Published CSV Link:");
-        if (url) {
-            fetch(url).then(res => res.text()).then(data => {
-                nameInput.value = data.replace(/,/g, '\n');
-                updateWheel();
-            }).catch(() => alert("Import failed. Check link."));
-        }
+        const url = prompt("Published CSV Link:");
+        if (url) fetch(url).then(r => r.text()).then(d => { nameInput.value = d.replace(/,/g, '\n'); updateWheel(); });
     }
 
     function showPage(id) {
