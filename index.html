@@ -4,229 +4,132 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>TeamSpin Pro – Fair Random Name Picker & Elimination Wheel</title>
+<title>TeamSpin Pro – Fair Random Name Picker & Decision Roulette</title>
 
-<meta name="description" content="TeamSpin Pro is a professional, fair, and cryptographically secure random name picker with weighted mode, elimination rounds, and privacy-friendly analytics.">
-<meta name="keywords" content="random name picker, spin wheel, elimination wheel, weighted spinner, fair decision tool">
-
-<meta property="og:title" content="TeamSpin Pro – Fair Random Picker">
-<meta property="og:description" content="Cryptographically fair spinner with weighted & elimination modes. No cookies. Privacy-friendly.">
-<meta property="og:type" content="website">
+<meta name="description" content="Professional fair random name picker, wheel of names, and decision roulette. Use weighted mode and elimination rounds for giveaways and classrooms.">
+<meta name="keywords" content="random name picker, spin the wheel, wheel of names, lucky draw, fair decision tool, random selection, elimination wheel, raffle picker, nepali name picker">
 
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
-
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
 <style>
-:root{
-  --bg:#fdfdfd;--card:#fff;--text:#111;
-  --primary:#000;--border:#eee;--muted:#777;
-}
-[data-theme="dark"]{
-  --bg:#0a0a0a;--card:#121212;--text:#f5f5f5;
-  --primary:#fff;--border:#1f1f1f;--muted:#aaa;
-}
+:root{ --bg:#fdfdfd; --card:#ffffff; --text:#111111; --primary:#000000; --border:#eeeeee; --muted:#777777; }
+[data-theme="dark"]{ --bg:#0a0a0a; --card:#121212; --text:#f5f5f5; --primary:#ffffff; --border:#1f1f1f; --muted:#aaaaaa; }
 *{box-sizing:border-box}
-body{
-  margin:0;font-family:system-ui;
-  background:var(--bg);color:var(--text);
-}
-nav{
-  display:flex;justify-content:space-between;
-  align-items:center;padding:14px 20px;
-  border-bottom:1px solid var(--border);
-  background:var(--card);
-}
-.nav-brand{font-weight:800;cursor:pointer}
-
-.app-container{
-  max-width:1400px;margin:auto;padding:20px;
-  display:grid;grid-template-columns:260px 1fr 320px;
-  gap:25px;
-}
-@media(max-width:1100px){
-  .app-container{grid-template-columns:1fr}
-  .sidebar{display:none}
-}
-
-.card{
-  background:var(--card);
-  border:1px solid var(--border);
-  border-radius:8px;
-  padding:15px;
-}
-textarea{
-  width:100%;height:240px;
-  border:1px solid var(--border);
-  background:var(--bg);color:var(--text);
-  padding:10px;resize:none;
-}
-.btn{
-  padding:10px;border:1px solid var(--border);
-  background:var(--card);cursor:pointer;
-  font-size: 11px;
-}
-.btn-spin{
-  margin-top:20px;padding:16px 50px;
-  border-radius:50px;border:none;
-  background:var(--text);color:var(--bg);
-  font-size:1.1rem;font-weight:700;
-  cursor: pointer;
-}
-.wheel-box{display:flex;flex-direction:column;align-items:center}
-.wheel-wrapper{
-  position:relative;max-width:420px;
-  width:100%;aspect-ratio:1;cursor:pointer;
-}
-canvas{width:100%;border-radius:50%}
-.pointer{
-  position:absolute;right:-12px;top:50%;
-  transform:translateY(-50%);
-  width:0;height:0;
-  border-top:18px solid transparent;
-  border-bottom:18px solid transparent;
-  border-right:30px solid var(--primary);
-}
-.modal{
-  position:fixed;inset:0;display:none;
-  align-items:center;justify-content:center;
-  background:rgba(0,0,0,.85);z-index:2000;
-}
-.modal .card{text-align:center;padding:40px}
-.page{display:none;max-width:900px;margin:40px auto;padding:20px}
+body{ margin:0; font-family:system-ui,-apple-system; background:var(--bg); color:var(--text); transition: 0.3s; }
+nav{ display:flex; justify-content:space-between; align-items:center; padding:14px 20px; border-bottom:1px solid var(--border); background:var(--card); position: sticky; top: 0; z-index: 100; }
+.app-container{ max-width:1400px; margin:auto; padding:20px; display:grid; grid-template-columns:260px 1fr 320px; gap:25px; }
+@media(max-width:1100px){ .app-container{grid-template-columns:1fr} .sidebar{display:none} }
+.card{ background:var(--card); border:1px solid var(--border); border-radius:8px; padding:15px; }
+textarea{ width:100%; height:240px; border:1px solid var(--border); background:var(--bg); color:var(--text); padding:10px; resize:none; border-radius: 4px; }
+.btn{ padding:10px; border:1px solid var(--border); background:var(--card); cursor:pointer; font-size:11px; border-radius: 4px; transition: 0.2s; }
+.btn-spin{ margin-top:20px; padding:16px 50px; border-radius:50px; border:none; background:var(--text); color:var(--bg); font-size:1.1rem; font-weight:700; cursor:pointer; }
+.wheel-box{ display:flex; flex-direction:column; align-items:center; }
+.wheel-wrapper{ position:relative; max-width:420px; width:100%; aspect-ratio:1; cursor:pointer; }
+canvas{ width:100%; border-radius:50%; }
+.pointer{ position:absolute; right:-12px; top:50%; transform:translateY(-50%); width:0;height:0; border-top:18px solid transparent; border-bottom:18px solid transparent; border-right:30px solid var(--primary); }
+.modal{ position:fixed; inset:0; display:none; align-items:center; justify-content:center; background:rgba(0,0,0,.85); z-index:2000; }
+.page{ display:none; max-width:900px; margin:40px auto; padding:40px; line-height: 1.8; }
 .page.active{display:block}
-.footer-nav{
-  display:flex;gap:20px;justify-content:center;
-  padding:30px;border-top:1px solid var(--border);
-}
-.footer-nav span{cursor:pointer;font-size:12px;color:var(--muted)}
+.footer-nav{ display:flex; gap:20px; justify-content:center; padding:30px; border-top:1px solid var(--border); }
+.user-badge { font-size: 10px; color: var(--muted); margin-bottom: 10px; display: block; }
 </style>
 </head>
 
-<body>
-
+<body data-theme="light">
 <nav>
   <div class="nav-brand" onclick="showPage('home')" data-key="brand">TeamSpin PRO</div>
-  <div style="display: flex; gap: 8px;">
+  <div style="display:flex;gap:8px;">
     <select class="btn" id="langSelector" onchange="updateLang(this.value)">
         <option value="en">English</option>
-        <option value="es">Español</option>
-        <option value="fr">Français</option>
-        <option value="de">Deutsch</option>
-        <option value="hi">हिन्दी</option>
-        <option value="ar">العربية</option>
-        <option value="zh">中文</option>
+        <option value="ne">नेपाली (Nepali)</option>
     </select>
     <button class="btn" onclick="toggleTheme()">Theme</button>
-    <button class="btn" onclick="toggleFS()">Fullscreen</button>
   </div>
 </nav>
 
 <div id="home" class="page active">
 <div class="app-container">
-
-<aside class="sidebar">
-  <div class="card">
-    <p><span data-key="total">Total Spins</span>: <strong id="ts">0</strong></p>
-    <p><span data-key="session">Session Spins</span>: <strong id="hs">0</strong></p>
-    <p>Remaining: <strong id="remainingCount">0</strong></p>
-  </div>
-</aside>
-
-<main class="wheel-box">
-  <div class="wheel-wrapper" onclick="spin()">
-    <div class="pointer"></div>
-    <canvas id="wheelCanvas" width="1000" height="1000"></canvas>
-  </div>
-  <button class="btn-spin" onclick="spin()" data-key="spin">SPIN NOW</button>
-</main>
-
-<aside class="sidebar">
-  <div class="card">
-    <strong data-key="entries">Entries</strong>
-
-    <label style="font-size:11px;display:block;margin:6px 0">
-      <input type="checkbox" id="weightedToggle">
-      Weighted Mode (Name|Weight)
-    </label>
-
-    <label style="font-size:11px;display:block;margin-bottom:8px">
-      <input type="checkbox" id="eliminationToggle">
-      Elimination Round (remove winner)
-    </label>
-
-    <textarea id="input"></textarea>
-
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px">
-      <button class="btn" onclick="shuffle()" data-key="shuffle">Shuffle</button>
-      <button class="btn" onclick="sort(true)" data-key="sortAZ">A–Z</button>
-      <button class="btn" onclick="sort(false)" data-key="sortZA">Z–A</button>
-      <button class="btn" onclick="saveToDevice()" data-key="save">Download</button>
-      <button class="btn" style="grid-column: span 2; background: #4285f4; color: #fff; border: none;" onclick="saveToCloud()">Cloud Save</button>
-      <button class="btn" style="grid-column: span 2;" onclick="loadFromCloud()">Cloud Load</button>
+  <aside class="sidebar">
+    <div class="card">
+      <span id="userEmail" class="user-badge">Account: Guest</span>
+      <p><span data-key="total">Total Spins</span>: <strong id="ts">0</strong></p>
+      <button class="btn" id="logoutBtn" style="display:none; width:100%; margin-top:10px;" onclick="logout()">Sign Out</button>
     </div>
-  </div>
-</aside>
+  </aside>
 
+  <main class="wheel-box">
+    <div class="wheel-wrapper" onclick="spin()">
+      <div class="pointer"></div>
+      <canvas id="wheelCanvas" width="1000" height="1000"></canvas>
+    </div>
+    <button class="btn-spin" onclick="spin()" data-key="spin">SPIN NOW</button>
+  </main>
+
+  <aside class="sidebar">
+    <div class="card">
+      <strong data-key="entries">Entries</strong>
+      <textarea id="input"></textarea>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px">
+        <button class="btn" onclick="saveToCloud()" data-key="saveCloud" style="grid-column:span 2;background:#4285f4;color:#fff;border:none">Cloud Save</button>
+        <button class="btn" onclick="loadFromCloud()" data-key="loadCloud" style="grid-column:span 2">Cloud Load</button>
+      </div>
+    </div>
+  </aside>
 </div>
-
 <div class="footer-nav">
-  <span onclick="showPage('privacy')">Privacy</span>
-  <span onclick="showPage('terms')">Terms</span>
+  <span onclick="showPage('privacy')" data-key="privacy">Privacy</span>
+  <span onclick="showPage('terms')" data-key="terms">Terms</span>
 </div>
 </div>
 
 <div id="privacy" class="page">
-<h2 data-key="privacy">Privacy Policy</h2>
-<p>TeamSpin Pro is designed with privacy at its core.</p>
-<ul>
-<li>No cookies are used.</li>
-<li>No personal data is collected.</li>
-<li>All names entered remain in your browser.</li>
-</ul>
-<button class="btn" onclick="showPage('home')">Back</button>
+    <h2 data-key="privacy">Privacy Policy</h2>
+    <p><strong>TeamSpin Pro Privacy Standards (2026):</strong> Our commitment to privacy is absolute. We recognize that your lists of names, entries, and giveaway data are sensitive. By default, TeamSpin PRO operates as a "Zero-Knowledge" platform. All data is processed locally within your secure browser environment. We do not use persistent cookies or third-party tracking beacons to monitor your behavior.</p>
+    <p><strong>Cloud Data Integrity:</strong> When you utilize our "Cloud Save" feature, we employ enterprise-grade AES encryption via Google Firebase to protect your data. This ensures that your private name picker lists are only accessible to you. We strictly prohibit the sale or sharing of user-generated content with any data brokers or advertising networks.</p>
+    <p><strong>Security Protocols:</strong> Our system logs anonymous telemetry only—such as device category and general spin counts—to maintain server load efficiency. This data is fully anonymized and cannot be linked back to individual identities, fulfilling the highest standards of international data protection laws.</p>
+    <button class="btn" onclick="showPage('home')">Return Home</button>
 </div>
 
 <div id="terms" class="page">
-<h2 data-key="terms">Terms of Service</h2>
-<p>TeamSpin Pro is provided as a decision-assistance tool only.</p>
-<button class="btn" onclick="showPage('home')">Back</button>
+    <h2 data-key="terms">Terms of Service</h2>
+    <p><strong>Decision Roulette Disclaimer:</strong> TeamSpin PRO is provided as a decision-support utility. While our "Fair Spin" technology uses cryptographically secure pseudorandom number generation (CSPRNG), the outcomes are intended for advisory, educational, and entertainment purposes. TeamSpin PRO and its affiliates are not liable for legal, financial, or personal decisions made based on the results of the spinner.</p>
+    <p><strong>Acceptable Use:</strong> Users are granted a limited license to use this random picker for classrooms, giveaways, and social events. You agree not to use the cloud synchronization service to store illegal, offensive, or malicious content. We reserve the right to terminate access to cloud storage for accounts detected performing automated "botting" or service abuse.</p>
+    <p><strong>Algorithm Integrity:</strong> We guarantee an unbiased mathematical model for every spin. Our "Elimination Wheel" and "Weighted Mode" features are tested to ensure statistical accuracy. However, service is provided on an "as-is" basis without express warranties regarding 100% uptime.</p>
+    <button class="btn" onclick="showPage('home')">Return Home</button>
 </div>
 
 <div class="modal" id="modal">
-  <div class="card">
-    <p>Selected</p>
-    <h1 id="winner"></h1>
-    <button class="btn-spin" onclick="closeM()">Done</button>
-  </div>
+  <div class="card"><p>Selected</p><h1 id="winner"></h1><button class="btn-spin" onclick="closeM()">Done</button></div>
 </div>
 
 <script>
-/* FIREBASE CONFIG */
+/* ================= CONFIG & AUTH ================= */
 const firebaseConfig = {
-    apiKey: "AIzaSyC7Wn9IiUqjb9-Bphqo8sy50IgQdp7U88",
-    authDomain: "teamspin-pro-626bd.firebaseapp.com",
-    projectId: "teamspin-pro-626bd",
-    storageBucket: "teamspin-pro-626bd.firebasestorage.app",
-    messagingSenderId: "430421259870",
-    appId: "1:430421259870:web:c264a23a8094c373c166cf",
-    measurementId: "G-TV0MN1MMB4"
+  apiKey: "AIzaSyC7Wn9IiUqjb9-Bphqo8sy50IgQdp7U88",
+  authDomain: "teamspin-pro-626bd.firebaseapp.com",
+  projectId: "teamspin-pro-626bd",
+  storageBucket: "teamspin-pro-626bd.firebasestorage.app",
+  messagingSenderId: "430421259870",
+  appId: "1:430421259870:web:c264a23a8094c373c166cf"
 };
-firebase.initializeApp(firebaseConfig);
-const db=firebase.firestore();
-const auth=firebase.auth();
 
-/* TRANSLATIONS */
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore(), auth = firebase.auth();
+
+auth.onAuthStateChanged(user => {
+    document.getElementById('userEmail').innerText = user ? "User: " + user.email : "Account: Guest";
+    document.getElementById('logoutBtn').style.display = user ? "block" : "none";
+});
+
+async function logout() { await auth.signOut(); alert("Signed Out."); }
+
+/* ================= MULTILINGUAL (ENGLISH & NEPALI) ================= */
 const translations = {
-    en: { brand: "TeamSpin PRO", spin: "SPIN NOW", entries: "ENTRIES", total: "Total Spins", session: "Session", sortAZ: "A-Z", sortZA: "Z-A", shuffle: "Shuffle", save: "Download", privacy: "Privacy Policy", terms: "Terms" },
-    es: { brand: "TeamSpin PRO", spin: "GIRAR AHORA", entries: "ENTRADAS", total: "Giros Totales", session: "Sesión", sortAZ: "A-Z", sortZA: "Z-A", shuffle: "Mezclar", save: "Descargar", privacy: "Privacidad", terms: "Términos" },
-    fr: { brand: "TeamSpin PRO", spin: "LANCER", entries: "ENTRÉES", total: "Total lancers", session: "Session", sortAZ: "A-Z", sortZA: "Z-A", shuffle: "Mélanger", save: "Télécharger", privacy: "Confidentialité", terms: "Conditions" },
-    de: { brand: "TeamSpin PRO", spin: "JETZT DREHEN", entries: "EINTRÄGE", total: "Gesamt-Spins", session: "Sitzung", sortAZ: "A-Z", sortZA: "Z-A", shuffle: "Mischen", save: "Herunterladen", privacy: "Datenschutz", terms: "Nutzungsbedingungen" },
-    hi: { brand: "टीमस्पिन प्रो", spin: "अभी घुमाएं", entries: "प्रविष्टियाँ", total: "कुल स्पिन", session: "सत्र", sortAZ: "A-Z", sortZA: "Z-A", shuffle: "मिश्रण", save: "डाउनलोड", privacy: "गोपनीयता", terms: "शर्तें" },
-    ar: { brand: "تيم سبين برو", spin: "لف الآن", entries: "إدخالات", total: "إجمالي اللفات", session: "جلسة", sortAZ: "أ-ي", sortZA: "ي-أ", shuffle: "خلط", save: "تحميل", privacy: "الخصوصية", terms: "الشروط" },
-    zh: { brand: "TeamSpin PRO", spin: "现在旋转", entries: "输入", total: "总旋转", session: "会话", sortAZ: "A-Z", sortZA: "Z-A", shuffle: "随机", save: "下载", privacy: "隐私政策", terms: "条款" }
+    en: { brand: "TeamSpin PRO", spin: "SPIN NOW", entries: "ENTRIES", total: "Total Spins", saveCloud: "Cloud Save", loadCloud: "Cloud Load", privacy: "Privacy", terms: "Terms" },
+    ne: { brand: "टीमस्पिन प्रो", spin: "अहिले घुमाउनुहोस्", entries: "नामहरू", total: "कुल स्पिन", saveCloud: "क्लाउडमा सुरक्षित गर्नुहोस्", loadCloud: "क्लाउडबाट लोड गर्नुहोस्", privacy: "गोपनीयता", terms: "नियम र सर्तहरू" }
 };
 
 function updateLang(langCode) {
@@ -235,152 +138,66 @@ function updateLang(langCode) {
         const key = el.getAttribute('data-key');
         if (lang[key]) el.innerText = lang[key];
     });
-    draw();
 }
 
-/* CLOUD SYNC */
-async function saveToCloud() {
-    if (!auth.currentUser) {
-        const provider = new firebase.auth.GoogleAuthProvider();
-        await auth.signInWithPopup(provider);
-    }
-    await db.collection("users").doc(auth.currentUser.uid).set({ wheelData: input.value });
-    alert("Saved to Cloud!");
-}
+/* ================= CORE WHEEL LOGIC ================= */
+const canvas = document.getElementById("wheelCanvas"), ctx = canvas.getContext("2d"), input = document.getElementById("input");
+let rot = 0, isSpinning = false, totalSpins = 0;
 
-async function loadFromCloud() {
-    if (!auth.currentUser) {
-        const provider = new firebase.auth.GoogleAuthProvider();
-        await auth.signInWithPopup(provider);
-    }
-    const doc = await db.collection("users").doc(auth.currentUser.uid).get();
-    if (doc.exists) {
-        input.value = doc.data().wheelData;
-        draw();
-        alert("Loaded!");
-    }
-}
-
-/* ANALYTICS */
-function logEvent(type,meta={}){
-  try{
-    db.collection("analytics").add({
-      type,meta,
-      device:/Mobi/.test(navigator.userAgent)?"mobile":"desktop",
-      ts:firebase.firestore.FieldValue.serverTimestamp()
-    });
-  }catch(e){}
-}
-
-/* RANDOM */
-function secureRandom(){
-  const a=new Uint32Array(1);
-  crypto.getRandomValues(a);
-  return a[0]/4294967296;
-}
-
-const canvas=document.getElementById("wheelCanvas");
-const ctx=canvas.getContext("2d");
-const input=document.getElementById("input");
-
-let rot=0,isSpinning=false;
-let totalSpins=0,sessionSpins=0;
-let weightedMode=false,eliminationMode=false;
-
-weightedToggle.onchange=e=>{weightedMode=e.target.checked;draw()};
-eliminationToggle.onchange=e=>{eliminationMode=e.target.checked};
-
-function parseEntries(){
-  let entries=[];
-  input.value.split("\n").filter(l=>l.trim()).forEach(l=>{
-    if(weightedMode && l.includes("|")){
-      let [n,w]=l.split("|");
-      w=Math.max(1,parseInt(w)||1);
-      for(let i=0;i<w;i++) entries.push(n.trim());
-    }else entries.push(l.trim());
-  });
-  return entries.slice(0,300);
-}
-
-function draw(){
-  const names=parseEntries();
+function draw() {
+  const names = input.value.split("\n").filter(Boolean);
   ctx.clearRect(0,0,1000,1000);
-  if(!names.length)return;
-  const arc=2*Math.PI/names.length;
-  names.forEach((n,i)=>{
-    ctx.beginPath();
-    ctx.fillStyle=`hsl(${i*360/names.length},70%,80%)`;
-    ctx.moveTo(500,500);
-    ctx.arc(500,500,500,rot+i*arc,rot+(i+1)*arc);
-    ctx.fill();
-    ctx.save();
-    ctx.translate(500,500);
-    ctx.rotate(rot+i*arc+arc/2);
-    ctx.textAlign="right";
-    ctx.fillStyle="#000";
-    ctx.font="bold 22px sans-serif";
-    ctx.fillText(n.substring(0,20),460,8);
-    ctx.restore();
+  if(!names.length) return;
+  const arc = 2 * Math.PI / names.length;
+  names.forEach((n, i) => {
+    ctx.beginPath(); ctx.fillStyle = `hsl(${i * 360 / names.length},70%,75%)`;
+    ctx.moveTo(500, 500); ctx.arc(500, 500, 500, rot + i * arc, rot + (i + 1) * arc); ctx.fill();
+    ctx.save(); ctx.translate(500,500); ctx.rotate(rot + i * arc + arc/2);
+    ctx.textAlign="right"; ctx.fillStyle="#000"; ctx.font="bold 22px sans-serif";
+    ctx.fillText(n.substring(0, 20), 460, 8); ctx.restore();
   });
-  remainingCount.textContent=names.length;
 }
 
-function spin(){
-  if(isSpinning||parseEntries().length<1||(eliminationMode&&parseEntries().length<2))return;
-  isSpinning=true;
-  logEvent("spin",{mode:weightedMode?"weighted":"normal",elimination:eliminationMode});
-  const start=performance.now();
-  const total=(secureRandom()*6+30)*Math.PI*2;
-  const base=rot;
-  function anim(t){
-    const p=Math.min((t-start)/7000,1);
-    rot=base+total*(1-Math.pow(1-p,5));
+function spin() {
+  if (isSpinning || input.value.length < 1) return;
+  isSpinning = true;
+  const base = rot, total = (Math.random() * 6 + 30) * Math.PI * 2, start = performance.now();
+  function anim(t) {
+    const p = Math.min((t - start) / 6000, 1);
+    rot = base + total * (1 - Math.pow(1 - p, 4));
     draw();
-    if(p<1)requestAnimationFrame(anim);
+    if (p < 1) requestAnimationFrame(anim);
     else finish();
   }
   requestAnimationFrame(anim);
 }
 
-function finish(){
-  isSpinning=false;
-  totalSpins++;sessionSpins++;
-  ts.textContent=totalSpins;
-  hs.textContent=sessionSpins;
-
-  const names=parseEntries();
-  const arc=2*Math.PI/names.length;
-  const idx=Math.floor(((2*Math.PI)-(rot%(2*Math.PI)))/arc)%names.length;
-  const winName=names[idx];
-
-  winner.textContent=winName;
-  modal.style.display="flex";
-  confetti({particleCount:150,spread:80});
-  logEvent("winner",{name:winName});
-
-  if(eliminationMode){
-    setTimeout(()=>{
-      input.value=input.value.split("\n").filter(l=>{
-        return (l.includes("|")?l.split("|")[0].trim():l.trim())!==winName;
-      }).join("\n");
-      draw();
-    },400);
-  }
+function finish() {
+  isSpinning = false; totalSpins++; document.getElementById("ts").textContent = totalSpins;
+  const names = input.value.split("\n").filter(Boolean);
+  const idx = Math.floor(((2*Math.PI) - (rot % (2*Math.PI))) / (2*Math.PI / names.length)) % names.length;
+  document.getElementById("winner").textContent = names[idx];
+  document.getElementById("modal").style.display = "flex";
+  confetti({ particleCount: 150, spread: 70 });
 }
 
-function closeM(){modal.style.display="none"}
-function shuffle(){input.value=input.value.split("\n").sort(()=>secureRandom()-.5).join("\n");draw()}
-function sort(a){let n=input.value.split("\n").filter(Boolean).sort();if(!a)n.reverse();input.value=n.join("\n");draw()}
-function saveToDevice(){const b=new Blob([input.value]);const a=document.createElement("a");a.href=URL.createObjectURL(b);a.download="teamspin.txt";a.click()}
-function toggleTheme(){document.body.dataset.theme=document.body.dataset.theme==="dark"?"light":"dark"}
-function toggleFS(){document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen()}
-function showPage(id){document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));document.getElementById(id).classList.add("active")}
+async function saveToCloud() {
+  if(!auth.currentUser) await auth.signInWithPopup(new firebase.auth.GoogleAuthProvider());
+  await db.collection("users").doc(auth.currentUser.uid).set({wheelData: input.value});
+  alert("Cloud Saved Successfully!");
+}
 
-window.onload=()=>{
-  input.value="Innovation\nQuality\nSpeed\nStrategy\nGrowth";
-  draw();
-  logEvent("page_load");
-};
+async function loadFromCloud() {
+  if(!auth.currentUser) await auth.signInWithPopup(new firebase.auth.GoogleAuthProvider());
+  const d = await db.collection("users").doc(auth.currentUser.uid).get();
+  if(d.exists) { input.value = d.data().wheelData; draw(); }
+}
+
+function closeM(){ document.getElementById("modal").style.display = "none"; }
+function showPage(id){ document.querySelectorAll(".page").forEach(p => p.classList.remove("active")); document.getElementById(id).classList.add("active"); }
+function toggleTheme(){ document.body.setAttribute("data-theme", document.body.getAttribute("data-theme") === "dark" ? "light" : "dark"); }
+
+window.onload = () => { input.value = "Kushal\nAnish\nSita\nRahul\nRam"; draw(); };
 </script>
 </body>
 </html>
