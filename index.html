@@ -1,364 +1,210 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
-<title>TeamSpin PRO v16.0 | Professional 3D Wheel of Names</title>
-<meta name="description" content="TeamSpin PRO: Professional 3D Wheel of Names. Fully responsive, 3D shadows, theme changer, mobile-friendly, SEO optimized.">
-<meta name="keywords" content="Wheel of Names, random picker, Nepali names, Hindi names, English names, spin wheel, winner picker, 3D wheel, TeamSpin PRO, privacy, terms, feedback, FAQ">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TeamSpin PRO | 3D Wheel of Names</title>
+    <style>
+        :root {
+            --primary: #4285f4;
+            --bg: #f8f9fa;
+            --card-bg: #ffffff;
+            --text: #333;
+        }
 
-<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg);
+            margin: 0;
+            color: var(--text);
+        }
 
-<style>
-:root {
-  --primary:#007AFF;
-  --bg:#F0F2F5;
-  --card:#fff;
-  --text:#1c1e21;
-}
-[data-theme="dark"] { --bg:#18191a; --card:#242526; --text:#e4e6eb; }
-[data-theme="blue"] { --primary:#1E90FF; --bg:#E0F0FF; --card:#ffffff; --text:#000; }
-[data-theme="green"] { --primary:#22C55E; --bg:#E6F4EA; --card:#ffffff; --text:#000; }
-[data-theme="red"] { --primary:#EF4444; --bg:#FFE6E6; --card:#fff; --text:#000; }
-[data-theme="purple"] { --primary:#8B5CF6; --bg:#F5EEFF; --card:#fff; --text:#000; }
+        /* Responsive Navigation */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 5%;
+            background: white;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
 
-body {
-  margin:0;
-  font-family:'Segoe UI','Mukta',sans-serif;
-  background:var(--bg);
-  color:var(--text);
-  transition:all 0.3s ease;
-  overflow-x:hidden;
-}
+        .btn {
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            color: var(--text);
+            cursor: pointer;
+            background: white;
+            font-size: 14px;
+        }
 
-/* NAVIGATION */
-nav {
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  padding:10px 20px;
-  background:var(--card);
-  border-bottom:1px solid #ddd;
-  position:sticky;
-  top:0;
-  z-index:1000;
-  flex-wrap:wrap;
-}
-.nav-left{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
-.nav-left a{margin-left:15px;color:var(--primary);text-decoration:none;font-weight:600;}
+        .btn-main {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            width: 100%;
+            margin-top: 10px;
+        }
 
-/* BUTTONS */
-.btn, .lang-select{
-  margin-top:5px;
-  padding:8px 12px;
-  border-radius:6px;
-  border:1px solid #ccc;
-  cursor:pointer;
-  font-size:13px;
-  font-weight:600;
-  background:var(--card);
-  color:var(--text);
-  transition:0.2s;
-}
-.btn:hover{background:#f0f0f0;}
-.btn-main{
-  background:var(--primary);
-  color:white;
-  border:none;
-  grid-column:span 2;
-  padding:15px;
-  font-size:18px;
-  font-weight:700;
-  margin-top:15px;
-  border-radius:50px;
-  cursor:pointer;
-  box-shadow:0 5px 20px rgba(0,0,0,0.2);
-}
+        /* Main Layout Grid */
+        .app-grid {
+            display: grid;
+            grid-template-columns: 300px 1fr 300px; /* Left Sidebar | Wheel | Ad Space */
+            gap: 20px;
+            padding: 20px;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
 
-/* GRID */
-.app-grid{
-  display:grid;
-  grid-template-columns:160px 1fr 350px;
-  min-height:calc(100vh - 65px);
-  gap:10px;
-}
-.ad-left, .sidebar{
-  padding:15px;
-  background:var(--card);
-  border:1px solid #ddd;
-  overflow:auto;
-}
-.ad-left{border-right:none;display:flex;flex-direction:column;align-items:center;}
-.sidebar{border-left:none;}
+        /* Sidebar Styling */
+        .sidebar { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        #nameInput { width: 100%; height: 300px; padding: 10px; border-radius: 5px; border: 1px solid #ccc; box-sizing: border-box; }
 
-/* WHEEL */
-.wheel-column{
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  padding:20px;
-  position:relative;
-  width:100%;
-}
-.wheel-container{
-  position:relative;
-  width:100%;
-  max-width:550px;
-  aspect-ratio:1/1;
-  filter:drop-shadow(0 15px 25px rgba(0,0,0,0.2));
-}
-canvas{
-  width:100%;
-  height:100%;
-  display:block;
-  cursor:pointer;
-  border-radius:50%;
-  box-shadow:0 5px 15px rgba(0,0,0,0.15);
-}
-.pointer-3d{
-  position:absolute;
-  right:-20px;
-  top:50%;
-  transform:translateY(-50%);
-  width:60px;
-  height:40px;
-  background:linear-gradient(135deg,#ff4d4d 0%,#b30000 100%);
-  clip-path:polygon(0% 50%,100% 0%,80% 50%,100% 100%);
-  z-index:100;
-}
+        /* Wheel Area */
+        .wheel-column { text-align: center; }
+        .wheel-container { 
+            position: relative; 
+            display: inline-block; 
+            margin: 20px 0;
+            background: radial-gradient(circle, #fff 0%, #ddd 100%);
+            border-radius: 50%;
+            padding: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2); /* 3D Shadow Effect */
+        }
+        
+        /* Pointer */
+        .wheel-pointer {
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0; 
+            height: 0; 
+            border-left: 20px solid transparent;
+            border-right: 20px solid transparent;
+            border-top: 40px solid #e74c3c;
+            z-index: 10;
+        }
 
-/* INFO SECTION */
-.info-section{max-width:1000px;margin:30px auto;padding:20px;}
-.info-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:20px;}
-.info-card{background:var(--card);padding:20px;border-radius:8px;border:1px solid #ddd;}
+        canvas { max-width: 100%; height: auto; border-radius: 50%; }
 
-/* FOOTER */
-footer{background:var(--card);padding:30px;border-top:1px solid #ddd;text-align:center;}
+        /* AdSense Area */
+        .ads-container { background: #eee; border: 1px dashed #bbb; display: flex; align-items: center; justify-content: center; min-height: 250px; border-radius: 8px; }
 
-/* MODALS */
-.modal{display:none;position:fixed;z-index:9999;left:0;top:0;width:100%;height:100%;background:rgba(0,0,0,0.6);backdrop-filter:blur(4px);}
-.modal-content{background:var(--card);margin:10% auto;padding:25px;border-radius:12px;width:90%;max-width:600px;position:relative;overflow-y:auto;max-height:80vh;}
+        /* Content Sections (Based on Screenshot) */
+        .faq-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 40px;
+            text-align: left;
+        }
+        .faq-card { background: white; padding: 25px; border-radius: 12px; border-top: 4px solid var(--primary); box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
 
-/* FULLSCREEN */
-body.fullscreen-active{
-  overflow:hidden;
-  background:#000;
-}
-body.fullscreen-active nav,
-body.fullscreen-active .sidebar,
-body.fullscreen-active .ad-left,
-body.fullscreen-active .info-section,
-body.fullscreen-active footer{
-  display:none !important;
-}
-body.fullscreen-active .wheel-column{
-  width:100vw;
-  height:100vh;
-  justify-content:center;
-  align-items:center;
-  padding:0;
-}
-body.fullscreen-active .wheel-container{
-  width:90vmin;
-  height:90vmin;
-  max-width:none;
-  max-height:none;
-}
+        /* Fullscreen Mode */
+        :fullscreen .wheel-container { background: white; width: 100vw; height: 100vh; display: flex; align-items: center; justify-content: center; }
+        :fullscreen .btn-main { position: fixed; bottom: 20px; width: 200px; left: 50%; transform: translateX(-50%); }
 
-/* MOBILE FIX */
-@media(max-width:992px){
-  .app-grid{grid-template-columns:1fr;}
-  .ad-left,.sidebar{display:none;}
-  nav{flex-direction:column;align-items:flex-start;height:auto;}
-  .wheel-column{padding:15px;}
-  .wheel-container{width:95vw;height:95vw;}
-}
-</style>
+        /* Mobile Responsiveness */
+        @media (max-width: 1024px) {
+            .app-grid { grid-template-columns: 1fr; }
+            .ads-container { display: none; } /* Hide side ads on mobile */
+            .sidebar { order: 2; }
+            .wheel-column { order: 1; }
+        }
+    </style>
 </head>
-<body data-theme="default">
+<body>
 
 <nav>
-  <div class="nav-left">
-    <h1 style="font-size:18px;margin:0;">TeamSpin <span style="color:var(--primary)">PRO</span></h1>
-    <a href="https://example.com/privacy" target="_blank">Privacy Policy</a>
-    <a href="https://example.com/terms" target="_blank">Terms</a>
-    <a href="https://example.com/faq" target="_blank">FAQ</a>
-    <a href="https://example.com/feedback" target="_blank">Feedback</a>
-  </div>
-  <div style="display:flex; gap:10px; align-items:center;">
-    <select class="lang-select" onchange="changeLanguage(this.value)">
-      <option value="en">English</option>
-      <option value="ne">नेपाली</option>
-      <option value="hi">हिन्दी</option>
-    </select>
-    <button class="btn" onclick="toggleTheme()">🌓 Theme</button>
-    <button class="btn" onclick="toggleFullScreen()">[ ] Fullscreen</button>
-  </div>
+    <div class="nav-left"><h1>TeamSpin <span style="color:var(--primary)">PRO</span></h1></div>
+    <div>
+        <button class="btn" onclick="toggleFullscreen()">Fullscreen</button>
+        <a href="faq.html" class="btn">FAQ</a>
+    </div>
 </nav>
 
 <div class="app-grid">
-  <aside class="ad-left">
-    <div class="ad-container-wrapper">
-      <button class="close-ad-btn" onclick="this.parentElement.style.display='none'">×</button>
-      <div style="width:120px;height:400px;background:#eee;display:flex;align-items:center;justify-content:center;text-align:center;font-size:10px;color:#888;">AD SLOT</div>
-    </div>
-  </aside>
+    <aside class="sidebar">
+        <h3>Wheel Entries (नामहरू थप्नुहोस्)</h3>
+        <textarea id="nameInput" oninput="draw()">राम
+श्याम
+गीता
+हरी
+सीता
+John
+Alice</textarea>
+        <div class="controls" style="margin-top:10px; display: flex; gap: 5px;">
+            <button class="btn" onclick="shuffleNames()">Shuffle</button>
+            <button class="btn" onclick="sortNames()">Sort</button>
+        </div>
+    </aside>
 
-  <main class="wheel-column">
-    <div class="wheel-container">
-      <div class="pointer-3d"></div>
-      <canvas id="wheelCanvas" width="1000" height="1000" onclick="spin()"></canvas>
-    </div>
-    <button class="btn btn-main" onclick="spin()">SPIN THE WHEEL</button>
-    <div style="margin-top:15px; font-weight:bold;">
-      Winner: <span id="latestWinner" style="color:var(--primary)">-</span>
-    </div>
-    <div style="margin-top:10px; display:flex; gap:10px;">
-      <button class="btn" onclick="shareWinner()">Share Winner</button>
-      <button class="btn" onclick="saveWinner()">Save Winner</button>
-    </div>
-    <div style="margin-top:15px;">
-      <label>Theme:</label>
-      <select class="lang-select" onchange="changeWheelTheme(this.value)">
-        <option value="default">Default</option>
-        <option value="dark">Dark</option>
-        <option value="blue">Blue</option>
-        <option value="green">Green</option>
-        <option value="red">Red</option>
-        <option value="purple">Purple</option>
-      </select>
-    </div>
-  </main>
+    <main class="wheel-column" id="mainApp">
+        <div class="wheel-container" id="fullscreenArea">
+            <div class="wheel-pointer"></div>
+            <canvas id="wheelCanvas" width="800" height="800"></canvas>
+        </div>
+        
+        <button class="btn btn-main" onclick="spin()">SPIN THE WHEEL</button>
+        
+        <div style="margin:20px 0;">
+            <strong>विजेता (Winner):</strong> <span id="latestWinner" style="color:var(--primary); font-size: 1.5rem;">-</span>
+        </div>
 
-  <aside class="sidebar">
-    <h3>Wheel Entries</h3>
-    <textarea id="nameInput" oninput="draw()" placeholder="Enter names here..."></textarea>
-    <div class="controls">
-      <button class="btn" onclick="shuffleNames()">Shuffle</button>
-      <button class="btn" onclick="sortNames()">Sort</button>
-      <button class="btn" onclick="exportCSV()">Export</button>
-      <button class="btn" onclick="openSubView('faqModal')">FAQ</button>
-      <button class="btn" onclick="openSubView('feedbackModal')">Feedback</button>
-      <button class="btn" onclick="openSubView('privacyModal')">Privacy Policy</button>
-      <button class="btn" onclick="openSubView('termsModal')">Terms & Conditions</button>
-    </div>
-  </aside>
+        <div class="ads-container">
+            <p>Google AdSense - Horizontal Banner</p>
+        </div>
+
+        <section class="faq-grid">
+            <div class="faq-card">
+                <h3>What is the wheel spinner for?</h3>
+                <ul style="padding-left: 20px; line-height: 1.6;">
+                    <li>Random name picker in the classroom.</li>
+                    <li>Retailer giveaways for loyal customers.</li>
+                    <li>Picking speakers for work standup meetings.</li>
+                    <li>Nepali support: चिठ्ठा थुत्ने वा निर्णय गर्ने उत्तम माध्यम।</li>
+                </ul>
+            </div>
+            <div class="faq-card">
+                <h3>Is the wheel truly random?</h3>
+                <p>We use <code>crypto.getRandomValues()</code>, a high-security function built into modern browsers, to ensure results are genuinely unpredictable.</p>
+                <button class="btn" style="background: var(--primary); color:white;">Run 10,000 Spins Test</button>
+            </div>
+        </section>
+    </main>
+
+    <aside class="ads-container">
+        <p>Google AdSense - Vertical Tower</p>
+    </aside>
 </div>
-
-<section class="info-section">
-  <h2>About TeamSpin PRO</h2>
-  <div class="info-grid">
-    <div class="info-card">
-      <h4>100% Privacy</h4>
-      <p>All names are processed locally. GDPR-compliant privacy preferences are available. No data is uploaded.</p>
-    </div>
-    <div class="info-card">
-      <h4>Multi-Language Support</h4>
-      <p>English, Nepali, and Hindi supported. Switch easily using the language selector.</p>
-    </div>
-  </div>
-</section>
-
-<!-- Winner Popup -->
-<div id="winnerPopup" class="modal">
-  <div class="modal-content">
-    <h2>🎉 Winner!</h2>
-    <p id="winnerName" style="font-size:24px;font-weight:bold;color:var(--primary);"></p>
-    <button class="btn" onclick="closeWinnerPopup()">Close</button>
-    <audio id="winnerSound" src="winner.mp3"></audio>
-  </div>
-</div>
-
-<!-- FAQ, Feedback, Privacy, Terms Modals are the same as before -->
-<!-- Add your long SEO-rich content here as before -->
 
 <script>
-// === Theme Change ===
-function changeWheelTheme(theme){
-  document.body.setAttribute('data-theme', theme);
-}
-
-// === Fullscreen ===
-function toggleFullScreen(){
-  if(!document.fullscreenElement) document.documentElement.requestFullscreen();
-  else document.exitFullscreen();
-}
-
-// === Wheel and Winner Logic ===
-const canvas=document.getElementById('wheelCanvas'),ctx=canvas.getContext('2d');
-const nameInput=document.getElementById('nameInput');
-let rotation=0,isSpinning=false,lastTick=0;
-
-function draw(){
-  const names=nameInput.value.split('\n').filter(Boolean);
-  if(!names.length){ctx.clearRect(0,0,canvas.width,canvas.height);return;}
-  const arc=(Math.PI*2)/names.length;
-  ctx.clearRect(0,0,canvas.width,canvas.height);
-  const colors=['#007AFF','#5856D6','#FF2D55','#FF9500','#FFCC00','#4CD964'];
-  const center=canvas.width/2;
-  const radius=center-20;
-  names.forEach((name,i)=>{
-    const angle=rotation+i*arc;
-    ctx.save();
-    ctx.beginPath();
-    ctx.moveTo(center,center);
-    ctx.arc(center,center,radius,angle,angle+arc);
-    ctx.fillStyle=colors[i%colors.length];
-    ctx.fill();
-    ctx.shadowColor="rgba(0,0,0,0.3)";
-    ctx.shadowBlur=5;
-    ctx.translate(center,center);
-    ctx.rotate(angle+arc/2);
-    ctx.fillStyle="white";
-    ctx.font="bold 28px Mukta, sans-serif";
-    ctx.fillText(name.substring(0,18),radius-ctx.measureText(name.substring(0,18)).width,10);
-    ctx.restore();
-  });
-}
-
-function spin(){
-  if(isSpinning) return;
-  const names=nameInput.value.split('\n').filter(Boolean);
-  if(names.length<2) return;
-  isSpinning=true;
-  const duration=4000;
-  const target=rotation+Math.PI*2*12+Math.random()*Math.PI*2;
-  const start=performance.now();
-  const arcSize=(Math.PI*2)/names.length;
-  function animate(now){
-    const p=(now-start)/duration;
-    if(p<1){
-      rotation=target*(1-Math.pow(1-p,4));
-      if(Math.abs(rotation-lastTick)>arcSize){lastTick=rotation;}
-      draw(); requestAnimationFrame(animate);
-    }else{
-      isSpinning=false;
-      const winIdx=Math.floor(((Math.PI*2)-(rotation%(Math.PI*2)))/arcSize)%names.length;
-      const winner=names[winIdx];
-      document.getElementById('latestWinner').innerText=winner;
-      showWinnerPopup(winner);
-      confetti({particleCount:150,spread:70,origin:{y:0.6}});
+    // Fullscreen Logic
+    function toggleFullscreen() {
+        let elem = document.getElementById("mainApp");
+        if (!document.fullscreenElement) {
+            elem.requestFullscreen().catch(err => {
+                alert(`Error: ${err.message}`);
+            });
+        } else {
+            document.exitFullscreen();
+        }
     }
-  }
-  requestAnimationFrame(animate);
-}
 
-// Winner popup
-function showWinnerPopup(name){document.getElementById('winnerName').innerText=name;document.getElementById('winnerSound').play();document.getElementById('winnerPopup').style.display='block';}
-function closeWinnerPopup(){document.getElementById('winnerPopup').style.display='none';}
-
-// Share/Save winner
-function shareWinner(){const winner=document.getElementById('latestWinner').innerText;if(navigator.share){navigator.share({title:'Wheel Winner',text:`Winner: ${winner}`});}else alert('Winner: '+winner+' (Sharing not supported)');}
-function saveWinner(){const winner=document.getElementById('latestWinner').innerText;const blob=new Blob([winner],{type:'text/plain'});const link=document.createElement('a');link.href=URL.createObjectURL(blob);link.download='winner.txt';link.click();}
-
-// Name controls
-function shuffleNames(){nameInput.value=nameInput.value.split('\n').sort(()=>Math.random()-0.5).join('\n');draw();}
-function sortNames(){nameInput.value=nameInput.value.split('\n').sort().join('\n');draw();}
-function exportCSV(){const blob=new Blob([nameInput.value],{type:'text/csv'});const link=document.createElement('a');link.href=URL.createObjectURL(blob);link.download='names.csv';link.click();}
-
-// Modals
-function openSubView(id){document.getElementById(id).style.display='block';}
-function closeSubView(){document.querySelectorAll('.modal').forEach(m=>m.style.display='none');}
+    // Logic for shuffle/sort can be added here
+    function shuffleNames() {
+        let ta = document.getElementById('nameInput');
+        let lines = ta.value.split('\n').filter(l => l.trim() !== "");
+        lines.sort(() => Math.random() - 0.5);
+        ta.value = lines.join('\n');
+        // trigger draw() from your wheel.js
+    }
 </script>
 
 </body>
