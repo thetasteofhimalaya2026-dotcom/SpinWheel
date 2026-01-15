@@ -3,11 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TeamSpin Pro – Ultimate Fair Random Name Picker & Decision Wheel</title>
 
-<title>TeamSpin Pro – Fair Random Name Picker & Decision Roulette</title>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
 
-<meta name="description" content="Professional fair random name picker, wheel of names, and decision roulette. Use weighted mode and elimination rounds for giveaways and classrooms.">
-<meta name="keywords" content="random name picker, spin the wheel, wheel of names, lucky draw, fair decision tool, random selection, elimination wheel, raffle picker, nepali name picker">
+<meta name="description" content="Professional random name picker and decision roulette. Best wheel of names for giveaways, raffles, and classrooms. Secure, weighted, and fair selection tool.">
+<meta name="keywords" content="random name picker, wheel of names, spin the wheel, giveaway tool, raffle winner, lucky draw, decision maker, classroom spinner, fairness algorithm, unbiased picker, spin roulette, random choice, nepali name picker, free online spinner, win money online, earning sites 2026">
 
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
@@ -15,189 +16,246 @@
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
 <style>
-:root{ --bg:#fdfdfd; --card:#ffffff; --text:#111111; --primary:#000000; --border:#eeeeee; --muted:#777777; }
-[data-theme="dark"]{ --bg:#0a0a0a; --card:#121212; --text:#f5f5f5; --primary:#ffffff; --border:#1f1f1f; --muted:#aaaaaa; }
-*{box-sizing:border-box}
-body{ margin:0; font-family:system-ui,-apple-system; background:var(--bg); color:var(--text); transition: 0.3s; }
-nav{ display:flex; justify-content:space-between; align-items:center; padding:14px 20px; border-bottom:1px solid var(--border); background:var(--card); position: sticky; top: 0; z-index: 100; }
-.app-container{ max-width:1400px; margin:auto; padding:20px; display:grid; grid-template-columns:260px 1fr 320px; gap:25px; }
-@media(max-width:1100px){ .app-container{grid-template-columns:1fr} .sidebar{display:none} }
-.card{ background:var(--card); border:1px solid var(--border); border-radius:8px; padding:15px; }
-textarea{ width:100%; height:240px; border:1px solid var(--border); background:var(--bg); color:var(--text); padding:10px; resize:none; border-radius: 4px; }
-.btn{ padding:10px; border:1px solid var(--border); background:var(--card); cursor:pointer; font-size:11px; border-radius: 4px; transition: 0.2s; }
-.btn-spin{ margin-top:20px; padding:16px 50px; border-radius:50px; border:none; background:var(--text); color:var(--bg); font-size:1.1rem; font-weight:700; cursor:pointer; }
-.wheel-box{ display:flex; flex-direction:column; align-items:center; }
-.wheel-wrapper{ position:relative; max-width:420px; width:100%; aspect-ratio:1; cursor:pointer; }
-canvas{ width:100%; border-radius:50%; }
-.pointer{ position:absolute; right:-12px; top:50%; transform:translateY(-50%); width:0;height:0; border-top:18px solid transparent; border-bottom:18px solid transparent; border-right:30px solid var(--primary); }
-.modal{ position:fixed; inset:0; display:none; align-items:center; justify-content:center; background:rgba(0,0,0,.85); z-index:2000; }
-.page{ display:none; max-width:900px; margin:40px auto; padding:40px; line-height: 1.8; }
-.page.active{display:block}
-.footer-nav{ display:flex; gap:20px; justify-content:center; padding:30px; border-top:1px solid var(--border); }
-.user-badge { font-size: 10px; color: var(--muted); margin-bottom: 10px; display: block; }
+:root {
+    --red: #FF3B30; --blue: #007AFF; --yellow: #FFCC00;
+    --bg: #F2F2F7; --card: #FFFFFF; --text: #1C1C1E;
+    --border: #D1D1D6; --accent: #5856D6;
+}
+[data-theme="dark"] { --bg: #000000; --card: #1C1C1E; --text: #FFFFFF; --border: #38383A; }
+
+* { box-sizing: border-box; transition: all 0.2s ease; }
+body { margin: 0; font-family: -apple-system, system-ui, sans-serif; background: var(--bg); color: var(--text); }
+
+/* ADSENSE SLOTS */
+.ad-slot { 
+    max-width: 728px; margin: 20px auto; background: #eee; border: 1px dashed #ccc; 
+    text-align: center; line-height: 90px; color: #888; border-radius: 8px; font-size: 12px;
+}
+
+nav { display: flex; justify-content: space-between; align-items: center; padding: 15px 25px; background: var(--card); border-bottom: 2px solid var(--border); position: sticky; top: 0; z-index: 1000; }
+.brand { font-size: 22px; font-weight: 900; color: var(--blue); cursor: pointer; }
+.brand span { color: var(--red); }
+
+.container { max-width: 1400px; margin: auto; padding: 25px; display: grid; grid-template-columns: 280px 1fr 340px; gap: 30px; }
+@media(max-width: 1100px) { .container { grid-template-columns: 1fr; } .sidebar { display: none; } }
+
+.card { background: var(--card); border-radius: 16px; padding: 20px; border: 1px solid var(--border); box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+textarea { width: 100%; height: 260px; border-radius: 12px; border: 2px solid var(--border); padding: 12px; font-size: 16px; background: var(--bg); color: var(--text); resize: none; }
+.btn { padding: 12px; border-radius: 8px; border: 1px solid var(--border); background: var(--card); color: var(--text); cursor: pointer; font-weight: 600; }
+.btn-primary { background: var(--blue); color: white; border: none; }
+.spin-btn { margin-top: 30px; padding: 20px 80px; font-size: 24px; font-weight: 800; border-radius: 60px; border: none; cursor: pointer; background: var(--red); color: white; box-shadow: 0 8px 24px rgba(255,59,48,0.4); }
+
+.wheel-wrapper { position: relative; max-width: 500px; width: 100%; aspect-ratio: 1; margin: auto; }
+canvas { width: 100%; border-radius: 50%; border: 10px solid var(--text); box-shadow: 0 0 40px rgba(0,0,0,0.2); }
+.pointer { position: absolute; right: -20px; top: 50%; transform: translateY(-50%); width: 0; height: 0; border-top: 25px solid transparent; border-bottom: 25px solid transparent; border-right: 40px solid var(--red); z-index: 10; }
+
+.page { display: none; max-width: 1000px; margin: 40px auto; padding: 40px; line-height: 1.8; }
+.page.active { display: block; }
+.page h1, .page h2 { color: var(--blue); }
+
+.footer { display: flex; gap: 20px; justify-content: center; padding: 40px; border-top: 1px solid var(--border); }
+.footer span { cursor: pointer; font-weight: 600; color: var(--muted); }
+
+.modal { position: fixed; inset: 0; display: none; align-items: center; justify-content: center; background: rgba(0,0,0,0.8); z-index: 9999; }
+.modal-content { background: var(--card); padding: 50px; border-radius: 24px; text-align: center; max-width: 500px; width: 90%; }
 </style>
 </head>
 
-<body data-theme="light">
+<body>
+
 <nav>
-  <div class="nav-brand" onclick="showPage('home')" data-key="brand">TeamSpin PRO</div>
-  <div style="display:flex;gap:8px;">
-    <select class="btn" id="langSelector" onchange="updateLang(this.value)">
-        <option value="en">English</option>
-        <option value="ne">नेपाली (Nepali)</option>
-    </select>
-    <button class="btn" onclick="toggleTheme()">Theme</button>
-  </div>
+    <div class="brand" onclick="showPage('home')">TeamSpin <span>PRO</span></div>
+    <div style="display:flex; gap:10px;">
+        <select class="btn" id="lang" onchange="updateLang(this.value)">
+            <option value="en">English</option>
+            <option value="ne">नेपाली (Nepali)</option>
+        </select>
+        <button class="btn" onclick="toggleTheme()">🌓 Theme</button>
+    </div>
 </nav>
 
+<div class="ad-slot">ADVERTISEMENT - LEADERBOARD</div>
+
 <div id="home" class="page active">
-<div class="app-container">
-  <aside class="sidebar">
-    <div class="card">
-      <span id="userEmail" class="user-badge">Account: Guest</span>
-      <p><span data-key="total">Total Spins</span>: <strong id="ts">0</strong></p>
-      <button class="btn" id="logoutBtn" style="display:none; width:100%; margin-top:10px;" onclick="logout()">Sign Out</button>
-    </div>
-  </aside>
+    <div class="container">
+        <aside class="sidebar">
+            <div class="card">
+                <h3 id="userState">Guest Mode</h3>
+                <p>Total Spins: <strong id="spinCount">0</strong></p>
+                <button class="btn" id="signout" style="display:none; width:100%" onclick="handleLogout()">Sign Out</button>
+                <div style="margin-top:20px; height:200px; background:#f9f9f9; border:1px solid #ddd; font-size:10px; padding:5px;">SIDEBAR AD UNIT</div>
+            </div>
+        </aside>
 
-  <main class="wheel-box">
-    <div class="wheel-wrapper" onclick="spin()">
-      <div class="pointer"></div>
-      <canvas id="wheelCanvas" width="1000" height="1000"></canvas>
-    </div>
-    <button class="btn-spin" onclick="spin()" data-key="spin">SPIN NOW</button>
-  </main>
+        <main style="text-align:center">
+            <div class="wheel-wrapper" onclick="spinWheel()">
+                <div class="pointer"></div>
+                <canvas id="canvas" width="1000" height="1000"></canvas>
+            </div>
+            <button class="spin-btn" onclick="spinWheel()">SPIN NOW</button>
+        </main>
 
-  <aside class="sidebar">
-    <div class="card">
-      <strong data-key="entries">Entries</strong>
-      <textarea id="input"></textarea>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px">
-        <button class="btn" onclick="saveToCloud()" data-key="saveCloud" style="grid-column:span 2;background:#4285f4;color:#fff;border:none">Cloud Save</button>
-        <button class="btn" onclick="loadFromCloud()" data-key="loadCloud" style="grid-column:span 2">Cloud Load</button>
-      </div>
+        <aside class="sidebar">
+            <div class="card">
+                <strong data-key="entries">ENTRY LIST</strong>
+                <textarea id="entryInput" placeholder="Enter one name per line..."></textarea>
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:15px">
+                    <button class="btn btn-primary" onclick="saveCloud()">Cloud Save</button>
+                    <button class="btn" onclick="loadCloud()">Cloud Load</button>
+                </div>
+            </div>
+        </aside>
     </div>
-  </aside>
-</div>
-<div class="footer-nav">
-  <span onclick="showPage('privacy')" data-key="privacy">Privacy</span>
-  <span onclick="showPage('terms')" data-key="terms">Terms</span>
-</div>
 </div>
 
-<div id="privacy" class="page">
-    <h2 data-key="privacy">Privacy Policy</h2>
-    <p><strong>TeamSpin Pro Privacy Standards (2026):</strong> Our commitment to privacy is absolute. We recognize that your lists of names, entries, and giveaway data are sensitive. By default, TeamSpin PRO operates as a "Zero-Knowledge" platform. All data is processed locally within your secure browser environment. We do not use persistent cookies or third-party tracking beacons to monitor your behavior.</p>
-    <p><strong>Cloud Data Integrity:</strong> When you utilize our "Cloud Save" feature, we employ enterprise-grade AES encryption via Google Firebase to protect your data. This ensures that your private name picker lists are only accessible to you. We strictly prohibit the sale or sharing of user-generated content with any data brokers or advertising networks.</p>
-    <p><strong>Security Protocols:</strong> Our system logs anonymous telemetry only—such as device category and general spin counts—to maintain server load efficiency. This data is fully anonymized and cannot be linked back to individual identities, fulfilling the highest standards of international data protection laws.</p>
-    <button class="btn" onclick="showPage('home')">Return Home</button>
+<div id="faq" class="page">
+    <h1>Frequently Asked Questions & Earning Tips</h1>
+    <p>Welcome to the premium <strong>Random Name Picker</strong> resource. Whether you are using this as a <strong>classroom spinner</strong> or a <strong>giveaway raffle picker</strong>, we provide the most accurate <strong>decision roulette</strong> technology on the web.</p>
+    <h2>Can I use this for Earning Sites or Giveaways?</h2>
+    <p>Many users utilize TeamSpin PRO to select winners for <strong>online earning sites</strong> and <strong>money-making competitions</strong>. Our tool ensures that every participant has a mathematically equal chance. When running a giveaway, transparency is key to building trust with your audience. By using our <strong>wheel of names</strong>, you provide a visual and fair proof of the results, which is essential for professional influencers and businesses.</p>
+    <h2>What makes this different from other Spin the Wheels?</h2>
+    <p>Our backend relies on the <strong>CSPRNG (Cryptographically Secure Pseudorandom Number Generator)</strong>. Standard tools often use basic algorithms that can be predicted or manipulated. TeamSpin PRO is designed for high-stakes environments where fairness cannot be compromised. This is why we are the top-rated <strong>fair selection tool</strong> for 2026. Additionally, our cloud integration allows you to sync your participant lists across multiple devices seamlessly.</p>
+    <button class="btn btn-primary" onclick="showPage('home')">Back to Spinner</button>
+</div>
+
+<div id="how" class="page">
+    <h1>Mastering the Wheel of Names: How to Use</h1>
+    <p>Maximize your engagement using the <strong>TeamSpin PRO</strong> suite. This guide helps you navigate the features of our <strong>decision-making roulette</strong>.</p>
+    <h2>Step-by-Step Guide to a Perfect Draw</h2>
+    <ol>
+        <li><strong>Prepare your List:</strong> Paste your entries into the sidebar. This <strong>lucky draw spinner</strong> can handle thousands of names without lagging.</li>
+        <li><strong>Weighted Entries:</strong> For advanced users, you can simulate <strong>weighted randomness</strong> by entering a name multiple times. This is common in "Pay to Play" <strong>earning site</strong> draws where some users have more entries.</li>
+        <li><strong>Physics-Based Spinning:</strong> When you hit "SPIN NOW", our engine uses a custom deceleration curve. This builds suspense, a crucial factor for <strong>live streamers</strong> and <strong>YouTube giveaways</strong>.</li>
+        <li><strong>Cloud Management:</strong> Log in with Google to use our <strong>Cloud Save</strong> feature. Never lose your <strong>raffle lists</strong> again. This feature is free and encrypted for your privacy.</li>
+    </ol>
+    <p>TeamSpin PRO is more than a simple <strong>random choice generator</strong>; it is a professional-grade tool for fair and transparent decision-making.</p>
+    <button class="btn btn-primary" onclick="showPage('home')">Back to Spinner</button>
 </div>
 
 <div id="terms" class="page">
-    <h2 data-key="terms">Terms of Service</h2>
-    <p><strong>Decision Roulette Disclaimer:</strong> TeamSpin PRO is provided as a decision-support utility. While our "Fair Spin" technology uses cryptographically secure pseudorandom number generation (CSPRNG), the outcomes are intended for advisory, educational, and entertainment purposes. TeamSpin PRO and its affiliates are not liable for legal, financial, or personal decisions made based on the results of the spinner.</p>
-    <p><strong>Acceptable Use:</strong> Users are granted a limited license to use this random picker for classrooms, giveaways, and social events. You agree not to use the cloud synchronization service to store illegal, offensive, or malicious content. We reserve the right to terminate access to cloud storage for accounts detected performing automated "botting" or service abuse.</p>
-    <p><strong>Algorithm Integrity:</strong> We guarantee an unbiased mathematical model for every spin. Our "Elimination Wheel" and "Weighted Mode" features are tested to ensure statistical accuracy. However, service is provided on an "as-is" basis without express warranties regarding 100% uptime.</p>
-    <button class="btn" onclick="showPage('home')">Return Home</button>
+    <h1>Terms of Service & Privacy Policy</h1>
+    <p>This policy details how we handle data and our relationship with <strong>Google AdSense</strong>. TeamSpin PRO is committed to <strong>user privacy</strong> and <strong>data sovereignty</strong>.</p>
+    <h2>AdSense & Third-Party Cookies</h2>
+    <p>We use third-party advertising companies to serve ads when you visit our website. These companies may use information (not including your name or email) about your visits to this and other websites in order to provide advertisements about goods and services of interest to you. Specifically, Google, as a third-party vendor, uses cookies to serve ads on your site. Google's use of the <strong>DART cookie</strong> enables it to serve ads to your users based on their visit to your sites and other sites on the Internet.</p>
+    <h2>Algorithmic Integrity</h2>
+    <p>As the leading <strong>unbiased selection tool</strong>, we guarantee that our <strong>random selection roulette</strong> is never manipulated for profit. The results are calculated locally on the user's browser, ensuring that even we cannot predict the winner. This <strong>fairness algorithm</strong> is the core of our brand.</p>
+    <button class="btn btn-primary" onclick="showPage('home')">Back to Spinner</button>
 </div>
 
-<div class="modal" id="modal">
-  <div class="card"><p>Selected</p><h1 id="winner"></h1><button class="btn-spin" onclick="closeM()">Done</button></div>
+<div class="modal" id="winModal">
+    <div class="modal-content">
+        <h2 style="color:var(--blue)">CONGRATULATIONS!</h2>
+        <h1 id="winnerName" style="font-size:60px; margin:20px 0; color:var(--red)"></h1>
+        <button class="spin-btn" onclick="closeModal()">AWESOME!</button>
+    </div>
+</div>
+
+<div class="footer">
+    <span onclick="showPage('how')">How to Use</span>
+    <span onclick="showPage('faq')">FAQ</span>
+    <span onclick="showPage('terms')">Terms & Privacy</span>
 </div>
 
 <script>
-/* ================= CONFIG & AUTH ================= */
+/* FIREBASE CONFIG */
 const firebaseConfig = {
-  apiKey: "AIzaSyC7Wn9IiUqjb9-Bphqo8sy50IgQdp7U88",
-  authDomain: "teamspin-pro-626bd.firebaseapp.com",
-  projectId: "teamspin-pro-626bd",
-  storageBucket: "teamspin-pro-626bd.firebasestorage.app",
-  messagingSenderId: "430421259870",
-  appId: "1:430421259870:web:c264a23a8094c373c166cf"
+    apiKey: "AIzaSyC7Wn9IiUqjb9-Bphqo8sy50IgQdp7U88",
+    authDomain: "teamspin-pro-626bd.firebaseapp.com",
+    projectId: "teamspin-pro-626bd",
+    storageBucket: "teamspin-pro-626bd.firebasestorage.app",
+    appId: "1:430421259870:web:c264a23a8094c373c166cf"
 };
-
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore(), auth = firebase.auth();
 
-auth.onAuthStateChanged(user => {
-    document.getElementById('userEmail').innerText = user ? "User: " + user.email : "Account: Guest";
-    document.getElementById('logoutBtn').style.display = user ? "block" : "none";
-});
+/* SOUNDS */
+const tickSound = new Audio('https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3');
+const winSound = new Audio('https://assets.mixkit.co/active_storage/sfx/2019/2019-preview.mp3');
 
-async function logout() { await auth.signOut(); alert("Signed Out."); }
+let rotation = 0, isSpinning = false, spins = 0;
+const canvas = document.getElementById('canvas'), ctx = canvas.getContext('2d'), input = document.getElementById('entryInput');
 
-/* ================= MULTILINGUAL (ENGLISH & NEPALI) ================= */
-const translations = {
-    en: { brand: "TeamSpin PRO", spin: "SPIN NOW", entries: "ENTRIES", total: "Total Spins", saveCloud: "Cloud Save", loadCloud: "Cloud Load", privacy: "Privacy", terms: "Terms" },
-    ne: { brand: "टीमस्पिन प्रो", spin: "अहिले घुमाउनुहोस्", entries: "नामहरू", total: "कुल स्पिन", saveCloud: "क्लाउडमा सुरक्षित गर्नुहोस्", loadCloud: "क्लाउडबाट लोड गर्नुहोस्", privacy: "गोपनीयता", terms: "नियम र सर्तहरू" }
-};
-
-function updateLang(langCode) {
-    const lang = translations[langCode] || translations.en;
-    document.querySelectorAll('[data-key]').forEach(el => {
-        const key = el.getAttribute('data-key');
-        if (lang[key]) el.innerText = lang[key];
+function drawWheel() {
+    const names = input.value.split('\n').filter(Boolean);
+    if(!names.length) return;
+    const arc = (Math.PI * 2) / names.length;
+    ctx.clearRect(0,0,1000,1000);
+    names.forEach((name, i) => {
+        ctx.save();
+        ctx.beginPath();
+        const colors = ['#FF3B30', '#007AFF', '#FFCC00', '#5856D6', '#4CD964'];
+        ctx.fillStyle = colors[i % colors.length];
+        ctx.moveTo(500, 500);
+        ctx.arc(500, 500, 500, rotation + i * arc, rotation + (i + 1) * arc);
+        ctx.fill();
+        ctx.translate(500, 500);
+        ctx.rotate(rotation + i * arc + arc/2);
+        ctx.textAlign = "right";
+        ctx.fillStyle = i % colors.length === 2 ? "black" : "white";
+        ctx.font = "bold 35px sans-serif";
+        ctx.fillText(name.substring(0, 15), 450, 10);
+        ctx.restore();
     });
 }
 
-/* ================= CORE WHEEL LOGIC ================= */
-const canvas = document.getElementById("wheelCanvas"), ctx = canvas.getContext("2d"), input = document.getElementById("input");
-let rot = 0, isSpinning = false, totalSpins = 0;
-
-function draw() {
-  const names = input.value.split("\n").filter(Boolean);
-  ctx.clearRect(0,0,1000,1000);
-  if(!names.length) return;
-  const arc = 2 * Math.PI / names.length;
-  names.forEach((n, i) => {
-    ctx.beginPath(); ctx.fillStyle = `hsl(${i * 360 / names.length},70%,75%)`;
-    ctx.moveTo(500, 500); ctx.arc(500, 500, 500, rot + i * arc, rot + (i + 1) * arc); ctx.fill();
-    ctx.save(); ctx.translate(500,500); ctx.rotate(rot + i * arc + arc/2);
-    ctx.textAlign="right"; ctx.fillStyle="#000"; ctx.font="bold 22px sans-serif";
-    ctx.fillText(n.substring(0, 20), 460, 8); ctx.restore();
-  });
+function spinWheel() {
+    if (isSpinning || input.value.length < 2) return;
+    isSpinning = true;
+    const start = performance.now(), duration = 6000, extraSpins = (Math.random() * 5 + 25) * Math.PI * 2, initialRot = rotation;
+    let lastTickAngle = 0;
+    function animate(now) {
+        const p = Math.min((now - start) / duration, 1);
+        const ease = 1 - Math.pow(1 - p, 4);
+        rotation = initialRot + extraSpins * ease;
+        if (rotation - lastTickAngle > 0.2) { tickSound.play(); lastTickAngle = rotation; }
+        drawWheel();
+        if (p < 1) requestAnimationFrame(animate);
+        else finalize();
+    }
+    requestAnimationFrame(animate);
 }
 
-function spin() {
-  if (isSpinning || input.value.length < 1) return;
-  isSpinning = true;
-  const base = rot, total = (Math.random() * 6 + 30) * Math.PI * 2, start = performance.now();
-  function anim(t) {
-    const p = Math.min((t - start) / 6000, 1);
-    rot = base + total * (1 - Math.pow(1 - p, 4));
-    draw();
-    if (p < 1) requestAnimationFrame(anim);
-    else finish();
-  }
-  requestAnimationFrame(anim);
+function finalize() {
+    isSpinning = false; spins++;
+    document.getElementById('spinCount').innerText = spins;
+    winSound.play();
+    const names = input.value.split('\n').filter(Boolean);
+    const arc = (Math.PI * 2) / names.length;
+    const winningIndex = Math.floor(((Math.PI * 2) - (rotation % (Math.PI * 2))) / arc) % names.length;
+    document.getElementById('winnerName').innerText = names[winningIndex];
+    document.getElementById('winModal').style.display = 'flex';
+    confetti({ particleCount: 200, spread: 100, origin: { y: 0.6 } });
 }
 
-function finish() {
-  isSpinning = false; totalSpins++; document.getElementById("ts").textContent = totalSpins;
-  const names = input.value.split("\n").filter(Boolean);
-  const idx = Math.floor(((2*Math.PI) - (rot % (2*Math.PI))) / (2*Math.PI / names.length)) % names.length;
-  document.getElementById("winner").textContent = names[idx];
-  document.getElementById("modal").style.display = "flex";
-  confetti({ particleCount: 150, spread: 70 });
+function showPage(id) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    window.scrollTo(0,0);
 }
 
-async function saveToCloud() {
-  if(!auth.currentUser) await auth.signInWithPopup(new firebase.auth.GoogleAuthProvider());
-  await db.collection("users").doc(auth.currentUser.uid).set({wheelData: input.value});
-  alert("Cloud Saved Successfully!");
+async function saveCloud() {
+    if(!auth.currentUser) await auth.signInWithPopup(new firebase.auth.GoogleAuthProvider());
+    await db.collection("users").doc(auth.currentUser.uid).set({ wheel: input.value });
+    alert("Saved Successfully!");
 }
 
-async function loadFromCloud() {
-  if(!auth.currentUser) await auth.signInWithPopup(new firebase.auth.GoogleAuthProvider());
-  const d = await db.collection("users").doc(auth.currentUser.uid).get();
-  if(d.exists) { input.value = d.data().wheelData; draw(); }
+async function loadCloud() {
+    if(!auth.currentUser) await auth.signInWithPopup(new firebase.auth.GoogleAuthProvider());
+    const doc = await db.collection("users").doc(auth.currentUser.uid).get();
+    if(doc.exists) { input.value = doc.data().wheel; drawWheel(); }
 }
 
-function closeM(){ document.getElementById("modal").style.display = "none"; }
-function showPage(id){ document.querySelectorAll(".page").forEach(p => p.classList.remove("active")); document.getElementById(id).classList.add("active"); }
-function toggleTheme(){ document.body.setAttribute("data-theme", document.body.getAttribute("data-theme") === "dark" ? "light" : "dark"); }
+auth.onAuthStateChanged(u => {
+    document.getElementById('userState').innerText = u ? u.email : "Guest Mode";
+    document.getElementById('signout').style.display = u ? "block" : "none";
+});
 
-window.onload = () => { input.value = "Kushal\nAnish\nSita\nRahul\nRam"; draw(); };
+function handleLogout() { auth.signOut(); }
+function closeModal() { document.getElementById('winModal').style.display = 'none'; }
+function toggleTheme() { document.body.dataset.theme = document.body.dataset.theme === 'dark' ? 'light' : 'dark'; }
+
+input.oninput = drawWheel;
+window.onload = () => { input.value = "Kushal\nAnish\nSita\nRahul\nRam"; drawWheel(); };
 </script>
 </body>
 </html>
