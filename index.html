@@ -2,196 +2,132 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>TeamSpin Pro | Random Name Picker & Decision Wheel</title>
-    <meta name="description" content="Free, fair, and fast random name picker wheel. Support for English, Hindi, and Nepali. Perfect for teachers, gamers, and giveaways.">
     
+    <meta name="description" content="Free, fair, and responsive random name picker wheel. English, Hindi, and Nepali support.">
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-YOUR_ID" crossorigin="anonymous"></script>
-
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     
-   <style>
-    :root { --bg: #f8fafc; --card: #ffffff; --text: #1e293b; --primary: #6366f1; --accent: #ef4444; }
-    [data-theme="dark"] { --bg: #0f172a; --card: #1e293b; --text: #f8fafc; --primary: #818cf8; }
-    
-    body { margin: 0; font-family: 'Inter', sans-serif; background-color: var(--bg); color: var(--text); overflow-x: hidden; }
+    <style>
+        :root { --bg: #f8fafc; --card: #ffffff; --text: #1e293b; --primary: #6366f1; --accent: #ef4444; }
+        [data-theme="dark"] { --bg: #0f172a; --card: #1e293b; --text: #f8fafc; --primary: #818cf8; }
 
-    /* Navigation - Fixed for Mobile */
-    nav { 
-        background: var(--card); 
-        padding: 10px 15px; 
-        display: flex; 
-        flex-wrap: wrap; 
-        justify-content: space-between; 
-        align-items: center; 
-        box-shadow: 0 2px 10px rgba(0,0,0,0.1); 
-        position: sticky; 
-        top: 0; 
-        z-index: 100; 
-    }
-    .nav-brand { font-size: 18px; font-weight: 900; color: var(--primary); text-decoration: none; }
-    .nav-links { display: flex; gap: 10px; align-items: center; font-size: 14px; }
+        body { margin: 0; font-family: 'Inter', sans-serif; background-color: var(--bg); color: var(--text); transition: 0.3s; overflow-x: hidden; }
+        
+        nav { background: var(--card); padding: 10px 20px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 8px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 100; flex-wrap: wrap; }
+        .nav-brand { font-size: 1.2rem; font-weight: 900; color: var(--primary); text-decoration: none; cursor: pointer; }
+        .nav-links { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; margin-top: 5px; }
+        .nav-links a { font-size: 0.85rem; color: var(--text); text-decoration: none; cursor: pointer; font-weight: 500; }
 
-    .container { width: 100%; max-width: 1200px; margin: 0 auto; padding: 10px; box-sizing: border-box; }
-    
-    /* Layout: Stacked on mobile, side-by-side on desktop */
-    .main-grid { display: flex; flex-direction: column; gap: 20px; }
-    @media (min-width: 1024px) { .main-grid { flex-direction: row; } }
+        .container { max-width: 1200px; margin: 0 auto; padding: 15px; box-sizing: border-box; }
+        .page { display: none; animation: fadeIn 0.3s ease; }
+        .active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-    /* Wheel Section - Responsive Size */
-    .wheel-section { 
-        flex: 1; 
-        background: var(--card); 
-        padding: 20px; 
-        border-radius: 20px; 
-        display: flex; 
-        flex-direction: column; 
-        align-items: center; 
-        box-shadow: 0 4px 15px rgba(0,0,0,0.05); 
-    }
-    
-    .wheel-wrapper { 
-        position: relative; 
-        width: 100%; 
-        max-width: 450px; /* Limits size on desktop */
-        aspect-ratio: 1 / 1; 
-        margin: 0 auto;
-    }
-    canvas { width: 100% !important; height: auto !important; }
-    
-    .pointer { 
-        position: absolute; top: -15px; left: 50%; transform: translateX(-50%); 
-        width: 0; height: 0; border-left: 20px solid transparent; border-right: 20px solid transparent; 
-        border-top: 40px solid var(--accent); z-index: 40; 
-    }
+        /* Layout Grid */
+        .main-grid { display: grid; grid-template-columns: 1fr; gap: 20px; }
+        @media (min-width: 1024px) { .main-grid { grid-template-columns: 1fr 380px; } }
 
-    /* Sidebar - Full width on mobile */
-    .sidebar { width: 100%; }
-    @media (min-width: 1024px) { .sidebar { width: 380px; } }
+        .card { background: var(--card); padding: 20px; border-radius: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        
+        /* Wheel Responsiveness */
+        .wheel-wrapper { position: relative; width: 100%; max-width: 450px; aspect-ratio: 1/1; margin: 0 auto; cursor: pointer; }
+        canvas { width: 100% !important; height: 100% !important; }
+        .pointer { position: absolute; top: -10px; left: 50%; transform: translateX(-50%); width: 0; height: 0; border-left: 18px solid transparent; border-right: 18px solid transparent; border-top: 36px solid var(--accent); z-index: 50; }
 
-    .sidebar-card { background: var(--card); padding: 20px; border-radius: 20px; margin-bottom: 20px; }
-    textarea { width: 100%; height: 150px; border-radius: 10px; border: 2px solid #e2e8f0; padding: 10px; box-sizing: border-box; font-size: 16px; }
+        textarea { width: 100%; height: 150px; padding: 12px; border-radius: 12px; border: 2px solid #e2e8f0; font-size: 16px; box-sizing: border-box; background: var(--bg); color: var(--text); resize: none; }
+        .btn-spin { width: 100%; padding: 16px; background: var(--primary); color: white; border: none; border-radius: 12px; font-weight: bold; font-size: 1.1rem; cursor: pointer; margin-top: 10px; }
+        
+        /* Legal Page Text */
+        .legal-text { line-height: 1.6; font-size: 0.95rem; }
+        .legal-text h2 { color: var(--primary); margin-top: 25px; }
 
-    .btn-spin { width: 100%; padding: 15px; background: var(--primary); color: white; border: none; border-radius: 12px; font-weight: bold; font-size: 1.1rem; cursor: pointer; margin-top: 10px; }
-    
-    /* Ads - Hidden if too small */
-    .ad-slot { background: #f1f5f9; color: #94a3b8; text-align: center; padding: 10px; border-radius: 10px; margin: 10px 0; font-size: 12px; }
-</style>
-
-<body>
-<nav>
-    <a href="#" class="nav-brand">🎡 TeamSpin Pro</a>
-    <div class="nav-links">
-        <select id="langSelect" onchange="changeLanguage(this.value)">
-            <option value="en">EN</option>
-            <option value="hi">HI</option>
-            <option value="ne">NE</option>
-        </select>
-        <button onclick="toggleTheme()" style="background:none; border:none; cursor:pointer;">🌓</button>
-    </div>
-</nav>
-
-<div class="container">
-    <div class="ad-slot">Advertisement</div>
-
-    <div class="main-grid">
-        <div class="wheel-section">
-            <div class="wheel-wrapper" onclick="startSpin()">
-                <div class="pointer"></div>
-                <canvas id="wheelCanvas" width="800" height="800"></canvas>
-            </div>
-            <div style="margin-top:20px; text-align:center;">
-                <h2 id="seo-h2" style="font-size: 1.2rem;">Random Name Picker</h2>
-                <p id="seo-p" style="font-size: 0.9rem;">Fair results every time.</p>
-            </div>
-        </div>
-
-        <div class="sidebar">
-            <div class="sidebar-card">
-                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-                    <strong id="label-participants">Participants</strong>
-                    <button onclick="shuffleNames()" style="font-size:12px; cursor:pointer;">🔀 Shuffle</button>
-                </div>
-                <textarea id="nameInput" oninput="draw()"></textarea>
-                <button class="btn-spin" onclick="startSpin()" id="btn-spin">SPIN NOW</button>
-            </div>
-        </div>
-    </div>
-</div>
+        .ad-slot { background: #f1f5f9; border: 1px dashed #cbd5e1; border-radius: 8px; text-align: center; color: #94a3b8; font-size: 11px; padding: 10px; margin: 15px 0; }
+        .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.8); display: none; justify-content: center; align-items: center; z-index: 200; padding: 20px; }
+        .modal-content { background: var(--card); padding: 30px; border-radius: 20px; text-align: center; max-width: 400px; width: 100%; }
+    </style>
 </head>
 <body>
 
 <nav>
     <div class="nav-brand" onclick="showPage('home')">🎡 TeamSpin Pro</div>
     <div class="nav-links">
-        <select id="langSelect" onchange="changeLanguage(this.value)">
-            <option value="en">English</option>
-            <option value="hi">हिन्दी</option>
-            <option value="ne">नेपाली</option>
-        </select>
         <a onclick="showPage('home')">Wheel</a>
-        <a onclick="showPage('customize')">Customize</a>
         <a onclick="showPage('about')">About</a>
-        <button onclick="toggleTheme()" style="background:none; border:none; cursor:pointer;">🌓</button>
+        <a onclick="showPage('privacy')">Privacy</a>
+        <select id="langSelect" onchange="changeLanguage(this.value)">
+            <option value="en">EN</option>
+            <option value="hi">HI</option>
+            <option value="ne">NE</option>
+        </select>
+        <button onclick="toggleTheme()" style="background:none; border:none; cursor:pointer; font-size:1.1rem;">🌓</button>
     </div>
 </nav>
 
 <div class="container">
-    <div class="ad-slot ad-top">Advertisement</div>
+    <div class="ad-slot">ADVERTISEMENT SLOT</div>
 
     <div id="home" class="page active">
         <div class="main-grid">
-            <div class="wheel-section">
-                <h1 id="main-title" style="margin-top:0">Random Name Picker Wheel</h1>
+            <div class="card" style="text-align:center;">
+                <h1 id="main-title" style="font-size: 1.4rem; margin-top:0;">Random Name Picker</h1>
                 <div class="wheel-wrapper" onclick="startSpin()">
                     <div class="pointer"></div>
-                    <canvas id="wheelCanvas" width="1000" height="1000"></canvas>
-                </div>
-                
-                <div style="margin-top: 40px; text-align: left; line-height: 1.6;">
-                    <h2 id="seo-h2">The Fairest Random Wheel Spinner</h2>
-                    <p id="seo-p">TeamSpin Pro uses high-performance algorithms to ensure every name has an equal chance. Perfect for teachers selecting students, online raffles, or group giveaways in Hindi, Nepali, and English.</p>
+                    <canvas id="wheelCanvas" width="800" height="800"></canvas>
                 </div>
             </div>
 
             <div class="sidebar">
-                <div class="sidebar-card">
-                    <div class="flex-header">
-                        <h3 id="label-participants" style="margin:0">Participants</h3>
-                        <button class="btn-shuffle" onclick="shuffleNames()" id="btn-shuffle">🔀 Shuffle</button>
+                <div class="card">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                        <strong id="label-participants">Participants</strong>
+                        <button onclick="shuffleNames()" style="font-size:12px; padding:4px 8px; cursor:pointer;">🔀 Shuffle</button>
                     </div>
                     <textarea id="nameInput" oninput="draw()"></textarea>
                     <button class="btn-spin" onclick="startSpin()" id="btn-spin">SPIN NOW</button>
                 </div>
-
-                <div class="ad-slot ad-sidebar">Advertisement (Sidebar)</div>
             </div>
         </div>
     </div>
 
-    <div id="customize" class="page">
-        <div class="sidebar-card"><h1>Customize Wheel</h1><p>Select your favorite theme colors here.</p></div>
-    </div>
-    <div id="about" class="page">
-        <div class="sidebar-card"><h1>About Us</h1><p>TeamSpin Pro is a global utility for random decisions.</p></div>
+    <div id="about" class="page card legal-text">
+        <h1>About TeamSpin Pro</h1>
+        <p>TeamSpin Pro is a fair, transparent, and high-performance random decision tool designed for teachers, event organizers, and gamers worldwide. We prioritize speed and mobile-friendliness to ensure everyone can make quick decisions on the go.</p>
     </div>
 
-    <div class="ad-slot ad-bottom">Advertisement (Bottom)</div>
+    <div id="privacy" class="page card legal-text">
+        <h1>Privacy Policy</h1>
+        <p>Last Updated: January 2026</p>
+        <p>At TeamSpin Pro, we value your privacy. This policy explains how we handle information.</p>
+        
+        <h2>1. Data Collection</h2>
+        <p>We do not store the names you enter into the picker wheel on our servers. All processing happens locally on your device's browser.</p>
+        
+        <h2>2. Cookies & Advertising</h2>
+        <p>We use Google AdSense to serve ads. Google may use cookies (like the DART cookie) to serve ads based on your visit to this and other sites on the internet.</p>
+        
+        <h2>3. Third-Party Links</h2>
+        <p>Our site contains links to other sites. We are not responsible for the privacy practices of such other sites.</p>
+        
+        <h2>4. Contact</h2>
+        <p>If you have questions regarding this policy, please contact us via our GitHub repository.</p>
+    </div>
 </div>
 
 <div class="modal" id="winnerModal">
     <div class="modal-content">
         <h2 id="modal-congrats">WINNER!</h2>
-        <div id="winnerName" style="font-size: 3rem; font-weight: 900; color: var(--primary); margin: 20px 0;"></div>
-        <button class="btn-spin" onclick="closeModal()">OK</button>
+        <div id="winnerName" style="font-size: 2.5rem; font-weight: 900; color: var(--primary); margin: 20px 0;"></div>
+        <button class="btn-spin" onclick="closeModal()">Close</button>
     </div>
 </div>
 
 <script>
     const translations = {
-        en: { title: "Random Name Picker Wheel", participants: "Participants", spin: "SPIN NOW", congrats: "WINNER!", shuffle: "🔀 Shuffle", h2: "The Fairest Random Wheel Spinner", p: "Professional tool for giveaways and classrooms." },
-        hi: { title: "नाम चुनने वाला चक्का", participants: "प्रतिभागी", spin: "घुमाएं", congrats: "विजेता!", shuffle: "🔀 रैंडम", h2: "सबसे निष्पक्ष रैंडम व्हील", p: "गिवअवे और क्लासरूम के लिए पेशेवर टूल।" },
-        ne: { title: "नाम छान्ने चक्का", participants: "सहभागीहरू", spin: "घुमाउनुहोस्", congrats: "विजेता!", shuffle: "🔀 मिसाउनुहोस्", h2: "सबैभन्दा निष्पक्ष भाग्यशाली चक्का", p: "उपहार र कक्षाकोठाका लागि व्यावसायिक उपकरण।" }
+        en: { title: "Random Name Picker Wheel", participants: "Participants", spin: "SPIN NOW", congrats: "Winner!" },
+        hi: { title: "नाम चुनने वाला चक्का", participants: "प्रतिभागी", spin: "घुमाएं", congrats: "विजेता!" },
+        ne: { title: "नाम छान्ने चक्का", participants: "सहभागीहरू", spin: "घुमाउनुहोस्", congrats: "विजेता!" }
     };
 
     const canvas = document.getElementById('wheelCanvas');
@@ -211,9 +147,6 @@
         document.getElementById('label-participants').innerText = translations[lang].participants;
         document.getElementById('btn-spin').innerText = translations[lang].spin;
         document.getElementById('modal-congrats').innerText = translations[lang].congrats;
-        document.getElementById('btn-shuffle').innerText = translations[lang].shuffle;
-        document.getElementById('seo-h2').innerText = translations[lang].h2;
-        document.getElementById('seo-p').innerText = translations[lang].p;
         draw();
     }
 
@@ -242,8 +175,8 @@
             ctx.rotate(angle + arcSize / 2);
             ctx.textAlign = "right";
             ctx.fillStyle = "white";
-            ctx.font = "bold 32px Inter";
-            ctx.fillText(name.substring(0, 15), radius - 40, 10);
+            ctx.font = "bold 34px Inter";
+            ctx.fillText(name.substring(0, 15), radius - 40, 12);
             ctx.restore();
         });
     }
@@ -276,7 +209,6 @@
         const pointerPos = (1.5 * Math.PI);
         let idx = Math.floor((pointerPos - normalized) / arcSize) % names.length;
         if (idx < 0) idx += names.length;
-
         document.getElementById('winnerName').innerText = names[idx];
         document.getElementById('winnerModal').style.display = 'flex';
         confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
@@ -304,4 +236,3 @@
 </script>
 </body>
 </html>
-
