@@ -113,37 +113,17 @@
         <article class="card seo-section">
             <h2 data-i18n="seo_title1">Most Reliable Online Random Name Picker</h2>
             <p>Welcome to <strong>TeamSpin Pro</strong>, the ultimate <strong>spin the wheel</strong> tool for all your picking needs. Whether you are a teacher looking for a <strong>classroom name picker</strong> or an organizer running a <strong>raffle draw</strong>, our digital wheel ensures 100% fairness.</p>
-            
             <h2 data-i18n="seo_title2">Why Choose Our Randomizer Tool?</h2>
-            <p>Our tool is optimized with **realistic spin physics** and **high-fidelity sound effects**. Key features include:
-                <ul>
-                    <li><strong>No Duplicate Entries:</strong> Our system detects and blocks duplicate names to ensure every participant has an equal chance.</li>
-                    <li><strong>Fully Responsive:</strong> A seamless experience as a <strong>mobile wheel spinner</strong>, tablet tool, or laptop application.</li>
-                    <li><strong>Instant Results:</strong> No lag, high-resolution graphics, and celebratory confetti.</li>
-                    <li><strong>International Support:</strong> Easily switch between English, Hindi, and Nepali.</li>
-                </ul>
-            </p>
+            <p>Our tool is optimized with **realistic spin physics** and **loud sound effects**. Key features include duplicate prevention, responsive design, and multi-language support.</p>
         </article>
     </div>
 
     <div id="privacy" class="page card policy-body">
         <h1>Privacy Policy</h1>
-        <p>Last Updated: January 15, 2026</p>
-        <p>Your privacy is important to us. This Privacy Policy explains how TeamSpin Pro handles data.</p>
-        
-        <h3>1. Data Collection & Processing</h3>
-        <p>TeamSpin Pro is a client-side application. We do not collect, store, or transmit the names or lists you enter into the "Participants" box to any server. All name picking is processed locally in your browser.</p>
-        
-        <h3>2. Google AdSense & Cookies</h3>
-        <p>We use Google AdSense to serve ads. Google, as a third-party vendor, uses cookies to serve ads on this site. Google's use of advertising cookies enables it and its partners to serve ads to users based on their visit to this site and/or other sites on the Internet.</p>
-        <p>Users may opt out of personalized advertising by visiting <a href="https://www.google.com/settings/ads" target="_blank">Google Ads Settings</a>.</p>
-        
-        <h3>3. Log Data</h3>
-        <p>We may collect information that your browser sends whenever you visit our tool ("Log Data"). This may include your IP address, browser type, and pages visited. This is used strictly for analytics and site improvement.</p>
-        
-        <h3>4. GDPR & CCPA Compliance</h3>
-        <p>As we do not store personal names or identifiable user data on our databases, we align with data minimization principles required by GDPR and CCPA.</p>
-        
+        <p>Last Updated: January 2026</p>
+        <p>Your privacy is important to us. TeamSpin Pro does not store or collect names. Data processed locally in your browser.</p>
+        <h3>Google AdSense & Cookies</h3>
+        <p>We use cookies for ads. Visit Google Ads Settings to opt out of personalized advertising.</p>
         <button onclick="showPage('home')" class="btn-spin" style="width:auto; padding:12px 30px;">Back to Wheel</button>
     </div>
 
@@ -166,10 +146,11 @@
     const duplicateError = document.getElementById('duplicateError');
     const spinError = document.getElementById('spinError');
     
-    // SOUND EFFECTS (Realistic Tick and Popper)
+    // SOUND EFFECTS (LOUDER SETTINGS)
     const tickSound = new Audio('https://assets.mixkit.co/active_storage/sfx/2005/2005-preview.mp3');
     const winSound = new Audio('https://assets.mixkit.co/active_storage/sfx/1435/1435-preview.mp3');
-    tickSound.volume = 0.5;
+    tickSound.volume = 1.0; // MAX LOUDNESS
+    winSound.volume = 1.0;  // MAX LOUDNESS
 
     const palette = ['#6366f1', '#a855f7', '#ec4899', '#f43f5e', '#f59e0b', '#10b981', '#3b82f6', '#f97316'];
     let currentRotation = 0;
@@ -178,9 +159,9 @@
     let lastTickAngle = 0;
 
     const translations = {
-        en: { nav_privacy: "Privacy Policy", hero_title: "Free Random Name Picker Wheel", btn_spin: "SPIN THE WHEEL", label_participants: "Participants List", btn_shuffle: "🔀 Shuffle", label_winners: "Winner History", no_winners: "No winners yet", modal_winner_title: "WINNER!", err_min: "Min 2 names required.", err_dup: "Duplicate names detected!", btn_close: "Close", seo_title1: "Reliable Online Random Name Picker", seo_title2: "Why Choose Our Randomizer Tool?" },
-        hi: { nav_privacy: "गोपनीयता नीति", hero_title: "मुफ़्त नाम चुनने वाला पहिया", btn_spin: "पहिया घुमाएं", label_participants: "प्रतिभागी सूची", btn_shuffle: "🔀 फेरबदल", label_winners: "विजेता इतिहास", no_winners: "कोई विजेता नहीं", modal_winner_title: "विजेता!", err_min: "कम से कम 2 नाम चाहिए।", err_dup: "डुप्लिकेट नाम मिले!", btn_close: "बंद करें", seo_title1: "विश्वसनीय ऑनलाइन नाम पिकर", seo_title2: "हमारा टूल क्यों चुनें?" },
-        ne: { nav_privacy: "गोपनीयता नीति", hero_title: "नि: शुल्क नाम छान्ने चक्का", btn_spin: "चक्का घुमाउनुहोस्", label_participants: "सहभागी सूची", btn_shuffle: "🔀 मिसाउनुहोस्", label_winners: "विजेता इतिहास", no_winners: "कोही विजेता छैन", modal_winner_title: "विजेता!", err_min: "कम्तिमा २ नाम चाहिन्छ।", err_dup: "उस्तै नामहरू फेला पर्यो!", btn_close: "बन्द गर्नुहोस्", seo_title1: "भरपर्दो अनलाइन नाम पिकर", seo_title2: "किन हाम्रो टूल छान्ने?" }
+        en: { nav_privacy: "Privacy Policy", hero_title: "Free Random Name Picker Wheel", btn_spin: "SPIN THE WHEEL", label_participants: "Participants List", btn_shuffle: "🔀 Shuffle", label_winners: "Winner History", no_winners: "No winners yet", modal_winner_title: "WINNER!", err_min: "Min 2 names required.", err_dup: "Duplicate names detected!", btn_close: "Close" },
+        hi: { nav_privacy: "गोपनीयता नीति", hero_title: "मुफ़्त नाम चुनने वाला पहिया", btn_spin: "पहिया घुमाएं", label_participants: "प्रतिभागी सूची", btn_shuffle: "🔀 फेरबदल", label_winners: "विजेता इतिहास", no_winners: "कोई विजेता नहीं", modal_winner_title: "विजेता!", err_min: "कम से कम 2 नाम चाहिए।", err_dup: "डुप्लिकेट नाम मिले!", btn_close: "बंद करें" },
+        ne: { nav_privacy: "गोपनीयता नीति", hero_title: "नि: शुल्क नाम छान्ने चक्का", btn_spin: "चक्का घुमाउनुहोस्", label_participants: "सहभागी सूची", btn_shuffle: "🔀 मिसाउनुहोस्", label_winners: "विजेता इतिहास", no_winners: "कोही विजेता छैन", modal_winner_title: "विजेता!", err_min: "कम्तिमा २ नाम चाहिन्छ।", err_dup: "उस्तै नामहरू फेला पर्यो!", btn_close: "बन्द गर्नुहोस्" }
     };
 
     function draw() {
@@ -210,7 +191,8 @@
         // Sound Trigger Logic
         const currentTick = Math.floor(currentRotation / arcSize);
         if (currentTick !== lastTickAngle && isSpinning) {
-            tickSound.pause(); tickSound.currentTime = 0;
+            tickSound.pause(); 
+            tickSound.currentTime = 0;
             tickSound.play().catch(()=>{});
             lastTickAngle = currentTick;
         }
@@ -253,8 +235,14 @@
             draw();
             if (progress < 1) requestAnimationFrame(animate);
             else { 
-                isSpinning = false; spinBtn.disabled = false; 
-                winSound.play(); finishSpin(); 
+                isSpinning = false; 
+                spinBtn.disabled = false;
+                // STOP TICKING SOUND INSTANTLY
+                tickSound.pause(); 
+                tickSound.currentTime = 0;
+                // PLAY WINNER SOUND
+                winSound.play(); 
+                finishSpin(); 
             }
         }
         requestAnimationFrame(animate);
@@ -311,12 +299,6 @@
 
     window.onload = () => { 
         nameInput.value = "Alice\nBob\nCharlie\nDiana\nEdward"; 
-        const urlParams = new URLSearchParams(window.location.search);
-        const langParam = urlParams.get('lang');
-        if (langParam && translations[langParam]) {
-            changeLanguage(langParam);
-            document.getElementById('langPicker').value = langParam;
-        }
         draw(); 
     };
 </script>
