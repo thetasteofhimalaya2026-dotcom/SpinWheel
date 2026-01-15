@@ -18,14 +18,15 @@
 
         body { margin: 0; font-family: 'Inter', sans-serif; background-color: var(--bg); color: var(--text); transition: 0.3s; }
         
-        nav { background: var(--card); padding: 10px 20px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 8px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 100; }
+        nav { background: var(--card); padding: 10px 20px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 8px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 100; flex-wrap: wrap; gap: 10px; }
         
-        /* Brand Logo Styling */
         .nav-brand { display: flex; align-items: center; gap: 10px; font-weight: 900; color: var(--primary); cursor: pointer; font-size: 1.2rem; }
         .brand-img { width: 35px; height: 35px; border-radius: 8px; object-fit: cover; }
 
         .nav-links { display: flex; gap: 15px; align-items: center; }
         .nav-links a { font-size: 0.9rem; color: var(--text); text-decoration: none; cursor: pointer; font-weight: 500; }
+
+        .lang-select { padding: 4px; border-radius: 5px; border: 1px solid #cbd5e1; background: var(--card); color: var(--text); font-size: 0.8rem; }
 
         .container { max-width: 1200px; margin: 0 auto; padding: 15px; }
         .page { display: none; }
@@ -61,8 +62,14 @@
         <span>TeamSpin PRO</span>
     </div>
     <div class="nav-links">
-        <a onclick="showPage('home')">Wheel</a>
-        <a onclick="showPage('privacy')">Privacy</a>
+        <select class="lang-select" onchange="changeLanguage(this.value)">
+            <option value="en">English</option>
+            <option value="es">Español</option>
+            <option value="fr">Français</option>
+            <option value="de">Deutsch</option>
+        </select>
+        <a onclick="showPage('home')" data-i18n="nav_wheel">Wheel</a>
+        <a onclick="showPage('privacy')" data-i18n="nav_privacy">Privacy</a>
         <button onclick="toggleTheme()" style="background:none; border:none; cursor:pointer; font-size:1.2rem;">🌓</button>
     </div>
 </nav>
@@ -73,52 +80,45 @@
     <div id="home" class="page active">
         <div class="main-grid">
             <div class="card" style="text-align:center;">
-                <h1 style="font-size: 1.4rem; margin-top: 0;">Random Name Picker Wheel</h1>
+                <h1 style="font-size: 1.4rem; margin-top: 0;" data-i18n="hero_title">Random Name Picker Wheel</h1>
                 <div class="wheel-wrapper" onclick="startSpin()">
                     <div class="pointer"></div>
                     <canvas id="wheelCanvas" width="800" height="800"></canvas>
                 </div>
-                <button class="btn-spin" onclick="startSpin()">SPIN NOW</button>
+                <button class="btn-spin" onclick="startSpin()" data-i18n="btn_spin">SPIN NOW</button>
             </div>
 
             <div class="sidebar">
                 <div class="card">
                     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-                        <strong>Participants</strong>
-                        <button onclick="shuffleNames()" style="font-size:11px; padding:4px 8px; cursor:pointer;">🔀 Shuffle</button>
+                        <strong data-i18n="label_participants">Participants</strong>
+                        <button onclick="shuffleNames()" style="font-size:11px; padding:4px 8px; cursor:pointer;" data-i18n="btn_shuffle">🔀 Shuffle</button>
                     </div>
-                    <textarea id="nameInput"></textarea>
+                    <textarea id="nameInput" onkeyup="draw()"></textarea>
                 </div>
 
                 <div class="card">
-                    <strong>Previous Winners</strong>
+                    <strong data-i18n="label_winners">Previous Winners</strong>
                     <ul id="history" class="history-list">
-                        <li style="color:#94a3b8; text-align:center;">No winners yet</li>
+                        <li style="color:#94a3b8; text-align:center;" data-i18n="no_winners">No winners yet</li>
                     </ul>
                 </div>
             </div>
         </div>
-
-        <div class="card" style="line-height:1.6; color:#64748b; font-size:0.95rem;">
-            <h2 style="color:var(--text);">About TeamSpin Pro</h2>
-            <p>TeamSpin Pro is a professional-grade random decision tool. Our wheel spinner is 100% fair and processes all data locally on your device, ensuring maximum privacy and speed for teachers and event organizers.</p>
-            <h2 style="color:var(--text);">Terms of Use</h2>
-            <p>This tool is provided for entertainment and organizational purposes. By using TeamSpin Pro, you agree that results are random and we are not liable for decisions made based on spins.</p>
-        </div>
     </div>
 
     <div id="privacy" class="page card" style="line-height:1.6;">
-        <h1>Privacy Policy</h1>
-        <p>At TeamSpin Pro, we do not store the names you enter on our servers. All data remains in your browser's local memory. We use Google AdSense to serve ads, which may use cookies to personalize your experience.</p>
-        <button onclick="showPage('home')" class="btn-spin" style="width:auto; padding:10px 25px;">Back to Wheel</button>
+        <h1 data-i18n="nav_privacy">Privacy Policy</h1>
+        <p data-i18n="privacy_text">At TeamSpin Pro, we do not store the names you enter on our servers. All data remains in your browser's local memory.</p>
+        <button onclick="showPage('home')" class="btn-spin" style="width:auto; padding:10px 25px;" data-i18n="btn_back">Back to Wheel</button>
     </div>
 </div>
 
 <div class="modal" id="winnerModal">
     <div class="modal-content">
-        <h2>WINNER!</h2>
+        <h2 data-i18n="modal_winner_title">WINNER!</h2>
         <div id="winnerName" style="font-size: 2.8rem; font-weight: 900; color: var(--primary); margin: 25px 0;"></div>
-        <button class="btn-spin" onclick="closeModal()">Close</button>
+        <button class="btn-spin" onclick="closeModal()" data-i18n="btn_close">Close</button>
     </div>
 </div>
 
@@ -130,6 +130,36 @@
     let currentRotation = 0;
     let isSpinning = false;
 
+    // --- Language Support ---
+    const translations = {
+        en: {
+            nav_wheel: "Wheel", nav_privacy: "Privacy", hero_title: "Random Name Picker Wheel",
+            btn_spin: "SPIN NOW", label_participants: "Participants", btn_shuffle: "🔀 Shuffle",
+            label_winners: "Previous Winners", no_winners: "No winners yet", modal_winner_title: "WINNER!",
+            btn_close: "Close", btn_back: "Back", privacy_text: "At TeamSpin Pro, we do not store the names you enter on our servers."
+        },
+        es: {
+            nav_wheel: "Rueda", nav_privacy: "Privacidad", hero_title: "Rueda para Elegir Nombres",
+            btn_spin: "GIRAR AHORA", label_participants: "Participantes", btn_shuffle: "🔀 Mezclar",
+            label_winners: "Ganadores Previos", no_winners: "Sin ganadores", modal_winner_title: "¡GANADOR!",
+            btn_close: "Cerrar", btn_back: "Volver", privacy_text: "No almacenamos sus datos en nuestros servidores."
+        },
+        fr: {
+            nav_wheel: "Roue", nav_privacy: "Confidentialité", hero_title: "Roue de Tirage au Sort",
+            btn_spin: "LANCER", label_participants: "Participants", btn_shuffle: "🔀 Mélanger",
+            label_winners: "Anciens Gagnants", no_winners: "Pas encore de gagnant", modal_winner_title: "GAGNANT !",
+            btn_close: "Fermer", btn_back: "Retour", privacy_text: "Nous ne stockons pas vos données sur nos serveurs."
+        }
+    };
+
+    function changeLanguage(lang) {
+        document.querySelectorAll('[data-i18n]').forEach(el => {
+            const key = el.getAttribute('data-i18n');
+            if (translations[lang][key]) el.innerText = translations[lang][key];
+        });
+    }
+
+    // --- Wheel Logic ---
     window.onload = () => {
         nameInput.value = "Alice\nBob\nCharlie\nDiana\nEdward";
         draw();
@@ -141,7 +171,14 @@
         const center = size / 2;
         const radius = center - 20;
         ctx.clearRect(0, 0, size, size);
-        if (names.length === 0) return;
+        
+        if (names.length === 0) {
+            ctx.beginPath();
+            ctx.arc(center, center, radius, 0, 2 * Math.PI);
+            ctx.fillStyle = "#e2e8f0";
+            ctx.fill();
+            return;
+        }
 
         const arcSize = (2 * Math.PI) / names.length;
         names.forEach((name, i) => {
@@ -196,8 +233,6 @@
         if (idx < 0) idx += names.length;
         
         const winner = names[idx];
-        const timeStr = new Date().toLocaleTimeString();
-
         document.getElementById('winnerName').innerText = winner;
         document.getElementById('winnerModal').style.display = 'flex';
         confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
@@ -206,7 +241,7 @@
         if (historyList.innerText.includes('No winners yet')) historyList.innerHTML = '';
         const li = document.createElement('li');
         li.className = 'history-item';
-        li.innerHTML = `<span><strong>${winner}</strong></span><span class="history-time">${timeStr}</span>`;
+        li.innerHTML = `<span><strong>${winner}</strong></span><span class="history-time">${new Date().toLocaleTimeString()}</span>`;
         historyList.prepend(li);
     }
 
