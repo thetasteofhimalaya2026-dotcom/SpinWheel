@@ -5,88 +5,86 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     
     <title>TeamSpin Pro | Spin the Wheel & Best Name of Wheels Picker 2026</title>
-    <meta name="description" content="Use TeamSpin Pro, the ultimate Team Spin Wheel. A professional 3D spin the wheel tool for giveaways. Choose from various Name of Wheels patterns in 32 languages.">
-    <meta name="keywords" content="spin the wheel, team spin wheel, name of wheels, random name picker, wheel of names, 3D spinner, classroom wheel, raffle wheel 2026">
+    <meta name="description" content="Use TeamSpin Pro, the ultimate Team Spin Wheel. A professional 3D spin the wheel tool with shuffle and sort features. Choose from various Name of Wheels patterns in 32 languages.">
+    <meta name="keywords" content="spin the wheel, team spin wheel, name of wheels, random name picker, wheel of names, 3D spinner, shuffle names, sort names, raffle wheel 2026">
     
     <link rel="icon" type="image/jpeg" href="logo.jpg">
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-YOUR_ID" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
     <style>
-        /* ALL THEMES PRESERVED */
-        :root { --bg: #f8fafc; --card: #ffffff; --text: #1e293b; --primary: #6366f1; }
-        [data-theme="dark"] { --bg: #0f172a; --card: #1e293b; --text: #f8fafc; --primary: #818cf8; }
-        [data-theme="ocean"] { --bg: #0c4a6e; --card: #075985; --text: #f0f9ff; --primary: #38bdf8; }
-        [data-theme="forest"] { --bg: #064e3b; --card: #065f46; --text: #ecfdf5; --primary: #34d399; }
-        [data-theme="sunset"] { --bg: #450a0a; --card: #7f1d1d; --text: #fff7ed; --primary: #fbbf24; }
+        :root { --bg: #f8fafc; --card: #ffffff; --text: #1e293b; --primary: #6366f1; --shadow: rgba(0,0,0,0.1); }
+        [data-theme="dark"] { --bg: #0f172a; --card: #1e293b; --text: #f8fafc; --primary: #818cf8; --shadow: rgba(0,0,0,0.4); }
+        [data-theme="ocean"] { --bg: #0c4a6e; --card: #075985; --text: #f0f9ff; --primary: #38bdf8; --shadow: rgba(0,0,0,0.3); }
+        [data-theme="forest"] { --bg: #064e3b; --card: #065f46; --text: #ecfdf5; --primary: #34d399; --shadow: rgba(0,0,0,0.3); }
+        [data-theme="sunset"] { --bg: #450a0a; --card: #7f1d1d; --text: #fff7ed; --primary: #fbbf24; --shadow: rgba(0,0,0,0.4); }
 
-        body { margin: 0; font-family: 'Inter', sans-serif; background-color: var(--bg); color: var(--text); transition: 0.3s; line-height: 1.6; overflow-x: hidden; }
-        nav { background: var(--card); padding: 10px 15px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 1000; }
-        .nav-brand { display: flex; align-items: center; gap: 8px; font-weight: 900; color: var(--primary); cursor: pointer; }
-        .container { max-width: 1300px; margin: 0 auto; padding: 10px; }
-        .card { background: var(--card); padding: 20px; border-radius: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); margin-bottom: 20px; }
+        body { margin: 0; font-family: 'Inter', sans-serif; background-color: var(--bg); color: var(--text); transition: 0.3s; overflow-x: hidden; }
+        nav { background: var(--card); padding: 10px 20px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px var(--shadow); position: sticky; top: 0; z-index: 1000; }
+        .container { max-width: 1300px; margin: 0 auto; padding: 15px; }
+        .card { background: var(--card); padding: 25px; border-radius: 20px; box-shadow: 0 4px 20px var(--shadow); margin-bottom: 20px; }
 
-        /* RESPONSIVE WHEEL SYSTEM - SHAPE PRESERVED */
-        #wheelContainer { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; }
-        .wheel-wrapper { position: relative; width: 100%; max-width: 480px; aspect-ratio: 1/1; margin: 10px auto; cursor: pointer; display: flex; align-items: center; justify-content: center; }
-        #wheelContainer:fullscreen { background: var(--bg); width: 100vw; height: 100vh; padding: 20px; }
-        #wheelContainer:fullscreen .wheel-wrapper { max-width: 80vh; max-height: 80vh; }
-
+        /* WHEEL DESIGN */
+        #wheelContainer { display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .wheel-wrapper { position: relative; width: 100%; max-width: 480px; aspect-ratio: 1/1; margin: 15px auto; cursor: pointer; }
         .pointer-3d { 
-            position: absolute; top: -10px; left: 50%; transform: translateX(-50%); 
-            width: 30px; height: 50px; z-index: 100;
+            position: absolute; top: -12px; left: 50%; transform: translateX(-50%); 
+            width: 35px; height: 55px; z-index: 100;
             background: linear-gradient(145deg, #ef4444, #991b1b);
             clip-path: polygon(50% 100%, 0% 0%, 100% 0%);
-            filter: drop-shadow(0 5px 5px rgba(0,0,0,0.4));
+            filter: drop-shadow(0 4px 4px rgba(0,0,0,0.5));
         }
+        canvas { width: 100% !important; height: 100% !important; border-radius: 50%; border: 8px solid var(--card); box-shadow: 0 0 20px var(--shadow); }
 
-        canvas { width: 100% !important; height: 100% !important; border-radius: 50%; }
-
-        .btn { padding: 8px 12px; border-radius: 10px; border: 1px solid #e2e8f0; cursor: pointer; font-weight: 700; background: var(--card); color: var(--text); font-size: 12px; }
-        .btn-spin { background: var(--primary); color: white; border: none; width: 100%; max-width: 480px; padding: 15px; font-size: 1.2rem; border-radius: 15px; margin-top: 10px; }
-        textarea { width: 100%; height: 150px; padding: 12px; border-radius: 12px; border: 2px solid #e2e8f0; background: var(--bg); color: var(--text); resize: none; box-sizing: border-box; }
+        /* BUTTONS & CONTROLS */
+        .toolbar { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; margin-bottom: 20px; }
+        .btn { padding: 10px 14px; border-radius: 10px; border: 1px solid #e2e8f0; cursor: pointer; font-weight: 700; background: var(--card); color: var(--text); font-size: 13px; transition: 0.2s; }
+        .btn:hover { border-color: var(--primary); }
+        .btn-spin { background: var(--primary); color: white; border: none; width: 100%; max-width: 480px; padding: 18px; font-size: 1.3rem; border-radius: 15px; margin-top: 15px; cursor: pointer; }
         
-        .main-grid { display: grid; grid-template-columns: 1fr; gap: 15px; }
-        @media (min-width: 1024px) { .main-grid { grid-template-columns: 1fr 380px; } }
-        .toolbar { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; margin-bottom: 15px; }
-        .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.85); display: none; justify-content: center; align-items: center; z-index: 2000; }
-        .modal-content { background: var(--card); padding: 30px; border-radius: 25px; text-align: center; max-width: 400px; width: 85%; }
+        textarea { width: 100%; height: 180px; padding: 15px; border-radius: 15px; border: 2px solid #e2e8f0; background: var(--bg); color: var(--text); resize: none; box-sizing: border-box; font-size: 14px; }
+        
+        .main-grid { display: grid; grid-template-columns: 1fr; gap: 20px; }
+        @media (min-width: 1024px) { .main-grid { grid-template-columns: 1fr 400px; } }
+
+        /* MODAL */
+        .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.9); display: none; justify-content: center; align-items: center; z-index: 2000; }
+        .modal-content { background: var(--card); padding: 40px; border-radius: 30px; text-align: center; max-width: 450px; width: 90%; }
+        
         .page { display: none; } .active { display: block; }
-        .seo-text h2 { color: var(--primary); font-size: 1.4rem; }
-        .topic-card { margin-bottom: 15px; padding: 15px; background: rgba(0,0,0,0.02); border-radius: 15px; }
+        .seo-section h2 { color: var(--primary); border-bottom: 2px solid #eee; padding-bottom: 10px; }
     </style>
 </head>
-<body>
+<body data-theme="light">
 
 <nav>
     <div class="nav-brand" onclick="showPage('home')">
-        <img src="logo.jpg" alt="Logo" style="width:28px; border-radius:4px;">
+        <img src="logo.jpg" alt="Logo" style="width:30px; border-radius:5px;">
         <span>TeamSpin PRO</span>
     </div>
     <div class="nav-links">
-        <button class="btn" onclick="showPage('home')">Spin the Wheel</button>
-        <button class="btn" onclick="showPage('guidelines')">Guide</button>
+        <button class="btn" onclick="showPage('home')">Wheel</button>
+        <button class="btn" onclick="showPage('guidelines')">Guidelines</button>
         <button class="btn" onclick="showPage('topics')">Topics</button>
     </div>
 </nav>
 
 <div class="container">
-    
     <div id="home" class="page active">
         <div class="toolbar">
             <select id="themePicker" class="btn" onchange="setTheme(this.value)">
-                <option value="light">Theme: Light</option>
-                <option value="dark">Theme: Dark</option>
-                <option value="ocean">Theme: Ocean</option>
-                <option value="forest">Theme: Forest</option>
-                <option value="sunset">Theme: Sunset</option>
+                <option value="light">☀️ Light Theme</option>
+                <option value="dark">🌙 Dark Theme</option>
+                <option value="ocean">🌊 Ocean Blue</option>
+                <option value="forest">🌲 Forest Green</option>
+                <option value="sunset">🌇 Sunset Red</option>
             </select>
             <select id="patternPicker" class="btn" onchange="setPattern(this.value)">
-                <option value="classic">Classic Duo</option>
-                <option value="rainbow">Rainbow Spin</option>
-                <option value="monochrome">Grey Scale</option>
-                <option value="neon">Neon Pulse</option>
-                <option value="pastel">Pastel Soft</option>
+                <option value="classic">Pattern: Classic Duo</option>
+                <option value="rainbow">Pattern: Rainbow Spin</option>
+                <option value="monochrome">Pattern: Monochrome</option>
+                <option value="neon">Pattern: Neon Pulse</option>
+                <option value="pastel">Pattern: Pastel Soft</option>
             </select>
             <select id="langPicker" class="btn" onchange="changeLang(this.value)"></select>
             <button class="btn" onclick="toggleFullScreen()">⛶ Full Screen</button>
@@ -98,57 +96,41 @@
                     <div class="pointer-3d"></div>
                     <canvas id="wheelCanvas" width="1000" height="1000"></canvas>
                 </div>
-                <button id="spinBtn" class="btn btn-spin" onclick="startSpin()">CLICK TO SPIN THE WHEEL</button>
+                <button id="spinBtn" class="btn btn-spin" onclick="startSpin()">SPIN THE WHEEL</button>
             </section>
 
             <aside>
                 <div class="card">
-                    <strong style="display:block; margin-bottom:8px;">Team Spin Wheel Entries</strong>
-                    <textarea id="nameInput" onkeyup="updateWheel()" placeholder="Enter name of wheels entries here..."></textarea>
-                    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px; margin-top:10px;">
-                        <button class="btn" onclick="sortNames()">A-Z Sort</button>
-                        <button class="btn" onclick="saveToDevice()">💾 Save</button>
+                    <strong>Team Spin Wheel Entries</strong>
+                    <textarea id="nameInput" onkeyup="updateWheel()" placeholder="One name per line..."></textarea>
+                    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-top:15px;">
+                        <button class="btn" onclick="sortNames(true)">Sort A-Z</button>
+                        <button class="btn" onclick="sortNames(false)">Sort Z-A</button>
+                        <button class="btn" onclick="shuffleNames()">🔀 Shuffle</button>
+                        <button class="btn" onclick="saveToDevice()">💾 Save List</button>
                     </div>
                 </div>
             </aside>
         </div>
     </div>
 
-    <div id="guidelines" class="page card seo-text">
-        <h2>How to Spin the Wheel for Fair Results</h2>
-        <p>Mastering the <strong>Team Spin Wheel</strong> is easy. Whether you are creating a custom <strong>name of wheels</strong> list for a classroom or a corporate giveaway, our 2026 algorithm ensures 100% unbiased randomness.</p>
-        <div class="topic-card">
-            <strong>Customizing Name of Wheels:</strong> You can add up to 500 names. The <strong>spin the wheel</strong> interface will automatically adjust the slice sizes to fit your list perfectly while maintaining the 3D aesthetic.
-        </div>
-        <div class="topic-card">
-            <strong>The Team Spin Wheel Advantage:</strong> Unlike other spinners, TeamSpin Pro uses a physics-based deceleration to make every <strong>spin the wheel</strong> experience exciting and transparent.
-        </div>
-        <button class="btn btn-spin" onclick="showPage('home')">Back to Spin the Wheel</button>
+    <div id="guidelines" class="page card seo-section">
+        <h2>Guidelines: How to Use Team Spin Wheel</h2>
+        <p>Using <strong>TeamSpin Pro</strong> is the best way to <strong>spin the wheel</strong> for names. Enter your <strong>name of wheels</strong> entries into the text area. You can <strong>shuffle</strong> the list to ensure extra randomness or use the <strong>A-Z Sort</strong> to organize participants before the big draw.</p>
+        <p><strong>Note:</strong> To close ads, look for the 'X' icon provided by Google AdSense on the ad banners.</p>
+        <button class="btn btn-spin" onclick="showPage('home')">Return to Wheel</button>
     </div>
 
-    <div id="topics" class="page card seo-text">
-        <h2>Popular Name of Wheels Categories</h2>
-        <div class="topic-card">
-            <strong>Educational Team Spin Wheel:</strong> Teachers use our tool to pick students fairly. Just enter the class roster into the <strong>name of wheels</strong> box and spin!
-        </div>
-        <div class="topic-card">
-            <strong>Business Spin the Wheel:</strong> Use it for choosing meeting leaders or lucky draw winners. The 3D pointer adds a professional touch to any corporate event.
-        </div>
-        <button class="btn btn-spin" onclick="showPage('home')">Return to Team Spin Wheel</button>
+    <div id="topics" class="page card seo-section">
+        <h2>Topics & Name of Wheels Use Cases</h2>
+        <p>Our <strong>Spin the Wheel</strong> tool is used globally by teachers for classroom management and by businesses for giveaway raffles in 2026. The <strong>Team Spin Wheel</strong> technology ensures that every user gets a fair, visible result every time.</p>
     </div>
-
-    <div id="privacy" class="page card seo-text">
-        <h1>Privacy & Team Spin Wheel Terms</h1>
-        <p>When you use our <strong>spin the wheel</strong> service, your data stays on your device. We do not store your <strong>name of wheels</strong> lists. Google AdSense helps keep the <strong>Team Spin Wheel</strong> free for everyone.</p>
-        <button class="btn btn-spin" onclick="showPage('home')">Close</button>
-    </div>
-
 </div>
 
 <div class="modal" id="winnerModal">
     <div class="modal-content">
-        <h2 style="margin-top:0;">WINNER!</h2>
-        <div id="winnerName" style="font-size: 2.5rem; font-weight: 900; color: var(--primary); margin: 20px 0; word-break: break-all;"></div>
+        <h2>WINNER!</h2>
+        <div id="winnerName" style="font-size: 3rem; font-weight: 900; color: var(--primary); margin: 20px 0; text-shadow: 2px 2px 10px rgba(0,0,0,0.1);"></div>
         <button class="btn btn-spin" onclick="closeModal()">Next Spin</button>
     </div>
 </div>
@@ -157,8 +139,6 @@
     const canvas = document.getElementById('wheelCanvas');
     const ctx = canvas.getContext('2d');
     const nameInput = document.getElementById('nameInput');
-    const tickSound = new Audio('https://assets.mixkit.co/active_storage/sfx/2005/2005-preview.mp3');
-    tickSound.volume = 0.2;
 
     let rotation = 0;
     let isSpinning = false;
@@ -166,10 +146,10 @@
 
     const patterns = {
         classic: ['#6366f1', '#ec4899'],
-        rainbow: ['#ff0000', '#ff7f00', '#ffff00', '#00ff00', '#0000ff', '#4b0082', '#8b00ff'],
-        monochrome: ['#1e293b', '#64748b', '#94a3b8', '#cbd5e1'],
-        neon: ['#00f3ff', '#ff00ff', '#7efb00', '#ff003c'],
-        pastel: ['#ffb3ba', '#baffc9', '#bae1ff', '#ffffba']
+        rainbow: ['#ff4d4d', '#ffaf40', '#fffa65', '#32ff7e', '#7efff5', '#18dcff', '#7d5fff'],
+        monochrome: ['#2c3e50', '#7f8c8d', '#bdc3c7', '#34495e'],
+        neon: ['#ff0055', '#00fbff', '#00ff44', '#ffea00'],
+        pastel: ['#ffb3ba', '#bae1ff', '#baffc9', '#ffffba', '#ffdfba']
     };
 
     const languages = [
@@ -196,10 +176,15 @@
             ctx.moveTo(center, center);
             ctx.arc(center, center, radius, angle, angle + arc);
             ctx.fill(); ctx.strokeStyle = "white"; ctx.lineWidth = 4; ctx.stroke();
+            
             ctx.save();
             ctx.translate(center, center); ctx.rotate(angle + arc / 2);
-            ctx.textAlign = "right"; ctx.fillStyle = "white"; ctx.font = "bold 35px Inter";
-            ctx.fillText(name.substring(0, 15), radius - 60, 10);
+            ctx.textAlign = "right"; ctx.fillStyle = "white";
+            
+            // SHADOW FOR READABILITY ON PASTEL THEMES
+            ctx.shadowColor = "rgba(0,0,0,0.6)"; ctx.shadowBlur = 6;
+            ctx.font = "bold 40px Inter";
+            ctx.fillText(name.substring(0, 15), radius - 60, 15);
             ctx.restore();
         });
     }
@@ -226,30 +211,41 @@
         if (idx < 0) idx += names.length;
         document.getElementById('winnerName').innerText = names[idx];
         document.getElementById('winnerModal').style.display = 'flex';
-        confetti({ particleCount: 150, spread: 60, origin: { y: 0.6 } });
+        confetti({ particleCount: 200, spread: 70, origin: { y: 0.6 } });
+    }
+
+    /* FEATURE: SORT & SHUFFLE */
+    function sortNames(asc = true) {
+        let names = nameInput.value.split('\n').filter(n => n.trim() !== '');
+        names.sort(); if (!asc) names.reverse();
+        nameInput.value = names.join('\n'); updateWheel();
+    }
+    function shuffleNames() {
+        let names = nameInput.value.split('\n').filter(n => n.trim() !== '');
+        for (let i = names.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [names[i], names[j]] = [names[j], names[i]];
+        }
+        nameInput.value = names.join('\n'); updateWheel();
     }
 
     function setTheme(theme) { document.body.setAttribute('data-theme', theme); updateWheel(); }
     function setPattern(p) { currentPattern = patterns[p]; updateWheel(); }
-    function toggleFullScreen() {
-        const elem = document.getElementById('wheelContainer');
-        if (!document.fullscreenElement) elem.requestFullscreen();
-        else document.exitFullscreen();
-    }
-    function sortNames() {
-        let names = nameInput.value.split('\n').filter(n => n.trim() !== '');
-        names.sort(); nameInput.value = names.join('\n'); updateWheel();
-    }
-    function saveToDevice() {
-        const blob = new Blob([nameInput.value], {type: 'text/plain'});
-        const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'teamspin.txt'; a.click();
-    }
     function showPage(id) {
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
         document.getElementById(id).classList.add('active');
         window.scrollTo(0,0);
     }
     function closeModal() { document.getElementById('winnerModal').style.display = 'none'; }
+    function toggleFullScreen() {
+        const elem = document.getElementById('wheelContainer');
+        if (!document.fullscreenElement) elem.requestFullscreen();
+        else document.exitFullscreen();
+    }
+    function saveToDevice() {
+        const blob = new Blob([nameInput.value], {type: 'text/plain'});
+        const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'teamspin-list.txt'; a.click();
+    }
 
     window.onload = () => {
         const picker = document.getElementById('langPicker');
@@ -257,6 +253,12 @@
             const opt = document.createElement('option'); opt.value = l.c; opt.innerText = l.n;
             picker.appendChild(opt);
         });
+        
+        // Language detection from Sitemap
+        const urlParams = new URLSearchParams(window.location.search);
+        const langParam = urlParams.get('lang');
+        if (langParam) picker.value = langParam;
+
         nameInput.value = "Apple\nBeta\nCharlie\nDelta\nEcho";
         updateWheel();
     };
