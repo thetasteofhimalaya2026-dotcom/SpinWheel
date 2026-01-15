@@ -3,85 +3,88 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>TeamSpin Pro | 3D Random Name Picker & SEO Decision Tools 2026</title>
     
-    <meta name="description" content="TeamSpin Pro is the leading 3D random name picker wheel. Use our guidelines for classroom management, giveaways, and raffles. Support for 32 languages.">
+    <title>TeamSpin Pro | Spin the Wheel & Best Name of Wheels Picker 2026</title>
+    <meta name="description" content="Use TeamSpin Pro, the ultimate Team Spin Wheel. A professional 3D spin the wheel tool for giveaways. Choose from various Name of Wheels patterns in 32 languages.">
+    <meta name="keywords" content="spin the wheel, team spin wheel, name of wheels, random name picker, wheel of names, 3D spinner, classroom wheel, raffle wheel 2026">
+    
     <link rel="icon" type="image/jpeg" href="logo.jpg">
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-YOUR_ID" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
     <style>
-        /* ALL PREVIOUS STYLES PRESERVED */
+        /* ALL THEMES PRESERVED */
         :root { --bg: #f8fafc; --card: #ffffff; --text: #1e293b; --primary: #6366f1; }
         [data-theme="dark"] { --bg: #0f172a; --card: #1e293b; --text: #f8fafc; --primary: #818cf8; }
         [data-theme="ocean"] { --bg: #0c4a6e; --card: #075985; --text: #f0f9ff; --primary: #38bdf8; }
         [data-theme="forest"] { --bg: #064e3b; --card: #065f46; --text: #ecfdf5; --primary: #34d399; }
         [data-theme="sunset"] { --bg: #450a0a; --card: #7f1d1d; --text: #fff7ed; --primary: #fbbf24; }
 
-        body { margin: 0; font-family: 'Inter', sans-serif; background-color: var(--bg); color: var(--text); transition: 0.3s; line-height: 1.6; }
-        nav { background: var(--card); padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 1000; }
-        .container { max-width: 1300px; margin: 0 auto; padding: 15px; }
-        .card { background: var(--card); padding: 25px; border-radius: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); margin-bottom: 20px; }
+        body { margin: 0; font-family: 'Inter', sans-serif; background-color: var(--bg); color: var(--text); transition: 0.3s; line-height: 1.6; overflow-x: hidden; }
+        nav { background: var(--card); padding: 10px 15px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 1000; }
+        .nav-brand { display: flex; align-items: center; gap: 8px; font-weight: 900; color: var(--primary); cursor: pointer; }
+        .container { max-width: 1300px; margin: 0 auto; padding: 10px; }
+        .card { background: var(--card); padding: 20px; border-radius: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); margin-bottom: 20px; }
 
-        /* WHEEL UI */
-        #wheelContainer { display: flex; flex-direction: column; align-items: center; justify-content: center; }
-        #wheelContainer:fullscreen { background: var(--bg); width: 100vw; height: 100vh; justify-content: center; }
-        .wheel-wrapper { position: relative; width: 90%; max-width: 500px; aspect-ratio: 1/1; margin: 20px auto; cursor: pointer; }
-        #wheelContainer:fullscreen .wheel-wrapper { max-width: 80vh; }
+        /* RESPONSIVE WHEEL SYSTEM - SHAPE PRESERVED */
+        #wheelContainer { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; }
+        .wheel-wrapper { position: relative; width: 100%; max-width: 480px; aspect-ratio: 1/1; margin: 10px auto; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+        #wheelContainer:fullscreen { background: var(--bg); width: 100vw; height: 100vh; padding: 20px; }
+        #wheelContainer:fullscreen .wheel-wrapper { max-width: 80vh; max-height: 80vh; }
+
         .pointer-3d { 
-            position: absolute; top: -15px; left: 50%; transform: translateX(-50%); 
-            width: 35px; height: 55px; z-index: 100;
+            position: absolute; top: -10px; left: 50%; transform: translateX(-50%); 
+            width: 30px; height: 50px; z-index: 100;
             background: linear-gradient(145deg, #ef4444, #991b1b);
             clip-path: polygon(50% 100%, 0% 0%, 100% 0%);
             filter: drop-shadow(0 5px 5px rgba(0,0,0,0.4));
         }
 
-        .btn { padding: 10px 16px; border-radius: 10px; border: 1px solid #e2e8f0; cursor: pointer; font-weight: 700; background: var(--card); color: var(--text); }
-        .btn-spin { background: var(--primary); color: white; border: none; width: 100%; max-width: 500px; padding: 18px; font-size: 1.2rem; border-radius: 15px; cursor: pointer; }
-        textarea { width: 100%; height: 180px; padding: 15px; border-radius: 15px; border: 2px solid #e2e8f0; background: var(--bg); color: var(--text); resize: none; box-sizing: border-box; }
-        
-        .main-grid { display: grid; grid-template-columns: 1fr; gap: 20px; }
-        @media (min-width: 1024px) { .main-grid { grid-template-columns: 1fr 400px; } }
+        canvas { width: 100% !important; height: 100% !important; border-radius: 50%; }
 
-        /* SEO PAGE STYLING */
-        .seo-section h2 { color: var(--primary); border-bottom: 2px solid #e2e8f0; padding-bottom: 10px; }
-        .topic-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+        .btn { padding: 8px 12px; border-radius: 10px; border: 1px solid #e2e8f0; cursor: pointer; font-weight: 700; background: var(--card); color: var(--text); font-size: 12px; }
+        .btn-spin { background: var(--primary); color: white; border: none; width: 100%; max-width: 480px; padding: 15px; font-size: 1.2rem; border-radius: 15px; margin-top: 10px; }
+        textarea { width: 100%; height: 150px; padding: 12px; border-radius: 12px; border: 2px solid #e2e8f0; background: var(--bg); color: var(--text); resize: none; box-sizing: border-box; }
         
+        .main-grid { display: grid; grid-template-columns: 1fr; gap: 15px; }
+        @media (min-width: 1024px) { .main-grid { grid-template-columns: 1fr 380px; } }
+        .toolbar { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; margin-bottom: 15px; }
         .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.85); display: none; justify-content: center; align-items: center; z-index: 2000; }
-        .modal-content { background: var(--card); padding: 40px; border-radius: 30px; text-align: center; max-width: 450px; width: 90%; }
+        .modal-content { background: var(--card); padding: 30px; border-radius: 25px; text-align: center; max-width: 400px; width: 85%; }
         .page { display: none; } .active { display: block; }
+        .seo-text h2 { color: var(--primary); font-size: 1.4rem; }
+        .topic-card { margin-bottom: 15px; padding: 15px; background: rgba(0,0,0,0.02); border-radius: 15px; }
     </style>
 </head>
 <body>
 
 <nav>
     <div class="nav-brand" onclick="showPage('home')">
-        <img src="logo.jpg" alt="Logo" style="width:32px; border-radius:6px;">
+        <img src="logo.jpg" alt="Logo" style="width:28px; border-radius:4px;">
         <span>TeamSpin PRO</span>
     </div>
     <div class="nav-links">
-        <button class="btn" onclick="showPage('home')">Home</button>
-        <button class="btn" onclick="showPage('guidelines')">Guidelines</button>
+        <button class="btn" onclick="showPage('home')">Spin the Wheel</button>
+        <button class="btn" onclick="showPage('guidelines')">Guide</button>
         <button class="btn" onclick="showPage('topics')">Topics</button>
-        <button class="btn" onclick="showPage('privacy')">Privacy</button>
     </div>
 </nav>
 
 <div class="container">
     
     <div id="home" class="page active">
-        <div class="card" style="display: flex; gap: 10px; flex-wrap: wrap; justify-content: center;">
+        <div class="toolbar">
             <select id="themePicker" class="btn" onchange="setTheme(this.value)">
-                <option value="light">☀️ Light Theme</option>
-                <option value="dark">🌙 Dark Theme</option>
-                <option value="ocean">🌊 Ocean</option>
-                <option value="forest">🌲 Forest</option>
-                <option value="sunset">🌇 Sunset</option>
+                <option value="light">Theme: Light</option>
+                <option value="dark">Theme: Dark</option>
+                <option value="ocean">Theme: Ocean</option>
+                <option value="forest">Theme: Forest</option>
+                <option value="sunset">Theme: Sunset</option>
             </select>
             <select id="patternPicker" class="btn" onchange="setPattern(this.value)">
                 <option value="classic">Classic Duo</option>
-                <option value="rainbow">Rainbow</option>
-                <option value="monochrome">Monochrome</option>
+                <option value="rainbow">Rainbow Spin</option>
+                <option value="monochrome">Grey Scale</option>
                 <option value="neon">Neon Pulse</option>
                 <option value="pastel">Pastel Soft</option>
             </select>
@@ -95,14 +98,14 @@
                     <div class="pointer-3d"></div>
                     <canvas id="wheelCanvas" width="1000" height="1000"></canvas>
                 </div>
-                <button id="spinBtn" class="btn btn-spin" onclick="startSpin()">SPIN THE WHEEL</button>
+                <button id="spinBtn" class="btn btn-spin" onclick="startSpin()">CLICK TO SPIN THE WHEEL</button>
             </section>
 
             <aside>
                 <div class="card">
-                    <strong>Participants</strong>
-                    <textarea id="nameInput" onkeyup="updateWheel()" style="margin-top:10px;"></textarea>
-                    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-top:10px;">
+                    <strong style="display:block; margin-bottom:8px;">Team Spin Wheel Entries</strong>
+                    <textarea id="nameInput" onkeyup="updateWheel()" placeholder="Enter name of wheels entries here..."></textarea>
+                    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px; margin-top:10px;">
                         <button class="btn" onclick="sortNames()">A-Z Sort</button>
                         <button class="btn" onclick="saveToDevice()">💾 Save</button>
                     </div>
@@ -111,59 +114,46 @@
         </div>
     </div>
 
-    <div id="guidelines" class="page card seo-section">
-        <h2>Official Usage Guidelines for TeamSpin Pro</h2>
-        <p>Using a <strong>random name picker wheel</strong> effectively requires understanding both the technology and the psychology of fairness. Whether you are a primary school teacher or a high-stakes event coordinator, follow these steps to maximize engagement.</p>
-        
-        <h3>1. Setting Up Your Participant List</h3>
-        <p>The core of any successful draw is the list. Ensure names are entered one per line without extra commas or spaces. Our tool handles lists of up to 500 names with zero lag, thanks to local browser rendering. For large events, use our <strong>A-Z Sort feature</strong> to verify that no participant has been entered twice, maintaining 100% statistical fairness.</p>
-        
-        <h3>2. Choosing the Right Pattern and Theme</h3>
-        <p>Visual stimulation plays a role in classroom focus. For young students, the <strong>Rainbow Pattern</strong> provides high contrast. For professional business meetings, the <strong>Monochrome Pattern</strong> offers a sophisticated aesthetic. Switch themes (Ocean, Forest, Sunset) to match the ambient lighting of your room.</p>
-        
-        <h3>3. Using Full-Screen Mode for Presentations</h3>
-        <p>When projecting onto a smartboard or large TV, click the <strong>Full Screen button</strong>. This removes all browser UI distractions, focusing the audience entirely on the wheel. This is the preferred method for <strong>2026 giveaway events</strong> and raffle draws.</p>
-    </div>
-
-    <div id="topics" class="page seo-section">
-        <div class="topic-grid">
-            <div class="card">
-                <h2>Classroom Management in 2026</h2>
-                <p>Modern educators use <strong>digital name pickers</strong> to reduce bias. Unlike drawing sticks from a jar, a digital wheel is transparent and exciting. Students feel more involved when they see the 3D pointer and hear the soothing tick-sound of the spin.</p>
-            </div>
-            <div class="card">
-                <h2>Hosting Fair Giveaways</h2>
-                <p>Transparency is the most important factor for social media influencers and streamers. By sharing your screen while using TeamSpin Pro, your audience can witness the randomness in real-time. Our <strong>cryptographic entropy</strong> ensures no outcome is predetermined.</p>
-            </div>
-            <div class="card">
-                <h2>Decision Making Made Easy</h2>
-                <p>Stuck between dinner choices or vacation spots? Randomize your decisions to save time and reduce "decision fatigue." TeamSpin Pro isn't just for names; it's a versatile choice-maker for daily life.</p>
-            </div>
-            <div class="card">
-                <h2>Multi-Language Support Benefits</h2>
-                <p>With 32 languages including <strong>Hindi and Nepali</strong>, TeamSpin Pro is built for global accessibility. Localizing the interface ensures that users from Kathmandu to New York can navigate the tool without language barriers.</p>
-            </div>
+    <div id="guidelines" class="page card seo-text">
+        <h2>How to Spin the Wheel for Fair Results</h2>
+        <p>Mastering the <strong>Team Spin Wheel</strong> is easy. Whether you are creating a custom <strong>name of wheels</strong> list for a classroom or a corporate giveaway, our 2026 algorithm ensures 100% unbiased randomness.</p>
+        <div class="topic-card">
+            <strong>Customizing Name of Wheels:</strong> You can add up to 500 names. The <strong>spin the wheel</strong> interface will automatically adjust the slice sizes to fit your list perfectly while maintaining the 3D aesthetic.
         </div>
+        <div class="topic-card">
+            <strong>The Team Spin Wheel Advantage:</strong> Unlike other spinners, TeamSpin Pro uses a physics-based deceleration to make every <strong>spin the wheel</strong> experience exciting and transparent.
+        </div>
+        <button class="btn btn-spin" onclick="showPage('home')">Back to Spin the Wheel</button>
     </div>
 
-    <div id="privacy" class="page card">
-        <h1>Privacy & Ad Policy</h1>
-        <p>At TeamSpin Pro, we respect your data. Your lists are never uploaded to a cloud. Everything is processed via <strong>JavaScript</strong> in your browser. We use Google AdSense to fund this tool. You can close ads by clicking the 'X' button on the ad itself. For more information on how Google uses your data, please visit the Google Ad Settings portal. We ensure our tool is compliant with 2026 web privacy standards.</p>
-        <button class="btn btn-spin" onclick="showPage('home')">Return to Home</button>
+    <div id="topics" class="page card seo-text">
+        <h2>Popular Name of Wheels Categories</h2>
+        <div class="topic-card">
+            <strong>Educational Team Spin Wheel:</strong> Teachers use our tool to pick students fairly. Just enter the class roster into the <strong>name of wheels</strong> box and spin!
+        </div>
+        <div class="topic-card">
+            <strong>Business Spin the Wheel:</strong> Use it for choosing meeting leaders or lucky draw winners. The 3D pointer adds a professional touch to any corporate event.
+        </div>
+        <button class="btn btn-spin" onclick="showPage('home')">Return to Team Spin Wheel</button>
+    </div>
+
+    <div id="privacy" class="page card seo-text">
+        <h1>Privacy & Team Spin Wheel Terms</h1>
+        <p>When you use our <strong>spin the wheel</strong> service, your data stays on your device. We do not store your <strong>name of wheels</strong> lists. Google AdSense helps keep the <strong>Team Spin Wheel</strong> free for everyone.</p>
+        <button class="btn btn-spin" onclick="showPage('home')">Close</button>
     </div>
 
 </div>
 
 <div class="modal" id="winnerModal">
     <div class="modal-content">
-        <h2>WE HAVE A WINNER!</h2>
-        <div id="winnerName" style="font-size: 3rem; font-weight: 900; color: var(--primary); margin: 20px 0;"></div>
-        <button class="btn btn-spin" onclick="closeModal()">Close</button>
+        <h2 style="margin-top:0;">WINNER!</h2>
+        <div id="winnerName" style="font-size: 2.5rem; font-weight: 900; color: var(--primary); margin: 20px 0; word-break: break-all;"></div>
+        <button class="btn btn-spin" onclick="closeModal()">Next Spin</button>
     </div>
 </div>
 
 <script>
-    /* ALL JAVASCRIPT LOGIC PRESERVED EXACTLY */
     const canvas = document.getElementById('wheelCanvas');
     const ctx = canvas.getContext('2d');
     const nameInput = document.getElementById('nameInput');
@@ -186,7 +176,7 @@
         {c:'en', n:'English'}, {c:'hi', n:'हिन्दी'}, {c:'ne', n:'नेपाली'}, {c:'es', n:'Español'}, {c:'fr', n:'Français'},
         {c:'de', n:'Deutsch'}, {c:'it', n:'Italiano'}, {c:'pt', n:'Português'}, {c:'ru', n:'Русский'}, {c:'ja', n:'日本語'},
         {c:'zh', n:'中文'}, {c:'ko', n:'한국어'}, {c:'ar', n:'العربية'}, {c:'tr', n:'Türkçe'}, {c:'vi', n:'Tiếng Việt'},
-        {c:'th', n:'ไทย'}, {c:'id', n:'Bahasa Indonesia'}, {c:'bn', n:'বাংলা'}, {c:'pa', n:'ਪੰਜਾਬੀ'}, {c:'ur', n:'اردو'},
+        {c:'th', n:'ไทย'}, {c:'id', n:'Indonesian'}, {c:'bn', n:'বাংলা'}, {c:'pa', n:'ਪੰਜਾਬੀ'}, {c:'ur', n:'اردو'},
         {c:'ta', n:'தமிழ்'}, {c:'te', n:'తెలుగు'}, {c:'mr', n:'मराठी'}, {c:'gu', n:'ગુજરાતી'}, {c:'kn', n:'ಕನ್ನಡ'},
         {c:'ml', n:'മലയാളം'}, {c:'pl', n:'Polski'}, {c:'nl', n:'Nederlands'}, {c:'sv', n:'Svenska'}, {c:'fi', n:'Suomi'},
         {c:'no', n:'Norsk'}, {c:'da', n:'Dansk'}
@@ -236,7 +226,7 @@
         if (idx < 0) idx += names.length;
         document.getElementById('winnerName').innerText = names[idx];
         document.getElementById('winnerModal').style.display = 'flex';
-        confetti({ particleCount: 200, spread: 70, origin: { y: 0.6 } });
+        confetti({ particleCount: 150, spread: 60, origin: { y: 0.6 } });
     }
 
     function setTheme(theme) { document.body.setAttribute('data-theme', theme); updateWheel(); }
@@ -252,7 +242,7 @@
     }
     function saveToDevice() {
         const blob = new Blob([nameInput.value], {type: 'text/plain'});
-        const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'names.txt'; a.click();
+        const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'teamspin.txt'; a.click();
     }
     function showPage(id) {
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
