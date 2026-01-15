@@ -262,6 +262,16 @@
     }
 
     window.onload = () => { nameInput.value = "Alice\nBob\nCharlie\nDiana"; draw(); };
+    // Add this inside window.onload or at the end of your script
+const urlParams = new URLSearchParams(window.location.search);
+const langParam = urlParams.get('lang');
+
+if (langParam && (langParam === 'hi' || langParam === 'ne')) {
+    changeLanguage(langParam);
+    // Also update the dropdown visual value
+    document.querySelector('.lang-select').value = langParam;
+}
 </script>
 </body>
 </html>
+
