@@ -1,299 +1,35 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    
-    <title>TeamSpin Pro | Best Random Name Picker & Spin the Wheel Tool</title>
-    <meta name="description" content="Use TeamSpin Pro, the world's most fair random name picker wheel. Perfect for teachers, raffles, and giveaways. Free spin the wheel tool with realistic sound.">
-    <meta name="keywords" content="random name picker, spin the wheel, name wheel, randomizer, lucky draw, winner picker, classroom tool, raffle wheel, decision maker, digital wheel spin, random name generator">
-    
-    <link rel="icon" type="image/jpeg" href="logo.jpg">
-    <link rel="apple-touch-icon" href="logo.jpg">
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" 
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
 
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-YOUR_ID" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-    
-    <style>
-        :root { --bg: #f8fafc; --card: #ffffff; --text: #1e293b; --primary: #6366f1; --accent: #ef4444; }
-        [data-theme="dark"] { --bg: #0f172a; --card: #1e293b; --text: #f8fafc; --primary: #818cf8; }
-        body { margin: 0; font-family: 'Inter', sans-serif; background-color: var(--bg); color: var(--text); transition: 0.3s; overflow-x: hidden; }
-        
-        nav { background: var(--card); padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 100; }
-        .nav-brand { display: flex; align-items: center; gap: 10px; font-weight: 900; color: var(--primary); cursor: pointer; font-size: 1.2rem; }
-        .brand-img { width: 35px; height: 35px; border-radius: 8px; object-fit: cover; }
-        .nav-links { display: flex; gap: 15px; align-items: center; }
-        .nav-links a { font-size: 0.85rem; font-weight: bold; cursor: pointer; color: var(--text); text-decoration: none; }
-        .lang-select { padding: 6px; border-radius: 5px; border: 1px solid #cbd5e1; background: var(--card); color: var(--text); font-size: 0.8rem; }
+  <url>
+    <loc>https://thetasteofhimalaya2026-dotcom.github.io/SpinWheel/</loc>
+    <lastmod>2026-01-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://thetasteofhimalaya2026-dotcom.github.io/SpinWheel/"/>
+    <xhtml:link rel="alternate" hreflang="hi" href="https://thetasteofhimalaya2026-dotcom.github.io/SpinWheel/?lang=hi"/>
+    <xhtml:link rel="alternate" hreflang="ne" href="https://thetasteofhimalaya2026-dotcom.github.io/SpinWheel/?lang=ne"/>
+  </url>
 
-        .container { max-width: 1300px; margin: 0 auto; padding: 15px; }
-        .page { display: none; }
-        .active { display: block; }
+  <url>
+    <loc>https://thetasteofhimalaya2026-dotcom.github.io/SpinWheel/?lang=hi</loc>
+    <lastmod>2026-01-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://thetasteofhimalaya2026-dotcom.github.io/SpinWheel/"/>
+    <xhtml:link rel="alternate" hreflang="hi" href="https://thetasteofhimalaya2026-dotcom.github.io/SpinWheel/?lang=hi"/>
+    <xhtml:link rel="alternate" hreflang="ne" href="https://thetasteofhimalaya2026-dotcom.github.io/SpinWheel/?lang=ne"/>
+  </url>
 
-        .ad-slot { background: #f1f5f9; border: 1px dashed #cbd5e1; border-radius: 12px; text-align: center; color: #94a3b8; font-size: 12px; padding: 20px; margin: 15px 0; }
-        .card { background: var(--card); padding: 25px; border-radius: 24px; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.05); margin-bottom: 25px; }
-        
-        .main-grid { display: grid; grid-template-columns: 1fr; gap: 25px; align-items: start; }
-        @media (min-width: 1024px) { .main-grid { grid-template-columns: 1fr 400px; } }
+  <url>
+    <loc>https://thetasteofhimalaya2026-dotcom.github.io/SpinWheel/?lang=ne</loc>
+    <lastmod>2026-01-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://thetasteofhimalaya2026-dotcom.github.io/SpinWheel/"/>
+    <xhtml:link rel="alternate" hreflang="hi" href="https://thetasteofhimalaya2026-dotcom.github.io/SpinWheel/?lang=hi"/>
+    <xhtml:link rel="alternate" hreflang="ne" href="https://thetasteofhimalaya2026-dotcom.github.io/SpinWheel/?lang=ne"/>
+  </url>
 
-        .wheel-container { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; }
-        .wheel-wrapper { position: relative; width: 100%; max-width: 580px; aspect-ratio: 1/1; margin: 20px auto; cursor: pointer; }
-        canvas { width: 100% !important; height: 100% !important; filter: drop-shadow(0 10px 20px rgba(0,0,0,0.15)); touch-action: none; }
-        .pointer { position: absolute; top: -15px; left: 50%; transform: translateX(-50%); width: 0; height: 0; border-left: 20px solid transparent; border-right: 20px solid transparent; border-top: 40px solid var(--accent); z-index: 50; }
-
-        textarea { width: 100%; height: 200px; padding: 15px; border-radius: 15px; border: 2px solid #e2e8f0; font-size: 16px; box-sizing: border-box; background: var(--bg); color: var(--text); resize: none; font-family: inherit; }
-        .btn-spin { width: 100%; max-width: 400px; padding: 18px; background: var(--primary); color: white; border: none; border-radius: 15px; font-weight: 800; font-size: 1.2rem; cursor: pointer; margin-top: 15px; box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3); }
-        .btn-spin:disabled { background: #cbd5e1; cursor: not-allowed; opacity: 0.6; }
-
-        .validation-msg { font-size: 0.9rem; color: var(--accent); margin-top: 10px; font-weight: 600; min-height: 1.5rem; }
-        .history-list { list-style: none; padding: 0; margin-top: 15px; max-height: 200px; overflow-y: auto; }
-        .history-item { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #f1f5f9; font-size: 0.95rem; }
-        
-        .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.85); display: none; justify-content: center; align-items: center; z-index: 1000; padding: 20px; }
-        .modal-content { background: var(--card); padding: 40px; border-radius: 30px; text-align: center; max-width: 450px; width: 100%; }
-
-        .seo-section { line-height: 1.8; color: #64748b; font-size: 1rem; }
-        .seo-section h2 { color: var(--text); margin-top: 30px; font-size: 1.4rem; }
-        .policy-body h3 { color: var(--text); margin-top: 25px; border-bottom: 1px solid #e2e8f0; padding-bottom: 5px; }
-    </style>
-</head>
-<body>
-
-<nav>
-    <div class="nav-brand" onclick="showPage('home')">
-        <img src="logo.jpg" alt="TeamSpin Pro" class="brand-img">
-        <span>TeamSpin PRO</span>
-    </div>
-    <div class="nav-links">
-        <select class="lang-select" id="langPicker" onchange="changeLanguage(this.value)">
-            <option value="en">English</option>
-            <option value="hi">हिन्दी</option>
-            <option value="ne">नेपाली</option>
-        </select>
-        <a onclick="showPage('privacy')" data-i18n="nav_privacy">Privacy Policy</a>
-        <button onclick="toggleTheme()" style="background:none; border:none; cursor:pointer; font-size:1.2rem;">🌓</button>
-    </div>
-</nav>
-
-<div class="container">
-    <div class="ad-slot"><p>ADVERTISEMENT - TOP BANNER</p></div>
-
-    <div id="home" class="page active">
-        <div class="main-grid">
-            <section class="card wheel-container">
-                <h1 style="font-size: 1.6rem; margin-top: 0; text-align: center;" data-i18n="hero_title">Free Random Name Picker Wheel</h1>
-                <div class="wheel-wrapper" onclick="startSpin()">
-                    <div class="pointer"></div>
-                    <canvas id="wheelCanvas" width="1000" height="1000"></canvas>
-                </div>
-                <button id="spinBtn" class="btn-spin" onclick="startSpin()" data-i18n="btn_spin">SPIN THE WHEEL</button>
-                <div id="spinError" class="validation-msg"></div>
-            </section>
-
-            <aside class="sidebar">
-                <div class="card">
-                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
-                        <strong data-i18n="label_participants">Participants List</strong>
-                        <button onclick="shuffleNames()" style="font-size:11px; padding:6px 10px; cursor:pointer; border-radius:6px; border:1px solid #cbd5e1; background:var(--bg); color:var(--text);" data-i18n="btn_shuffle">🔀 Shuffle</button>
-                    </div>
-                    <textarea id="nameInput" onkeyup="draw()" placeholder="Add one name per line..."></textarea>
-                    <div id="duplicateError" class="validation-msg"></div>
-                </div>
-                <div class="card">
-                    <strong data-i18n="label_winners">Winner History</strong>
-                    <ul id="history" class="history-list">
-                        <li style="color:#94a3b8; text-align:center;" data-i18n="no_winners">No winners yet</li>
-                    </ul>
-                </div>
-            </aside>
-        </div>
-
-        <article class="card seo-section">
-            <h2 data-i18n="seo_title1">Most Reliable Online Random Name Picker</h2>
-            <p>Welcome to <strong>TeamSpin Pro</strong>, the ultimate <strong>spin the wheel</strong> tool. Fair, fast, and <strong>realistic sound</strong> for raffles and classrooms.</p>
-        </article>
-    </div>
-
-    <div id="privacy" class="page card policy-body">
-        <h1>Privacy Policy</h1>
-        <p>Last Updated: January 15, 2026</p>
-        <p>TeamSpin Pro values your privacy. We do not collect names or store lists. All processing happens locally in your browser.</p>
-        <h3>Google AdSense & Cookies</h3>
-        <p>We use cookies for advertising purposes. Users can opt out of personalized ads via Google Settings.</p>
-        <button onclick="showPage('home')" class="btn-spin" style="width:auto; padding:12px 30px;">Back to Wheel</button>
-    </div>
-
-    <div class="ad-slot"><p>ADVERTISEMENT - BOTTOM BANNER</p></div>
-</div>
-
-<div class="modal" id="winnerModal">
-    <div class="modal-content">
-        <h2 data-i18n="modal_winner_title">WINNER!</h2>
-        <div id="winnerName" style="font-size: 3rem; font-weight: 900; color: var(--primary); margin: 25px 0; overflow-wrap: break-word;"></div>
-        <button class="btn-spin" onclick="closeModal()" data-i18n="btn_close">Close</button>
-    </div>
-</div>
-
-<script>
-    const canvas = document.getElementById('wheelCanvas');
-    const ctx = canvas.getContext('2d');
-    const nameInput = document.getElementById('nameInput');
-    const spinBtn = document.getElementById('spinBtn');
-    const duplicateError = document.getElementById('duplicateError');
-    const spinError = document.getElementById('spinError');
-    
-    // SOUND ENGINE
-    const tickSound = new Audio('https://assets.mixkit.co/active_storage/sfx/2005/2005-preview.mp3');
-    const winnerSound = new Audio('winner.mp3'); 
-    tickSound.volume = 1.0;
-    winnerSound.volume = 1.0;
-
-    const palette = ['#6366f1', '#a855f7', '#ec4899', '#f43f5e', '#f59e0b', '#10b981', '#3b82f6', '#f97316'];
-    let currentRotation = 0;
-    let isSpinning = false;
-    let currentLang = 'en';
-    let lastTickAngle = 0;
-
-    const translations = {
-        en: { nav_privacy: "Privacy Policy", hero_title: "Free Random Name Picker Wheel", btn_spin: "SPIN THE WHEEL", label_participants: "Participants List", btn_shuffle: "🔀 Shuffle", label_winners: "Winner History", no_winners: "No winners yet", modal_winner_title: "WINNER!", err_min: "Min 2 names required.", err_dup: "Duplicate names detected!", btn_close: "Close" },
-        hi: { nav_privacy: "गोपनीयता नीति", hero_title: "मुफ़्त नाम चुनने वाला पहिया", btn_spin: "पहिया घुमाएं", label_participants: "प्रतिभागी सूची", btn_shuffle: "🔀 फेरबदल", label_winners: "विजेता इतिहास", no_winners: "कोई विजेता नहीं", modal_winner_title: "विजेता!", err_min: "कम से कम 2 नाम चाहिए।", err_dup: "डुप्लिकेट नाम मिले!", btn_close: "बंद करें" },
-        ne: { nav_privacy: "गोपनीयता नीति", hero_title: "नि: शुल्क नाम छान्ने चक्का", btn_spin: "चक्का घुमाउनुहोस्", label_participants: "सहभागी सूची", btn_shuffle: "🔀 मिसाउनुहोस्", label_winners: "विजेता इतिहास", no_winners: "कोही विजेता छैन", modal_winner_title: "विजेता!", err_min: "कम्तिमा २ नाम चाहिन्छ।", err_dup: "उस्तै नामहरू फेला पर्यो!", btn_close: "बन्द गर्नुहोस्" }
-    };
-
-    function draw() {
-        const rawNames = nameInput.value.split('\n').map(n => n.trim()).filter(n => n !== '');
-        const lowerNames = rawNames.map(n => n.toLowerCase());
-        const uniqueNames = [...new Set(lowerNames)];
-        
-        const hasDuplicates = rawNames.length !== uniqueNames.length;
-        const tooFewNames = rawNames.length < 2;
-
-        duplicateError.innerText = hasDuplicates ? translations[currentLang].err_dup : "";
-        spinBtn.disabled = hasDuplicates || tooFewNames;
-        spinError.innerText = tooFewNames ? translations[currentLang].err_min : "";
-
-        const size = canvas.width;
-        const center = size / 2;
-        const radius = center - 35;
-        ctx.clearRect(0, 0, size, size);
-        
-        if (rawNames.length === 0) {
-             ctx.beginPath(); ctx.arc(center, center, radius, 0, 2 * Math.PI);
-             ctx.fillStyle = "#e2e8f0"; ctx.fill(); return;
-        }
-
-        const arcSize = (2 * Math.PI) / rawNames.length;
-
-        // ACCURATE TICK LOGIC
-        if (isSpinning) {
-            const currentTickPos = Math.floor((currentRotation) / arcSize);
-            if (currentTickPos !== lastTickAngle) {
-                tickSound.currentTime = 0;
-                tickSound.play().catch(()=>{});
-                lastTickAngle = currentTickPos;
-            }
-        }
-
-        rawNames.forEach((name, i) => {
-            const angle = currentRotation + (i * arcSize);
-            ctx.beginPath();
-            ctx.fillStyle = palette[i % palette.length];
-            ctx.moveTo(center, center);
-            ctx.arc(center, center, radius, angle, angle + arcSize);
-            ctx.fill();
-            ctx.strokeStyle = "white"; ctx.lineWidth = 4; ctx.stroke();
-            ctx.save();
-            ctx.translate(center, center);
-            ctx.rotate(angle + arcSize / 2);
-            ctx.textAlign = "right"; ctx.fillStyle = "white";
-            ctx.font = "bold 34px 'Inter', sans-serif";
-            ctx.fillText(name.substring(0, 18), radius - 55, 12);
-            ctx.restore();
-        });
-
-        // Center hub
-        ctx.beginPath(); ctx.arc(center, center, 45, 0, 2 * Math.PI);
-        ctx.fillStyle = "white"; ctx.fill(); ctx.stroke();
-    }
-
-    function startSpin() {
-        if (isSpinning || spinBtn.disabled) return;
-        isSpinning = true; spinBtn.disabled = true;
-        const totalRot = (Math.random() * 5 + 12) * 2 * Math.PI;
-        const start = performance.now();
-        const duration = 5000;
-        const initialRot = currentRotation;
-
-        function animate(now) {
-            const elapsed = now - start;
-            const progress = Math.min(elapsed / duration, 1);
-            const easeOut = 1 - Math.pow(1 - progress, 5);
-            currentRotation = initialRot + (totalRot * easeOut);
-            draw();
-            if (progress < 1) requestAnimationFrame(animate);
-            else { 
-                isSpinning = false; spinBtn.disabled = false; 
-                tickSound.pause(); tickSound.currentTime = 0; // HARD STOP SPIN SOUND
-                winnerSound.play().catch(()=>{}); // START WINNER MP3
-                finishSpin(); 
-            }
-        }
-        requestAnimationFrame(animate);
-    }
-
-    function finishSpin() {
-        const names = nameInput.value.split('\n').map(n => n.trim()).filter(n => n !== '');
-        const arcSize = (2 * Math.PI) / names.length;
-        const normalized = (currentRotation % (2 * Math.PI));
-        const pointerPos = (1.5 * Math.PI);
-        let idx = Math.floor((pointerPos - normalized) / arcSize) % names.length;
-        if (idx < 0) idx += names.length;
-        
-        document.getElementById('winnerName').innerText = names[idx];
-        document.getElementById('winnerModal').style.display = 'flex';
-        confetti({ particleCount: 200, spread: 80, origin: { y: 0.6 } });
-
-        const historyList = document.getElementById('history');
-        if (historyList.innerText.includes('No winners')) historyList.innerHTML = '';
-        const li = document.createElement('li');
-        li.className = 'history-item';
-        li.innerHTML = `<span><strong>${names[idx]}</strong></span><span style="color:#94a3b8; font-size:0.8rem;">${new Date().toLocaleTimeString()}</span>`;
-        historyList.prepend(li);
-    }
-
-    function showPage(id) {
-        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-        document.getElementById(id).classList.add('active');
-        window.scrollTo(0,0);
-        if(id === 'home') draw();
-    }
-
-    function changeLanguage(lang) {
-        currentLang = lang;
-        document.querySelectorAll('[data-i18n]').forEach(el => {
-            const key = el.getAttribute('data-i18n');
-            if (translations[lang][key]) el.innerText = translations[lang][key];
-        });
-        draw();
-    }
-
-    function toggleTheme() {
-        document.body.setAttribute('data-theme', document.body.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
-        draw();
-    }
-
-    function closeModal() { document.getElementById('winnerModal').style.display = 'none'; }
-    function shuffleNames() {
-        let names = nameInput.value.split('\n').filter(n => n.trim() !== '');
-        names.sort(() => Math.random() - 0.5);
-        nameInput.value = names.join('\n');
-        draw();
-    }
-
-    window.onload = () => { 
-        nameInput.value = "Alice\nBob\nCharlie\nDiana\nEdward"; 
-        draw(); 
-    };
-</script>
-</body>
-</html>
+</urlset> will this match
