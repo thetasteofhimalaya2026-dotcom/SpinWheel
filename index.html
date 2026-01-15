@@ -5,13 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     
     <title>TeamSpin Pro | 100% Fair Random Name Picker Wheel</title>
-    <meta name="description" content="Free, fair, and responsive random name picker wheel. Perfect for teachers, giveaways, and raffles. Supports English, Hindi, and Nepali.">
-    <meta name="keywords" content="random name picker, spin the wheel, name wheel, randomizer, lucky draw, winner picker, Nepali name picker, Hindi name wheel">
+    <meta name="description" content="Free, fair, and responsive random name picker wheel. Perfect for teachers and giveaways. Supports English, Hindi, and Nepali.">
     
     <link rel="icon" type="image/jpeg" href="logo.jpg">
     <link rel="apple-touch-icon" href="logo.jpg">
 
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-YOUR_ID" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     
     <style>
@@ -45,9 +43,8 @@
         .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.85); display: none; justify-content: center; align-items: center; z-index: 1000; }
         .modal-content { background: var(--card); padding: 40px; border-radius: 24px; text-align: center; max-width: 400px; width: 90%; }
         
-        /* Updated SEO Styling: Removed the border-bottom (underline) */
         .seo-section { line-height: 1.8; color: #64748b; font-size: 0.95rem; }
-        .seo-section h2 { color: var(--text); margin-top: 25px; display: block; padding-bottom: 5px; border-bottom: none; }
+        .seo-section h2 { color: var(--text); margin-top: 25px; display: block; padding-bottom: 5px; }
     </style>
 </head>
 <body>
@@ -58,11 +55,13 @@
         <span>TeamSpin PRO</span>
     </div>
     <div class="nav-links">
-        <select class="lang-select" onchange="changeLanguage(this.value)">
+        <select class="lang-select" id="langPicker" onchange="changeLanguage(this.value)">
             <option value="en">English</option>
             <option value="hi">हिन्दी</option>
             <option value="ne">नेपाली</option>
         </select>
+        <a onclick="showPage('home')" data-i18n="nav_wheel" style="cursor:pointer; font-size:0.9rem;">Wheel</a>
+        <a onclick="showPage('privacy')" data-i18n="nav_privacy" style="cursor:pointer; font-size:0.9rem;">Privacy</a>
         <button onclick="toggleTheme()" style="background:none; border:none; cursor:pointer; font-size:1.2rem;">🌓</button>
     </div>
 </nav>
@@ -89,7 +88,6 @@
                     <textarea id="nameInput" onkeyup="draw()" placeholder="One name per line..."></textarea>
                     <div id="duplicateError" class="validation-msg"></div>
                 </div>
-
                 <div class="card">
                     <strong data-i18n="label_winners">Previous Winners</strong>
                     <ul id="history" class="history-list">
@@ -101,11 +99,16 @@
 
         <div class="card seo-section">
             <h2 data-i18n="seo_title1">How to Use the Random Name Picker Wheel?</h2>
-            <p>TeamSpin Pro is a professional <strong>online random name picker</strong>. To get started, type your list of names into the participant box. You will see the wheel update in <strong>real-time</strong>. Once your list is ready, click "Spin Now" to pick a winner fairly. This tool is perfect for teachers and giveaway organizers.</p>
-            
+            <p>TeamSpin Pro is a professional <strong>online random name picker</strong>. To get started, type your names into the participant box. The wheel updates in <strong>real-time</strong>. Once ready, click "Spin Now" to pick a winner fairly.</p>
             <h2 data-i18n="seo_title2">Features of TeamSpin Pro</h2>
-            <p>Our wheel automatically identifies duplicate entries (case-insensitive) to ensure fairness. Additionally, the system ensures you cannot spin with only one name, maintaining the integrity of your random draw.</p>
+            <p>Our wheel identifies duplicates (case-insensitive) and ensures you cannot spin with only one name, maintaining the integrity of your lucky draw.</p>
         </div>
+    </div>
+
+    <div id="privacy" class="page card" style="line-height:1.6;">
+        <h1 data-i18n="nav_privacy">Privacy Policy</h1>
+        <p data-i18n="privacy_text">At TeamSpin Pro, we do not store the names you enter on our servers. All data remains in your browser's local memory.</p>
+        <button onclick="showPage('home')" class="btn-spin" style="width:auto; padding:10px 25px;" data-i18n="btn_back">Back to Wheel</button>
     </div>
 </div>
 
@@ -113,7 +116,7 @@
     <div class="modal-content">
         <h2 data-i18n="modal_winner_title">WINNER!</h2>
         <div id="winnerName" style="font-size: 2.8rem; font-weight: 900; color: var(--primary); margin: 25px 0;"></div>
-        <button class="btn-spin" onclick="closeModal()">Close</button>
+        <button class="btn-spin" onclick="closeModal()" data-i18n="btn_close">Close</button>
     </div>
 </div>
 
@@ -131,22 +134,28 @@
 
     const translations = {
         en: {
-            hero_title: "Random Name Picker Wheel", btn_spin: "SPIN NOW", label_participants: "Participants",
+            nav_wheel: "Wheel", nav_privacy: "Privacy", hero_title: "Random Name Picker Wheel",
+            btn_spin: "SPIN NOW", label_participants: "Participants", btn_shuffle: "🔀 Shuffle",
             label_winners: "Previous Winners", no_winners: "No winners yet", modal_winner_title: "WINNER!",
             err_min: "Please enter at least 2 names to spin.", err_dup: "Warning: Duplicate names detected!",
-            seo_title1: "How to Use the Random Name Picker Wheel?", seo_title2: "Features of TeamSpin Pro", btn_shuffle: "🔀 Shuffle"
+            btn_close: "Close", btn_back: "Back", privacy_text: "At TeamSpin Pro, we do not store the names you enter on our servers.",
+            seo_title1: "How to Use the Random Name Picker Wheel?", seo_title2: "Features of TeamSpin Pro"
         },
         hi: {
-            hero_title: "नाम चुनने वाला पहिया", btn_spin: "घुमाएं", label_participants: "प्रतिभागी",
+            nav_wheel: "पहिया", nav_privacy: "गोपनीयता", hero_title: "नाम चुनने वाला पहिया",
+            btn_spin: "घुमाएं", label_participants: "प्रतिभागी", btn_shuffle: "🔀 फेरबदल",
             label_winners: "पिछले विजेता", no_winners: "कोई विजेता नहीं", modal_winner_title: "विजेता!",
             err_min: "घुमाने के लिए कम से कम 2 नाम दर्ज करें।", err_dup: "चेतावनी: डुप्लिकेट नाम मिले!",
-            seo_title1: "रैंडम नाम पिकर व्हील का उपयोग कैसे करें?", seo_title2: "TeamSpin Pro की विशेषताएं", btn_shuffle: "🔀 फेरबदल"
+            btn_close: "बंद करें", btn_back: "वापस", privacy_text: "हम आपके डेटा को संग्रहीत नहीं करते हैं।",
+            seo_title1: "उपयोग कैसे करें?", seo_title2: "विशेषताएं"
         },
         ne: {
-            hero_title: "नाम छान्ने चक्का", btn_spin: "घुमाउनुहोस्", label_participants: "सहभागीहरू",
+            nav_wheel: "चक्का", nav_privacy: "गोपनीयता", hero_title: "नाम छान्ने चक्का",
+            btn_spin: "घुमाउनुहोस्", label_participants: "सहभागीहरू", btn_shuffle: "🔀 मिसाउनुहोस्",
             label_winners: "अघिल्लो विजेताहरू", no_winners: "कोही विजेता छैन", modal_winner_title: "विजेता!",
             err_min: "घुमाउनको लागि कम्तिमा २ नामहरू प्रविष्ट गर्नुहोस्।", err_dup: "चेतावनी: उस्तै नामहरू फेला पर्यो!",
-            seo_title1: "नाम छान्ने चक्का कसरी प्रयोग गर्ने?", seo_title2: "TeamSpin Pro का विशेषताहरू", btn_shuffle: "🔀 मिसाउनुहोस्"
+            btn_close: "बन्द गर्नुहोस्", btn_back: "फिर्ता", privacy_text: "हामी तपाईंको डाटा भण्डारण गर्दैनौं।",
+            seo_title1: "कसरी प्रयोग गर्ने?", seo_title2: "विशेषताहरू"
         }
     };
 
@@ -155,10 +164,8 @@
         const lowerNames = rawNames.map(n => n.toLowerCase());
         const uniqueNames = [...new Set(lowerNames)];
 
-        // Notify duplicates (case-insensitive)
         duplicateError.innerText = (rawNames.length !== uniqueNames.length) ? translations[currentLang].err_dup : "";
 
-        // Check for minimum 2 names
         if (rawNames.length < 2) {
             spinBtn.disabled = true;
             spinError.innerText = translations[currentLang].err_min;
@@ -220,10 +227,7 @@
             currentRotation = initialRot + (totalRot * easeOut);
             draw();
             if (progress < 1) requestAnimationFrame(animate);
-            else {
-                isSpinning = false;
-                finishSpin();
-            }
+            else { isSpinning = false; finishSpin(); }
         }
         requestAnimationFrame(animate);
     }
@@ -248,6 +252,12 @@
         historyList.prepend(li);
     }
 
+    function showPage(id) {
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+        if(id === 'home') draw();
+    }
+
     function toggleTheme() {
         document.body.setAttribute('data-theme', document.body.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
         draw();
@@ -261,17 +271,17 @@
         draw();
     }
 
-    window.onload = () => { nameInput.value = "Alice\nBob\nCharlie\nDiana"; draw(); };
-    // Add this inside window.onload or at the end of your script
-const urlParams = new URLSearchParams(window.location.search);
-const langParam = urlParams.get('lang');
-
-if (langParam && (langParam === 'hi' || langParam === 'ne')) {
-    changeLanguage(langParam);
-    // Also update the dropdown visual value
-    document.querySelector('.lang-select').value = langParam;
-}
+    // URL PARAMETER DETECTION (FOR SITEMAP SUPPORT)
+    window.onload = () => { 
+        nameInput.value = "Alice\nBob\nCharlie\nDiana"; 
+        const urlParams = new URLSearchParams(window.location.search);
+        const langParam = urlParams.get('lang');
+        if (langParam && translations[langParam]) {
+            changeLanguage(langParam);
+            document.getElementById('langPicker').value = langParam;
+        }
+        draw(); 
+    };
 </script>
 </body>
 </html>
-
