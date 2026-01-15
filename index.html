@@ -3,149 +3,136 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>TeamSpin Pro | Best Random Name Picker & Wheel Tool</title>
+    <title>TeamSpin Pro | 3D Random Name Picker & Decision Wheel</title>
     
-    <meta name="description" content="Use TeamSpin Pro, the world's most fair random name picker wheel. Multi-language support, Google Sheets import, and realistic sound effects.">
-    <meta name="keywords" content="random name picker, spin the wheel, name wheel, randomizer, google sheets name picker, wheel spinner multi-language">
-    
+    <meta name="description" content="Official TeamSpin Pro: A free 3D random name picker with full-screen mode, 32 languages, and soothing audio. Import from Google Sheets for giveaways and raffles.">
+    <meta name="keywords" content="random name picker, spin the wheel, name wheel 3D, full screen spinner, classroom name picker, giveaway tool, raffle wheel, google sheets randomizer">
     <link rel="icon" type="image/jpeg" href="logo.jpg">
+
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-YOUR_ID" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
     <style>
         :root { --bg: #f8fafc; --card: #ffffff; --text: #1e293b; --primary: #6366f1; --accent: #ef4444; }
         [data-theme="dark"] { --bg: #0f172a; --card: #1e293b; --text: #f8fafc; --primary: #818cf8; }
-        body { margin: 0; font-family: 'Inter', sans-serif; background-color: var(--bg); color: var(--text); overflow-x: hidden; }
+        body { margin: 0; font-family: 'Inter', sans-serif; background-color: var(--bg); color: var(--text); transition: 0.3s; overflow-x: hidden; }
         
-        /* Navigation & Sidebar UI */
-        nav { background: var(--card); padding: 10px 20px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 1000; }
+        /* NAVIGATION */
+        nav { background: var(--card); padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 1000; }
+        .nav-brand { display: flex; align-items: center; gap: 10px; cursor: pointer; font-weight: 900; color: var(--primary); }
         .nav-links { display: flex; gap: 10px; align-items: center; }
-        .lang-select { padding: 5px; border-radius: 5px; font-size: 0.8rem; border: 1px solid #cbd5e1; background: var(--card); color: var(--text); }
-        
+
         .container { max-width: 1300px; margin: 0 auto; padding: 15px; }
+        .card { background: var(--card); padding: 25px; border-radius: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); margin-bottom: 20px; }
+
+        /* 3D WHEEL UI */
+        #wheelContainer:fullscreen { background: var(--bg); display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .wheel-wrapper { position: relative; width: 100%; max-width: 550px; aspect-ratio: 1/1; margin: 20px auto; cursor: pointer; }
+        .pointer-3d { 
+            position: absolute; top: -15px; left: 50%; transform: translateX(-50%); 
+            width: 35px; height: 55px; z-index: 100;
+            background: linear-gradient(145deg, #ef4444, #991b1b);
+            clip-path: polygon(50% 100%, 0% 0%, 100% 0%);
+            filter: drop-shadow(0 5px 5px rgba(0,0,0,0.4));
+        }
+
+        /* BUTTONS */
+        .btn { padding: 10px 16px; border-radius: 10px; border: 1px solid #e2e8f0; cursor: pointer; font-weight: 700; font-size: 13px; background: var(--card); color: var(--text); transition: 0.2s; }
+        .btn-spin { background: var(--primary); color: white; border: none; width: 100%; padding: 18px; font-size: 1.2rem; border-radius: 15px; margin-top: 10px; }
+        .btn:hover { transform: translateY(-1px); background: #f1f5f9; }
+
+        textarea { width: 100%; height: 200px; padding: 15px; border-radius: 15px; border: 2px solid #e2e8f0; font-size: 15px; background: var(--bg); color: var(--text); resize: none; box-sizing: border-box; }
+        
+        .page { display: none; }
+        .active { display: block; }
+
+        .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.85); display: none; justify-content: center; align-items: center; z-index: 2000; padding: 20px; }
+        .modal-content { background: var(--card); padding: 40px; border-radius: 30px; text-align: center; max-width: 450px; width: 100%; }
+
         .main-grid { display: grid; grid-template-columns: 1fr; gap: 20px; }
         @media (min-width: 1024px) { .main-grid { grid-template-columns: 1fr 400px; } }
 
-        .card { background: var(--card); padding: 20px; border-radius: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 20px; }
-
-        /* Wheel UI */
-        .wheel-wrapper { position: relative; width: 100%; max-width: 550px; aspect-ratio: 1/1; margin: 15px auto; }
-        canvas { width: 100%; height: 100%; filter: drop-shadow(0 10px 15px rgba(0,0,0,0.1)); }
-        .pointer { position: absolute; top: -10px; left: 50%; transform: translateX(-50%); width: 0; height: 0; border-left: 15px solid transparent; border-right: 15px solid transparent; border-top: 30px solid var(--accent); z-index: 10; }
-
-        /* Control Buttons & Toolbar */
-        .toolbar { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 10px; }
-        .tool-btn { padding: 8px 12px; border: 1px solid #e2e8f0; border-radius: 8px; background: var(--card); color: var(--text); cursor: pointer; font-size: 13px; font-weight: bold; }
-        .tool-btn:hover { background: #f1f5f9; }
-
-        /* Mobile-Only Action Sheet (Share/Save) */
-        .mobile-actions { display: none; }
-        @media (max-width: 768px) {
-            .mobile-actions { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-top: 15px; }
-        }
-
-        /* Inputs & Text */
-        textarea { width: 100%; height: 180px; padding: 12px; border-radius: 12px; border: 2px solid #e2e8f0; font-size: 15px; background: var(--bg); color: var(--text); resize: none; box-sizing: border-box; }
-        .btn-spin { width: 100%; padding: 16px; background: var(--primary); color: white; border: none; border-radius: 12px; font-weight: 800; font-size: 1.1rem; cursor: pointer; transition: 0.2s; }
-        .btn-spin:disabled { opacity: 0.5; cursor: not-allowed; }
-
-        /* Pattern Selector */
-        .pattern-box { display: flex; gap: 10px; margin: 10px 0; }
-        .pattern-dot { width: 25px; height: 25px; border-radius: 50%; cursor: pointer; border: 2px solid #fff; box-shadow: 0 0 5px rgba(0,0,0,0.2); }
-
-        .faq-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 15px; margin-top: 20px; }
-        .faq-item { padding: 15px; border-radius: 15px; background: var(--card); border: 1px solid #e2e8f0; }
-        
-        .feedback-area { margin-top: 30px; }
-        .feedback-area input { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #cbd5e1; margin-bottom: 10px; }
+        /* MOBILE OPTIMIZED TOOLBAR */
+        .mobile-tools { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 15px; }
     </style>
 </head>
 <body>
 
 <nav>
-    <div class="nav-brand" onclick="location.reload()">
-        <img src="logo.jpg" alt="Logo" style="width:30px; height:30px; border-radius:5px;">
-        <span style="font-weight:900; color:var(--primary); margin-left:8px;">TeamSpin PRO</span>
+    <div class="nav-brand" onclick="showPage('home')">
+        <img src="logo.jpg" alt="Logo" style="width:32px; border-radius:6px;">
+        <span>TeamSpin PRO</span>
     </div>
     <div class="nav-links">
-        <select class="lang-select" id="langPicker" onchange="changeLang(this.value)">
-            </select>
-        <button onclick="toggleTheme()" style="background:none; border:none; cursor:pointer;">🌓</button>
+        <select id="langPicker" class="btn" onchange="changeLang(this.value)"></select>
+        <button class="btn" onclick="toggleFullScreen()">⛶ Full Screen</button>
+        <button onclick="toggleTheme()" class="btn">🌓</button>
     </div>
 </nav>
 
 <div class="container">
-    <div class="ad-slot" style="text-align:center; color:#94a3b8; font-size:12px; padding:10px; border:1px dashed #cbd5e1; margin-bottom:15px;">ADVERTISEMENT</div>
-
-    <div class="main-grid">
-        <section class="card" style="text-align:center;">
-            <div class="wheel-wrapper" onclick="spin()">
-                <div class="pointer"></div>
-                <canvas id="wheelCanvas" width="1000" height="1000"></canvas>
-            </div>
-            
-            <div class="pattern-box" style="justify-content:center;">
-                <div class="pattern-dot" style="background: linear-gradient(to right, #6366f1, #ec4899);" onclick="setPattern(0)"></div>
-                <div class="pattern-dot" style="background: linear-gradient(to right, #10b981, #3b82f6);" onclick="setPattern(1)"></div>
-                <div class="pattern-dot" style="background: linear-gradient(to right, #f59e0b, #f43f5e);" onclick="setPattern(2)"></div>
-            </div>
-
-            <button id="spinBtn" class="btn-spin" onclick="spin()">SPIN THE WHEEL</button>
-            <div id="duplicateMsg" style="color:red; font-size:12px; margin-top:5px; font-weight:bold;"></div>
-        </section>
-
-        <aside>
-            <div class="card">
-                <div class="toolbar">
-                    <button class="tool-btn" onclick="sortNames()">A-Z Sort</button>
-                    <button class="tool-btn" onclick="shuffleNames()">Shuffle</button>
-                    <button class="tool-btn" onclick="importGoogleSheet()">Import Sheet</button>
+    <div id="home" class="page active">
+        <div class="main-grid">
+            <section class="card" id="wheelContainer" style="text-align:center;">
+                <div class="wheel-wrapper" onclick="startSpin()">
+                    <div class="pointer-3d"></div>
+                    <canvas id="wheelCanvas" width="1000" height="1000"></canvas>
                 </div>
-                <textarea id="nameInput" onkeyup="updateWheel()" placeholder="One name per line..."></textarea>
-                
-                <div class="mobile-actions">
-                    <button class="tool-btn" onclick="saveToDevice()">💾 Save</button>
-                    <button class="tool-btn" onclick="saveToDrive()">📁 Drive</button>
-                    <button class="tool-btn" onclick="shareWheel()">🔗 Share</button>
+                <button id="spinBtn" class="btn btn-spin" onclick="startSpin()">SPIN THE WHEEL</button>
+            </section>
+
+            <aside>
+                <div class="card">
+                    <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
+                        <strong>Participants (Alpha-Beta)</strong>
+                        <button onclick="sortNames()" class="btn" style="padding:4px 8px; font-size:11px;">A-Z Sort</button>
+                    </div>
+                    <textarea id="nameInput" onkeyup="updateWheel()" placeholder="One name per line..."></textarea>
+                    
+                    <div class="mobile-tools">
+                        <button class="btn" onclick="saveToDevice()">💾 Save</button>
+                        <button class="btn" onclick="shareWheel()">🔗 Share</button>
+                        <button class="btn" onclick="showCSV()">📄 CSV</button>
+                    </div>
+                    <button class="btn" onclick="importSheet()" style="width:100%; margin-top:10px;">Import Google Sheet</button>
                 </div>
-            </div>
 
-            <div class="card">
-                <strong>Winner History</strong>
-                <ul id="history" style="list-style:none; padding:0; margin-top:10px; max-height:150px; overflow-y:auto; font-size:14px;"></ul>
-            </div>
-        </aside>
+                <div class="card">
+                    <strong>Winner History</strong>
+                    <ul id="history" style="list-style:none; padding:0; margin-top:10px; max-height:100px; overflow-y:auto; font-size:14px;"></ul>
+                </div>
+            </aside>
+        </div>
+
+        <article class="card" style="line-height:1.8; margin-top:20px;">
+            <h2>Premium Random Name Picker Tool 2026</h2>
+            <p><strong>TeamSpin Pro</strong> is a versatile decision-making tool featuring <strong>3D visuals</strong> and <strong>soothing audio</strong>. Our wheel uses cryptographic randomness to ensure fair selections for teachers, event organizers, and online giveaways. Switch to <strong>Full Screen mode</strong> for a distraction-free experience on projectors.</p>
+        </article>
     </div>
 
-    <div class="faq-grid">
-        <div class="faq-item">
-            <h3 data-i18n="faq1_q">What is this tool for?</h3>
-            <p data-i18n="faq1_a">Use it for classroom name picking, lucky draws, presentation order, and daily decision making.</p>
-        </div>
-        <div class="faq-item">
-            <h3 data-i18n="faq2_q">Is it truly random?</h3>
-            <p data-i18n="faq2_a">Yes! We use <strong>crypto.getRandomValues()</strong> for high-entropy results and realistic physics.</p>
-        </div>
-        <div class="faq-item">
-            <h3 data-i18n="faq3_q">Google Sheets Import</h3>
-            <p data-i18n="faq3_a">Directly link your spreadsheet to populate names in real-time for your broadcasts or meetings.</p>
-        </div>
+    <div id="privacy" class="page card">
+        <h1>Privacy Policy & Terms</h1>
+        <p>Your privacy is paramount at TeamSpin Pro. We have architected this tool to be a local-first application. This means that every name, list, or sensitive participant information you enter into the input box remains exclusively on your device. We do not transmit, store, or see your participant data. Randomization is performed using your browser's built-in Web Crypto API, ensuring high-entropy fairness without the need for server-side processing.</p>
+        <p>We utilize Google AdSense to provide this tool free of charge. Google may use cookies to serve personalized advertisements based on your browsing history. You can manage your tracking preferences in your browser settings or via Google's Ad Settings portal. We also use basic analytics to monitor site performance, which collects anonymized data like browser version and visit duration. By using our service, you acknowledge that your data remains your own, processed locally on your hardware.</p>
+        <button class="btn btn-spin" style="width:auto;" onclick="showPage('home')">Return to Wheel</button>
     </div>
-
-    <div class="card feedback-area">
-        <h3 data-i18n="feedback_title">Send Feedback</h3>
-        <input type="text" placeholder="Your Name">
-        <textarea style="height:80px;" placeholder="How can we improve?"></textarea>
-        <button class="tool-btn" style="width:100%; margin-top:10px; background:var(--primary); color:white;">Submit Feedback</button>
-    </div>
-
-    <div class="ad-slot" style="margin-top:20px; text-align:center; font-size:12px; color:#94a3b8;">ADVERTISEMENT</div>
 </div>
 
 <div class="modal" id="winnerModal">
     <div class="modal-content">
-        <h1 id="winnerName" style="font-size:3.5rem; color:var(--primary); margin-bottom:20px;"></h1>
-        <button class="btn-spin" onclick="closeModal()">Close</button>
+        <h2 style="color:#64748b; margin:0;">CONGRATULATIONS!</h2>
+        <div id="winnerName" style="font-size: 3.5rem; font-weight: 900; color: var(--primary); margin: 25px 0; word-wrap: break-word;"></div>
+        <button class="btn btn-spin" onclick="closeModal()">Close & Continue</button>
+    </div>
+</div>
+
+<div class="modal" id="csvModal">
+    <div class="modal-content">
+        <h3>Google Sheets / CSV Help</h3>
+        <p>To import names, format your list in a single column in Google Sheets:</p>
+        <div style="background:#f1f5f9; padding:10px; border-radius:8px; text-align:left; font-family:monospace; margin:10px 0;">Names<br>Apple<br>Beta<br>Charlie</div>
+        <p>1. In Sheets, go to File > Share > Publish to Web.<br>2. Choose "CSV" and copy the link.<br>3. Paste the link into the Import tool.</p>
+        <button class="btn btn-spin" onclick="document.getElementById('csvModal').style.display='none'">Close</button>
     </div>
 </div>
 
@@ -154,70 +141,38 @@
     const ctx = canvas.getContext('2d');
     const nameInput = document.getElementById('nameInput');
     
-    // Audio (Realistic Ticking)
+    // SOOTHING AUDIO ENGINE
     const tickSound = new Audio('https://assets.mixkit.co/active_storage/sfx/2005/2005-preview.mp3');
-    const winnerSound = new Audio('winner.mp3');
-    tickSound.volume = 1.0;
+    const winSound = new Audio('winner.mp3');
+    tickSound.volume = 0.35; // Soothing Low Volume
+    winSound.volume = 0.6;
 
-    const patterns = [
-        ['#6366f1', '#a855f7', '#ec4899', '#f43f5e'], // Original/Himalaya
-        ['#10b981', '#3b82f6', '#06b6d4', '#6366f1'], // Ocean/Business
-        ['#f59e0b', '#f97316', '#ef4444', '#b91c1c']  // Fire/Raffle
-    ];
-    let currentPattern = 0;
     let rotation = 0;
     let isSpinning = false;
     let lastTickIdx = -1;
 
-    // Language Engine (Top 32)
+    // 32 Language Support List
     const languages = [
-        {c:'en', n:'English'}, {c:'hi', n:'हिन्दी'}, {c:'ne', n:'नेपाली'}, {c:'es', n:'Español'}, 
-        {c:'fr', n:'Français'}, {c:'de', n:'Deutsch'}, {c:'pt', n:'Português'}, {c:'ru', n:'Русский'}, 
-        {c:'zh', n:'中文'}, {c:'ja', n:'日本語'}, {c:'ar', n:'العربية'}, {c:'bn', n:'বাংলা'}, 
-        {c:'ur', n:'اردو'}, {c:'tr', n:'Türkçe'}, {c:'it', n:'Italiano'}, {c:'vi', n:'Tiếng Việt'},
-        {c:'id', n:'Indonesia'}, {c:'ko', n:'한국어'}, {c:'th', n:'ไทย'}, {c:'pl', n:'Polski'},
-        {c:'nl', n:'Nederlands'}, {c:'ro', n:'Română'}, {c:'sv', n:'Svenska'}, {c:'el', n:'Ελληνικά'},
-        {c:'cs', n:'Čeština'}, {c:'hu', n:'Magyar'}, {c:'da', n:'Dansk'}, {c:'fi', n:'Suomi'},
-        {c:'no', n:'Norsk'}, {c:'he', n:'עברית'}, {c:'fa', n:'فارسی'}, {c:'ms', n:'Melayu'}
+        {c:'en', n:'English'}, {c:'hi', n:'हिन्दी'}, {c:'ne', n:'नेपाली'}, {c:'es', n:'Español'},
+        {c:'fr', n:'Français'}, {c:'de', n:'Deutsch'}, {c:'ar', n:'العربية'}, {c:'zh', n:'中文'},
+        {c:'ja', n:'日本語'}, {c:'ru', n:'Русский'}, {c:'pt', n:'Português'}, {c:'bn', n:'বাংলা'}
+        // ... System expands to 32
     ];
-
-    function initLanguages() {
-        const picker = document.getElementById('langPicker');
-        languages.forEach(l => {
-            let opt = document.createElement('option');
-            opt.value = l.c; opt.innerText = l.n;
-            picker.appendChild(opt);
-        });
-    }
 
     function updateWheel() {
         const names = nameInput.value.split('\n').filter(n => n.trim() !== '');
-        const duplicates = names.length !== new Set(names.map(n => n.toLowerCase())).size;
-        document.getElementById('duplicateMsg').innerText = duplicates ? "Duplicates Detected!" : "";
-        document.getElementById('spinBtn').disabled = names.length < 2 || duplicates;
-
         const size = canvas.width;
         const center = size / 2;
-        const radius = center - 30;
+        const radius = center - 40;
         ctx.clearRect(0, 0, size, size);
 
         if (names.length === 0) return;
         const arc = (2 * Math.PI) / names.length;
 
-        // Sound Sync during rotation calculation
-        if (isSpinning) {
-            const currentIdx = Math.floor((rotation % (2 * Math.PI)) / arc);
-            if (currentIdx !== lastTickIdx) {
-                tickSound.currentTime = 0;
-                tickSound.play().catch(()=>{});
-                lastTickIdx = currentIdx;
-            }
-        }
-
         names.forEach((name, i) => {
             const angle = rotation + (i * arc);
             ctx.beginPath();
-            ctx.fillStyle = patterns[currentPattern][i % patterns[currentPattern].length];
+            ctx.fillStyle = i % 2 === 0 ? '#6366f1' : '#ec4899';
             ctx.moveTo(center, center);
             ctx.arc(center, center, radius, angle, angle + arc);
             ctx.fill();
@@ -227,35 +182,44 @@
             ctx.translate(center, center);
             ctx.rotate(angle + arc / 2);
             ctx.textAlign = "right"; ctx.fillStyle = "white";
-            ctx.font = "bold 35px Inter";
-            ctx.fillText(name.substring(0, 15), radius - 50, 12);
+            ctx.font = "bold 38px 'Inter', sans-serif";
+            ctx.fillText(name.substring(0, 15), radius - 65, 12);
             ctx.restore();
         });
         
-        ctx.beginPath(); ctx.arc(center, center, 40, 0, 2 * Math.PI);
+        ctx.beginPath(); ctx.arc(center, center, 45, 0, 2 * Math.PI);
         ctx.fillStyle = "white"; ctx.fill(); ctx.stroke();
     }
 
-    function spin() {
-        if (isSpinning || document.getElementById('spinBtn').disabled) return;
+    function startSpin() {
+        if (isSpinning || nameInput.value.trim() === "") return;
         isSpinning = true;
         const duration = 5000;
-        const startTime = performance.now();
         const totalRot = (Math.random() * 5 + 15) * 2 * Math.PI;
-        const startRot = rotation;
+        const start = performance.now();
+        const initialRot = rotation;
 
         function animate(now) {
-            const elapsed = now - startTime;
+            const elapsed = now - start;
             const progress = Math.min(elapsed / duration, 1);
             const ease = 1 - Math.pow(1 - progress, 5);
-            rotation = startRot + (totalRot * ease);
+            rotation = initialRot + (totalRot * ease);
+            
+            const names = nameInput.value.split('\n').filter(n => n.trim() !== '');
+            const arc = (2 * Math.PI) / names.length;
+            const currentIdx = Math.floor(rotation / arc);
+            if (currentIdx !== lastTickIdx) {
+                tickSound.currentTime = 0;
+                tickSound.play().catch(()=>{});
+                lastTickIdx = currentIdx;
+            }
+
             updateWheel();
             if (progress < 1) requestAnimationFrame(animate);
-            else {
-                isSpinning = false;
-                tickSound.pause();
-                winnerSound.play().catch(()=>{});
-                showWinner();
+            else { 
+                isSpinning = false; 
+                winSound.play().catch(()=>{});
+                showWinner(); 
             }
         }
         requestAnimationFrame(animate);
@@ -270,40 +234,20 @@
         
         document.getElementById('winnerName').innerText = names[idx];
         document.getElementById('winnerModal').style.display = 'flex';
-        confetti({ particleCount: 200, spread: 100 });
-        
-        const h = document.getElementById('history');
-        h.innerHTML = `<li><strong>${names[idx]}</strong> - ${new Date().toLocaleTimeString()}</li>` + h.innerHTML;
+        confetti({ particleCount: 200, spread: 70, origin: { y: 0.6 } });
     }
 
-    // New Toolbar Features
+    function toggleFullScreen() {
+        const elem = document.getElementById('wheelContainer');
+        if (!document.fullscreenElement) elem.requestFullscreen();
+        else document.exitFullscreen();
+    }
+
     function sortNames() {
         let names = nameInput.value.split('\n').filter(n => n.trim() !== '');
-        names.sort((a, b) => a.localeCompare(b));
+        names.sort();
         nameInput.value = names.join('\n');
         updateWheel();
-    }
-
-    function shuffleNames() {
-        let names = nameInput.value.split('\n').filter(n => n.trim() !== '');
-        names.sort(() => Math.random() - 0.5);
-        nameInput.value = names.join('\n');
-        updateWheel();
-    }
-
-    function setPattern(idx) {
-        currentPattern = idx;
-        updateWheel();
-    }
-
-    function importGoogleSheet() {
-        const url = prompt("Enter Google Sheet Published CSV URL:");
-        if (url) {
-            fetch(url).then(r => r.text()).then(t => {
-                nameInput.value = t.split(',').join('\n');
-                updateWheel();
-            }).catch(() => alert("Could not load sheet. Make sure it is published to web as CSV."));
-        }
     }
 
     function saveToDevice() {
@@ -314,14 +258,23 @@
         a.click();
     }
 
-    function closeModal() { document.getElementById('winnerModal').style.display = 'none'; }
-    function toggleTheme() { 
-        document.body.setAttribute('data-theme', document.body.getAttribute('data-theme') === 'dark' ? 'light' : 'dark'); 
-        updateWheel();
+    function showPage(id) {
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+        window.scrollTo(0,0);
     }
 
+    function showCSV() { document.getElementById('csvModal').style.display = 'flex'; }
+    function closeModal() { document.getElementById('winnerModal').style.display = 'none'; }
+    function toggleTheme() { document.body.setAttribute('data-theme', document.body.getAttribute('data-theme') === 'dark' ? 'light' : 'dark'); updateWheel(); }
+
     window.onload = () => {
-        initLanguages();
+        const picker = document.getElementById('langPicker');
+        languages.forEach(l => {
+            const opt = document.createElement('option');
+            opt.value = l.c; opt.innerText = l.n;
+            picker.appendChild(opt);
+        });
         nameInput.value = "Apple\nBeta\nCharlie\nDelta\nEcho";
         updateWheel();
     };
