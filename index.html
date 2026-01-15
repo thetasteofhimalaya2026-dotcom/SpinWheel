@@ -3,14 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TeamSpin PRO v15.0.0 | Professional 3D Decision Wheel</title>
+    <title>TeamSpin PRO v15.0.6 | Professional 3D Decision Wheel</title>
     
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
-    <meta name="description" content="Professional 3D Wheel of Names with CSV export, 30+ languages, and high-security randomization.">
+    <meta name="description" content="Professional 3D Wheel of Names with CSV export, AdSense optimized.">
 
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
     <style>
@@ -19,76 +16,82 @@
             --bg: #F0F2F5; --card: #ffffff; --text: #1c1e21;
         }
 
-        /* THEMES */
         [data-theme="dark"] { --bg: #18191a; --card: #242526; --text: #e4e6eb; }
-        [data-theme="neon"] { --bg: #000; --card: #111; --text: #39FF14; }
-        [data-theme="ocean"] { --bg: #0077be; --card: #ffffff; --text: #000; }
-        [data-theme="royal"] { --bg: #2c3e50; --card: #34495e; --text: #f1c40f; }
-        [data-theme="sunset"] { --bg: #ff5e62; --card: #ffffff; --text: #000; }
 
-        body { margin: 0; font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); overflow-x: hidden; }
+        body { margin: 0; font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); overflow-x: hidden; transition: background 0.3s; }
 
-        /* Presentation Mode Logic */
-        body.presentation-mode nav, body.presentation-mode .sidebar, body.presentation-mode .ad-left { display: none; }
-        body.presentation-mode .wheel-column { width: 100vw; height: 100vh; display: flex; align-items: center; justify-content: center; }
-
-        nav { display: flex; justify-content: space-between; align-items: center; padding: 10px 20px; background: var(--card); border-bottom: 1px solid #ddd; }
+        /* --- FULL SCREEN (Ad-Visible) --- */
+        body.fullscreen-active { overflow: hidden; background: #000 !important; }
+        body.fullscreen-active nav, body.fullscreen-active .sidebar, body.fullscreen-active .v-badge, body.fullscreen-active .btn-main { display: none !important; }
         
-        /* Layout with Left Ad Slot */
+        body.fullscreen-active .app-grid {
+            grid-template-columns: 160px 1fr !important; 
+            width: 100vw; height: 100vh;
+        }
+
+        body.fullscreen-active .ad-left { background: #111; border-right: 1px solid #333; }
+        body.fullscreen-active .wheel-column { width: auto; height: 100vh; padding: 0; justify-content: center; }
+        body.fullscreen-active .wheel-container { width: min(85vh, 70vw); }
+
+        #exitFS {
+            display: none; position: fixed; top: 20px; right: 20px; z-index: 9999;
+            background: rgba(255,255,255,0.2); color: white; border: 1px solid white; padding: 10px 20px; border-radius: 5px; cursor: pointer;
+        }
+        body.fullscreen-active #exitFS { display: block; }
+
+        /* --- LAYOUT --- */
+        nav { display: flex; justify-content: space-between; align-items: center; padding: 10px 20px; background: var(--card); border-bottom: 1px solid #ddd; }
         .app-grid { display: grid; grid-template-columns: 160px 1fr 350px; min-height: calc(100vh - 60px); }
         .ad-left { background: #f9f9f9; border-right: 1px solid #ddd; display: flex; flex-direction: column; align-items: center; padding-top: 20px; }
 
         .wheel-column { display: flex; flex-direction: column; align-items: center; padding: 20px; position: relative; }
         
-        /* 3D Wheel Container */
-        .wheel-container { position: relative; width: 90%; max-width: 600px; aspect-ratio: 1; filter: drop-shadow(0 20px 30px rgba(0,0,0,0.3)); }
+        .wheel-container { 
+            position: relative; 
+            width: min(550px, 90vw, 75vh);
+            aspect-ratio: 1; 
+            filter: drop-shadow(0 25px 35px rgba(0,0,0,0.35));
+        }
         
-        /* 3D Depth Pointer */
+        canvas { width: 100%; height: 100%; display: block; cursor: pointer; }
+
+        /* Professional 3D Pointer with Floating Shadow */
         .pointer-3d {
-            position: absolute; right: -15px; top: 50%; transform: translateY(-50%);
-            width: 60px; height: 40px; background: var(--red-3d); clip-path: polygon(100% 50%, 0 0, 0 100%);
-            z-index: 100; box-shadow: inset -5px 0 10px rgba(0,0,0,0.5);
-            border-right: 4px solid #b71c1c;
+            position: absolute; right: -20px; top: 50%; transform: translateY(-50%);
+            width: 70px; height: 45px; 
+            background: linear-gradient(135deg, #ff4d4d 0%, #b30000 100%);
+            clip-path: polygon(100% 50%, 0 0, 20% 50%, 0 100%);
+            z-index: 100; 
+            filter: drop-shadow(-8px 8px 6px rgba(0,0,0,0.5));
         }
 
         .sidebar { padding: 20px; background: var(--card); border-left: 1px solid #ddd; }
-        
-        textarea { 
-            width: 100%; height: 350px; border-radius: 8px; border: 1px solid #ddd; 
-            font-size: 16px; padding: 12px; font-family: inherit; line-height: 1.5;
-        }
-
+        textarea { width: 100%; height: 350px; border-radius: 8px; border: 1px solid #ddd; font-size: 16px; padding: 12px; font-family: inherit; resize: none; }
         .controls { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; }
-        .btn { padding: 10px; border-radius: 6px; border: 1px solid #ccc; cursor: pointer; font-size: 13px; font-weight: 600; text-align: center; }
-        .btn-main { background: var(--primary); color: white; border: none; grid-column: span 2; padding: 15px; font-size: 18px; }
+        .btn { padding: 10px; border-radius: 6px; border: 1px solid #ccc; cursor: pointer; font-size: 13px; font-weight: 600; text-align: center; background: var(--card); color: var(--text); }
+        .btn-main { background: var(--primary); color: white; border: none; grid-column: span 2; padding: 15px; font-size: 18px; cursor: pointer; }
 
         .v-badge { position: fixed; bottom: 10px; left: 10px; font-size: 10px; opacity: 0.5; }
+
+        @media(max-width: 1100px) { .app-grid { grid-template-columns: 1fr; } .ad-left, .sidebar { display: none; } }
     </style>
 </head>
 <body>
 
+<button id="exitFS" onclick="toggleFullScreen()">Exit Full Screen (F)</button>
+
 <nav>
     <div class="brand" onclick="location.reload()">TeamSpin <b>PRO</b></div>
     <div style="display:flex; gap:10px;">
-        <select class="btn" id="langSelector" onchange="changeLanguage(this.value)">
-            <option value="en">English</option><option value="ne">नेपाली</option><option value="hi">हिन्दी</option>
-            <option value="es">Español</option><option value="fr">Français</option><option value="de">Deutsch</option>
-            <option value="zh">中文</option><option value="ja">日本語</option><option value="ar">العربية</option>
-            <option value="pt">Português</option><option value="ru">Русский</option><option value="it">Italiano</option>
-            <option value="tr">Türkçe</option><option value="ko">한국어</option><option value="vi">Tiếng Việt</option>
-            </select>
-        <select class="btn" onchange="setTheme(this.value)">
-            <option value="light">Light</option><option value="dark">Dark</option>
-            <option value="neon">Neon</option><option value="royal">Royal</option>
-            <option value="sunset">Sunset</option>
-        </select>
-        <button class="btn" onclick="togglePresentation()">Presentation Mode</button>
+        <button class="btn" onclick="toggleFullScreen()">Presentation Mode</button>
     </div>
 </nav>
 
 <div class="app-grid">
-    <aside class="ad-left">
-        <div style="width:120px; height:600px; background:#eee; display:flex; align-items:center; text-align:center; font-size:10px;">ADVERTISING SLOT</div>
+    <aside class="ad-left" id="adSidebar">
+        <div id="adContainer" style="width:120px; height:600px; background:#eee; display:flex; align-items:center; text-align:center; font-size:10px; border: 1px dashed #ccc;">
+            <p style="padding:10px">ADVERTISING SLOT<br>(Refreshing on Spin)</p>
+        </div>
     </aside>
 
     <main class="wheel-column">
@@ -96,11 +99,11 @@
             <div class="pointer-3d"></div>
             <canvas id="wheelCanvas" width="1000" height="1000" onclick="spin()"></canvas>
         </div>
-        <button class="btn btn-main" style="margin-top:20px; width:300px; border-radius:50px;" onclick="spin()">SPIN</button>
+        <button class="btn btn-main" style="margin-top:20px; width:300px; border-radius:50px;" onclick="spin()">SPIN NOW</button>
         
         <div style="margin-top:20px; display:flex; gap:20px;">
-            <div>Count: <b id="sessionCount">0</b></div>
-            <div id="winnerHistory" style="font-size:12px; color:var(--primary)">Latest: None</div>
+            <div>Total Spins: <b id="sessionCount">0</b></div>
+            <div id="winnerHistory" style="font-size:12px; color:var(--primary)">Latest Winner: None</div>
         </div>
     </main>
 
@@ -111,83 +114,75 @@
             
             <div class="controls">
                 <button class="btn" onclick="shuffleNames()">Shuffle</button>
-                <button class="btn" onclick="sortNames('asc')">Sort A-Z</button>
-                <button class="btn" onclick="sortNames('desc')">Sort Z-A</button>
                 <button class="btn" onclick="exportCSV()">Export CSV</button>
-                <button class="btn" onclick="saveCloud()" style="background:#34a853; color:white;">Save Cloud</button>
-                <button class="btn" onclick="loadCloud()" style="background:#4285f4; color:white;">Load Cloud</button>
             </div>
-        </div>
-
-        <div class="card" style="margin-top:15px; font-size:11px;">
-            <b>Security Playground:</b> /databases/(default)/documents/users/{uid}
-            <div style="color:green">● Authenticated: True</div>
         </div>
     </aside>
 </div>
 
-<div class="v-badge">v15.0.0-PRO-FINAL</div>
+<div class="v-badge">v15.0.6-PRO-FINAL</div>
 
 <script>
     const canvas = document.getElementById('wheelCanvas'), ctx = canvas.getContext('2d');
     const nameInput = document.getElementById('nameInput');
     let rotation = 0, isSpinning = false, totalSpins = 0;
 
-    // Professional Color Palettes
-    const palettes = {
-        light: ['#FF3B30', '#FF9500', '#FFCC00', '#4CD964', '#5AC8FA', '#007AFF', '#5856D6', '#FF2D55'],
-        dark: ['#1a1a1a', '#333333', '#4d4d4d', '#007AFF', '#FF3B30'],
-        neon: ['#0ff', '#f0f', '#0f0', '#ff0', '#f00']
-    };
+    const palettes = { light: ['#FF3B30', '#FF9500', '#FFCC00', '#4CD964', '#5AC8FA', '#007AFF', '#5856D6', '#FF2D55'] };
 
     function draw() {
         const names = nameInput.value.split('\n').filter(Boolean);
         const arc = (Math.PI * 2) / names.length;
         ctx.clearRect(0,0,1000,1000);
+        const centerX = 500, centerY = 500, radius = 480;
 
         names.forEach((name, i) => {
             const angle = rotation + i * arc;
             ctx.save();
             ctx.beginPath();
-            
-            // 3D Gradient for each slice
-            const grad = ctx.createRadialGradient(500,500,0, 500,500,500);
+            const grad = ctx.createRadialGradient(centerX, centerY, 0, centerX, centerY, radius);
             const baseCol = palettes.light[i % palettes.light.length];
-            grad.addColorStop(0, baseCol);
-            grad.addColorStop(1, shadeColor(baseCol, -20)); // Darker edge for 3D effect
-
+            grad.addColorStop(0, shadeColor(baseCol, 15));
+            grad.addColorStop(0.7, baseCol);
+            grad.addColorStop(1, shadeColor(baseCol, -25));
             ctx.fillStyle = grad;
-            ctx.moveTo(500, 500);
-            ctx.arc(500, 500, 480, angle, angle + arc);
+            ctx.moveTo(centerX, centerY);
+            ctx.arc(centerX, centerY, radius, angle, angle + arc);
             ctx.fill();
-            ctx.strokeStyle = 'white';
-            ctx.lineWidth = 2;
-            ctx.stroke();
 
-            // Text Rendering
-            ctx.translate(500, 500);
+            ctx.translate(centerX, centerY);
             ctx.rotate(angle + arc / 2);
             ctx.textAlign = "right";
             ctx.fillStyle = "white";
-            ctx.font = "bold 40px Segoe UI";
-            ctx.shadowBlur = 4; ctx.shadowColor = "rgba(0,0,0,0.5)";
-            ctx.fillText(name.substring(0, 15), 440, 15);
+            ctx.font = "bold 42px Segoe UI";
+            ctx.shadowBlur = 8; ctx.shadowColor = "rgba(0,0,0,0.7)";
+            ctx.fillText(name.substring(0, 18), radius * 0.9, 15);
             ctx.restore();
         });
 
-        // Center Cap (3D Look)
         ctx.beginPath();
-        ctx.arc(500, 500, 40, 0, Math.PI*2);
+        ctx.arc(centerX, centerY, 45, 0, Math.PI*2);
         ctx.fillStyle = "#fff";
-        ctx.shadowBlur = 15; ctx.shadowColor = "rgba(0,0,0,0.4)";
+        ctx.shadowBlur = 20; ctx.shadowColor = "rgba(0,0,0,0.4)";
         ctx.fill();
     }
 
+    function refreshAd() {
+        console.log("Refreshing Ads...");
+        const container = document.getElementById('adContainer');
+        // Logic to push a new AdSense request
+        if(window.adsbygoogle) {
+            try { (adsbygoogle = window.adsbygoogle || []).push({}); } catch(e){}
+        }
+        // Visual feedback for development
+        container.style.opacity = "0.5";
+        setTimeout(() => container.style.opacity = "1", 300);
+    }
+
     function spin() {
-        if (isSpinning) return;
+        if (isSpinning || nameInput.value.split('\n').filter(Boolean).length < 2) return;
         isSpinning = true;
-        const duration = 5000 + Math.random() * 3000;
-        const targetRot = rotation + (Math.PI * 2 * 10) + Math.random() * (Math.PI * 2);
+        const duration = 6000;
+        const targetRot = rotation + (Math.PI * 2 * 12) + Math.random() * (Math.PI * 2);
         const start = performance.now();
 
         function animate(now) {
@@ -201,13 +196,28 @@
                 isSpinning = false;
                 totalSpins++;
                 document.getElementById('sessionCount').innerText = totalSpins;
-                confetti({ particleCount: 150, spread: 70 });
+                const names = nameInput.value.split('\n').filter(Boolean);
+                const winIdx = Math.floor(((Math.PI * 2) - (rotation % (Math.PI * 2))) / ((Math.PI * 2) / names.length)) % names.length;
+                document.getElementById('winnerHistory').innerText = `Latest Winner: ${names[winIdx]}`;
+                confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+                
+                // Trigger Ad Refresh on win
+                refreshAd();
             }
         }
         requestAnimationFrame(animate);
     }
 
-    // UTILITIES
+    function toggleFullScreen() {
+        document.body.classList.toggle('fullscreen-active');
+        setTimeout(draw, 200); 
+    }
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key.toLowerCase() === 'f') toggleFullScreen();
+        if (e.code === 'Space' && !isSpinning) spin();
+    });
+
     function shuffleNames() {
         const a = nameInput.value.split('\n').filter(Boolean);
         for (let i = a.length - 1; i > 0; i--) {
@@ -217,25 +227,17 @@
         nameInput.value = a.join('\n'); draw();
     }
 
-    function sortNames(dir) {
-        const a = nameInput.value.split('\n').filter(Boolean).sort();
-        if(dir === 'desc') a.reverse();
-        nameInput.value = a.join('\n'); draw();
-    }
-
     function exportCSV() {
         const blob = new Blob([nameInput.value], {type: 'text/csv'});
         const url = window.URL.createObjectURL(blob);
         const a = document.createElement('a');
-        a.href = url; a.download = 'teamspin_names.csv'; a.click();
+        a.href = url; a.download = 'winners.csv'; a.click();
     }
 
-    function togglePresentation() { document.body.classList.toggle('presentation-mode'); draw(); }
-    function setTheme(t) { document.body.setAttribute('data-theme', t); draw(); }
     function shadeColor(color, percent) {
         var R = parseInt(color.substring(1,3),16), G = parseInt(color.substring(3,5),16), B = parseInt(color.substring(5,7),16);
         R = parseInt(R * (100 + percent) / 100); G = parseInt(G * (100 + percent) / 100); B = parseInt(B * (100 + percent) / 100);
-        R = (R<255)?R:255; G = (G<255)?G:255; B = (B<255)?B:255;
+        R = R<255?R:255; G = G<255?G:255; B = B<255?B:255;
         return "#"+((1<<24)+(R<<16)+(G<<8)+B).toString(16).slice(1);
     }
 
