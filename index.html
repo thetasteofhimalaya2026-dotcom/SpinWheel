@@ -3,9 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>TeamSpin Pro | 100% Fair Random Name Picker Wheel</title>
-    <meta name="description" content="Free, fair, and responsive random name picker wheel. Perfect for teachers and giveaways. Supports English, Hindi, and Nepali.">
-    <meta name="keywords" content="random name picker, spin the wheel, name wheel, randomizer, lucky draw, winner picker, Nepali name picker, Hindi name wheel">
+    
+    <title>TeamSpin Pro | Best Random Name Picker & Spin the Wheel Tool</title>
+    <meta name="description" content="Use TeamSpin Pro, the world's most fair random name picker wheel. Perfect for teachers, raffles, and giveaways. Free spin the wheel tool with realistic sound.">
+    <meta name="keywords" content="random name picker, spin the wheel, name wheel, randomizer, lucky draw, winner picker, classroom tool, raffle wheel, decision maker, digital wheel spin, random name generator">
     
     <link rel="icon" type="image/jpeg" href="logo.jpg">
     <link rel="apple-touch-icon" href="logo.jpg">
@@ -16,52 +17,46 @@
     <style>
         :root { --bg: #f8fafc; --card: #ffffff; --text: #1e293b; --primary: #6366f1; --accent: #ef4444; }
         [data-theme="dark"] { --bg: #0f172a; --card: #1e293b; --text: #f8fafc; --primary: #818cf8; }
-
         body { margin: 0; font-family: 'Inter', sans-serif; background-color: var(--bg); color: var(--text); transition: 0.3s; overflow-x: hidden; }
         
         nav { background: var(--card); padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 100; }
         .nav-brand { display: flex; align-items: center; gap: 10px; font-weight: 900; color: var(--primary); cursor: pointer; font-size: 1.2rem; }
         .brand-img { width: 35px; height: 35px; border-radius: 8px; object-fit: cover; }
         .nav-links { display: flex; gap: 15px; align-items: center; }
-        .nav-links a { font-size: 0.9rem; cursor: pointer; font-weight: 500; text-decoration: none; color: var(--text); }
-        .lang-select { padding: 6px; border-radius: 5px; border: 1px solid #cbd5e1; background: var(--card); color: var(--text); font-size: 0.8rem; outline: none; }
+        .nav-links a { font-size: 0.85rem; font-weight: bold; cursor: pointer; color: var(--text); text-decoration: none; }
+        .lang-select { padding: 6px; border-radius: 5px; border: 1px solid #cbd5e1; background: var(--card); color: var(--text); font-size: 0.8rem; }
 
         .container { max-width: 1300px; margin: 0 auto; padding: 15px; }
         .page { display: none; }
         .active { display: block; }
 
-        /* AdSense Slots Styling */
-        .ad-slot { background: #f1f5f9; border: 1px dashed #cbd5e1; border-radius: 12px; text-align: center; color: #94a3b8; font-size: 12px; padding: 20px; margin: 15px 0; overflow: hidden; }
+        .ad-slot { background: #f1f5f9; border: 1px dashed #cbd5e1; border-radius: 12px; text-align: center; color: #94a3b8; font-size: 12px; padding: 20px; margin: 15px 0; }
         [data-theme="dark"] .ad-slot { background: #1e293b; border-color: #334155; }
 
         .card { background: var(--card); padding: 25px; border-radius: 24px; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.05); margin-bottom: 25px; }
         
-        /* Grid and Alignment */
         .main-grid { display: grid; grid-template-columns: 1fr; gap: 25px; align-items: start; }
         @media (min-width: 1024px) { .main-grid { grid-template-columns: 1fr 400px; } }
 
-        /* BIGGER WHEEL STYLING */
         .wheel-container { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; }
-        .wheel-wrapper { position: relative; width: 100%; max-width: 550px; aspect-ratio: 1/1; margin: 20px auto; cursor: pointer; transition: transform 0.2s; }
-        canvas { width: 100% !important; height: 100% !important; touch-action: none; filter: drop-shadow(0 10px 20px rgba(0,0,0,0.1)); }
+        .wheel-wrapper { position: relative; width: 100%; max-width: 580px; aspect-ratio: 1/1; margin: 20px auto; cursor: pointer; }
+        canvas { width: 100% !important; height: 100% !important; filter: drop-shadow(0 10px 20px rgba(0,0,0,0.15)); touch-action: none; }
         .pointer { position: absolute; top: -15px; left: 50%; transform: translateX(-50%); width: 0; height: 0; border-left: 20px solid transparent; border-right: 20px solid transparent; border-top: 40px solid var(--accent); z-index: 50; }
 
-        textarea { width: 100%; height: 180px; padding: 15px; border-radius: 15px; border: 2px solid #e2e8f0; font-size: 16px; box-sizing: border-box; background: var(--bg); color: var(--text); resize: none; font-family: inherit; }
-        textarea:focus { border-color: var(--primary); outline: none; }
-        
+        textarea { width: 100%; height: 200px; padding: 15px; border-radius: 15px; border: 2px solid #e2e8f0; font-size: 16px; box-sizing: border-box; background: var(--bg); color: var(--text); resize: none; font-family: inherit; }
         .btn-spin { width: 100%; max-width: 400px; padding: 18px; background: var(--primary); color: white; border: none; border-radius: 15px; font-weight: 800; font-size: 1.2rem; cursor: pointer; margin-top: 15px; transition: 0.3s; box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3); }
-        .btn-spin:disabled { background: #cbd5e1; cursor: not-allowed; box-shadow: none; opacity: 0.6; }
+        .btn-spin:disabled { background: #cbd5e1; cursor: not-allowed; opacity: 0.6; box-shadow: none; }
 
         .validation-msg { font-size: 0.9rem; color: var(--accent); margin-top: 10px; font-weight: 600; min-height: 1.5rem; }
-        
         .history-list { list-style: none; padding: 0; margin-top: 15px; max-height: 200px; overflow-y: auto; }
-        .history-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #f1f5f9; font-size: 0.95rem; }
+        .history-item { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #f1f5f9; font-size: 0.95rem; }
         
         .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.85); display: none; justify-content: center; align-items: center; z-index: 1000; padding: 20px; }
-        .modal-content { background: var(--card); padding: 40px; border-radius: 30px; text-align: center; max-width: 450px; width: 100%; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); }
+        .modal-content { background: var(--card); padding: 40px; border-radius: 30px; text-align: center; max-width: 450px; width: 100%; }
 
         .seo-section { line-height: 1.8; color: #64748b; font-size: 1rem; }
         .seo-section h2 { color: var(--text); margin-top: 30px; font-size: 1.4rem; }
+        .policy-body h3 { color: var(--text); margin-top: 25px; border-bottom: 1px solid #e2e8f0; padding-bottom: 5px; }
     </style>
 </head>
 <body>
@@ -77,45 +72,37 @@
             <option value="hi">हिन्दी</option>
             <option value="ne">नेपाली</option>
         </select>
-        <a onclick="showPage('home')" data-i18n="nav_wheel">Wheel</a>
-        <a onclick="showPage('privacy')" data-i18n="nav_privacy">Privacy</a>
+        <a onclick="showPage('privacy')" data-i18n="nav_privacy">Privacy Policy</a>
         <button onclick="toggleTheme()" style="background:none; border:none; cursor:pointer; font-size:1.2rem;">🌓</button>
     </div>
 </nav>
 
 <div class="container">
-    <div class="ad-slot">
-        <p>ADVERTISEMENT</p>
-        </div>
+    <div class="ad-slot"><p>ADVERTISEMENT</p></div>
 
     <div id="home" class="page active">
         <div class="main-grid">
             <section class="card wheel-container">
-                <h1 style="font-size: 1.5rem; margin-top: 0; margin-bottom: 10px;" data-i18n="hero_title">Random Name Picker Wheel</h1>
+                <h1 style="font-size: 1.6rem; margin-top: 0; text-align: center;" data-i18n="hero_title">Free Random Name Picker Wheel</h1>
                 <div class="wheel-wrapper" onclick="startSpin()">
                     <div class="pointer"></div>
                     <canvas id="wheelCanvas" width="1000" height="1000"></canvas>
                 </div>
-                <button id="spinBtn" class="btn-spin" onclick="startSpin()" data-i18n="btn_spin">SPIN NOW</button>
+                <button id="spinBtn" class="btn-spin" onclick="startSpin()" data-i18n="btn_spin">SPIN THE WHEEL</button>
                 <div id="spinError" class="validation-msg"></div>
             </section>
 
             <aside class="sidebar">
-                <div class="ad-slot" style="min-height: 100px;">
-                    <p>AD SLOT</p>
-                </div>
-
                 <div class="card">
                     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
-                        <strong data-i18n="label_participants">Participants</strong>
+                        <strong data-i18n="label_participants">Participants List</strong>
                         <button onclick="shuffleNames()" style="font-size:11px; padding:6px 10px; cursor:pointer; border-radius:6px; border:1px solid #cbd5e1; background:var(--bg); color:var(--text);" data-i18n="btn_shuffle">🔀 Shuffle</button>
                     </div>
-                    <textarea id="nameInput" onkeyup="draw()" placeholder="Write names here..."></textarea>
+                    <textarea id="nameInput" onkeyup="draw()" placeholder="Add one name per line..."></textarea>
                     <div id="duplicateError" class="validation-msg"></div>
                 </div>
-
                 <div class="card">
-                    <strong data-i18n="label_winners">Previous Winners</strong>
+                    <strong data-i18n="label_winners">Winner History</strong>
                     <ul id="history" class="history-list">
                         <li style="color:#94a3b8; text-align:center;" data-i18n="no_winners">No winners yet</li>
                     </ul>
@@ -124,23 +111,43 @@
         </div>
 
         <article class="card seo-section">
-            <h2 data-i18n="seo_title1">How to Use the Random Name Picker Wheel?</h2>
-            <p>TeamSpin Pro is a professional <strong>online random name picker</strong>. To get started, type your names into the participant box. The wheel updates in <strong>real-time</strong>. Once ready, click "Spin Now" to pick a winner fairly.</p>
+            <h2 data-i18n="seo_title1">Most Reliable Online Random Name Picker</h2>
+            <p>Welcome to <strong>TeamSpin Pro</strong>, the ultimate <strong>spin the wheel</strong> tool for all your picking needs. Whether you are a teacher looking for a <strong>classroom name picker</strong> or an organizer running a <strong>raffle draw</strong>, our digital wheel ensures 100% fairness.</p>
             
-            <h2 data-i18n="seo_title2">Features of TeamSpin Pro</h2>
-            <p>Our wheel identifies duplicates (case-insensitive) and ensures you cannot spin with only one name, maintaining the integrity of your lucky draw.</p>
+            <h2 data-i18n="seo_title2">Why Choose Our Randomizer Tool?</h2>
+            <p>Our tool is optimized with **realistic spin physics** and **high-fidelity sound effects**. Key features include:
+                <ul>
+                    <li><strong>No Duplicate Entries:</strong> Our system detects and blocks duplicate names to ensure every participant has an equal chance.</li>
+                    <li><strong>Fully Responsive:</strong> A seamless experience as a <strong>mobile wheel spinner</strong>, tablet tool, or laptop application.</li>
+                    <li><strong>Instant Results:</strong> No lag, high-resolution graphics, and celebratory confetti.</li>
+                    <li><strong>International Support:</strong> Easily switch between English, Hindi, and Nepali.</li>
+                </ul>
+            </p>
         </article>
     </div>
 
-    <div id="privacy" class="page card">
-        <h1 data-i18n="nav_privacy">Privacy Policy</h1>
-        <p data-i18n="privacy_text">At TeamSpin Pro, we do not store the names you enter on our servers. All data remains in your browser's local memory. We use cookies and AdSense to show relevant ads.</p>
-        <button onclick="showPage('home')" class="btn-spin" style="width:auto; padding:12px 30px;" data-i18n="btn_back">Back to Wheel</button>
+    <div id="privacy" class="page card policy-body">
+        <h1>Privacy Policy</h1>
+        <p>Last Updated: January 15, 2026</p>
+        <p>Your privacy is important to us. This Privacy Policy explains how TeamSpin Pro handles data.</p>
+        
+        <h3>1. Data Collection & Processing</h3>
+        <p>TeamSpin Pro is a client-side application. We do not collect, store, or transmit the names or lists you enter into the "Participants" box to any server. All name picking is processed locally in your browser.</p>
+        
+        <h3>2. Google AdSense & Cookies</h3>
+        <p>We use Google AdSense to serve ads. Google, as a third-party vendor, uses cookies to serve ads on this site. Google's use of advertising cookies enables it and its partners to serve ads to users based on their visit to this site and/or other sites on the Internet.</p>
+        <p>Users may opt out of personalized advertising by visiting <a href="https://www.google.com/settings/ads" target="_blank">Google Ads Settings</a>.</p>
+        
+        <h3>3. Log Data</h3>
+        <p>We may collect information that your browser sends whenever you visit our tool ("Log Data"). This may include your IP address, browser type, and pages visited. This is used strictly for analytics and site improvement.</p>
+        
+        <h3>4. GDPR & CCPA Compliance</h3>
+        <p>As we do not store personal names or identifiable user data on our databases, we align with data minimization principles required by GDPR and CCPA.</p>
+        
+        <button onclick="showPage('home')" class="btn-spin" style="width:auto; padding:12px 30px;">Back to Wheel</button>
     </div>
 
-    <div class="ad-slot">
-        <p>ADVERTISEMENT</p>
-    </div>
+    <div class="ad-slot"><p>ADVERTISEMENT</p></div>
 </div>
 
 <div class="modal" id="winnerModal">
@@ -158,36 +165,22 @@
     const spinBtn = document.getElementById('spinBtn');
     const duplicateError = document.getElementById('duplicateError');
     const spinError = document.getElementById('spinError');
+    
+    // SOUND EFFECTS (Realistic Tick and Popper)
+    const tickSound = new Audio('https://assets.mixkit.co/active_storage/sfx/2005/2005-preview.mp3');
+    const winSound = new Audio('https://assets.mixkit.co/active_storage/sfx/1435/1435-preview.mp3');
+    tickSound.volume = 0.5;
+
     const palette = ['#6366f1', '#a855f7', '#ec4899', '#f43f5e', '#f59e0b', '#10b981', '#3b82f6', '#f97316'];
     let currentRotation = 0;
     let isSpinning = false;
     let currentLang = 'en';
+    let lastTickAngle = 0;
 
     const translations = {
-        en: {
-            nav_wheel: "Wheel", nav_privacy: "Privacy", hero_title: "Random Name Picker Wheel",
-            btn_spin: "SPIN NOW", label_participants: "Participants", btn_shuffle: "🔀 Shuffle",
-            label_winners: "Previous Winners", no_winners: "No winners yet", modal_winner_title: "WINNER!",
-            err_min: "Min 2 names required to spin.", err_dup: "Duplicate names detected! Please fix.",
-            btn_close: "Close", btn_back: "Back", privacy_text: "We do not store your data. All processes happen in your browser.",
-            seo_title1: "How to Use?", seo_title2: "Features"
-        },
-        hi: {
-            nav_wheel: "पहिया", nav_privacy: "गोपनीयता", hero_title: "नाम चुनने वाला पहिया",
-            btn_spin: "घुमाएं", label_participants: "प्रतिभागी", btn_shuffle: "🔀 फेरबदल",
-            label_winners: "पिछले विजेता", no_winners: "कोई विजेता नहीं", modal_winner_title: "विजेता!",
-            err_min: "घुमाने के लिए कम से कम 2 नाम चाहिए।", err_dup: "डुप्लिकेट नाम मिले! कृपया ठीक करें।",
-            btn_close: "बंद करें", btn_back: "वापस", privacy_text: "हम आपका डेटा सुरक्षित रखते हैं।",
-            seo_title1: "उपयोग कैसे करें?", seo_title2: "विशेषताएं"
-        },
-        ne: {
-            nav_wheel: "चक्का", nav_privacy: "गोपनीयता", hero_title: "नाम छान्ने चक्का",
-            btn_spin: "घुमाउनुहोस्", label_participants: "सहभागीहरू", btn_shuffle: "🔀 मिसाउनुहोस्",
-            label_winners: "अघिल्लो विजेताहरू", no_winners: "कोही विजेता छैन", modal_winner_title: "विजेता!",
-            err_min: "घुमाउन कम्तिमा २ नाम चाहिन्छ।", err_dup: "उस्तै नामहरू फेला पर्यो! कृपया सच्याउनुहोस्।",
-            btn_close: "बन्द गर्नुहोस्", btn_back: "फिर्ता", privacy_text: "हामी तपाईंको डाटा भण्डारण गर्दैनौं।",
-            seo_title1: "कसरी प्रयोग गर्ने?", seo_title2: "विशेषताहरू"
-        }
+        en: { nav_privacy: "Privacy Policy", hero_title: "Free Random Name Picker Wheel", btn_spin: "SPIN THE WHEEL", label_participants: "Participants List", btn_shuffle: "🔀 Shuffle", label_winners: "Winner History", no_winners: "No winners yet", modal_winner_title: "WINNER!", err_min: "Min 2 names required.", err_dup: "Duplicate names detected!", btn_close: "Close", seo_title1: "Reliable Online Random Name Picker", seo_title2: "Why Choose Our Randomizer Tool?" },
+        hi: { nav_privacy: "गोपनीयता नीति", hero_title: "मुफ़्त नाम चुनने वाला पहिया", btn_spin: "पहिया घुमाएं", label_participants: "प्रतिभागी सूची", btn_shuffle: "🔀 फेरबदल", label_winners: "विजेता इतिहास", no_winners: "कोई विजेता नहीं", modal_winner_title: "विजेता!", err_min: "कम से कम 2 नाम चाहिए।", err_dup: "डुप्लिकेट नाम मिले!", btn_close: "बंद करें", seo_title1: "विश्वसनीय ऑनलाइन नाम पिकर", seo_title2: "हमारा टूल क्यों चुनें?" },
+        ne: { nav_privacy: "गोपनीयता नीति", hero_title: "नि: शुल्क नाम छान्ने चक्का", btn_spin: "चक्का घुमाउनुहोस्", label_participants: "सहभागी सूची", btn_shuffle: "🔀 मिसाउनुहोस्", label_winners: "विजेता इतिहास", no_winners: "कोही विजेता छैन", modal_winner_title: "विजेता!", err_min: "कम्तिमा २ नाम चाहिन्छ।", err_dup: "उस्तै नामहरू फेला पर्यो!", btn_close: "बन्द गर्नुहोस्", seo_title1: "भरपर्दो अनलाइन नाम पिकर", seo_title2: "किन हाम्रो टूल छान्ने?" }
     };
 
     function draw() {
@@ -198,19 +191,13 @@
         const hasDuplicates = rawNames.length !== uniqueNames.length;
         const tooFewNames = rawNames.length < 2;
 
-        if (hasDuplicates) {
-            duplicateError.innerText = translations[currentLang].err_dup;
-            spinBtn.disabled = true;
-        } else {
-            duplicateError.innerText = "";
-            spinBtn.disabled = tooFewNames;
-        }
-
+        duplicateError.innerText = hasDuplicates ? translations[currentLang].err_dup : "";
+        spinBtn.disabled = hasDuplicates || tooFewNames;
         spinError.innerText = tooFewNames ? translations[currentLang].err_min : "";
 
         const size = canvas.width;
         const center = size / 2;
-        const radius = center - 30;
+        const radius = center - 35;
         ctx.clearRect(0, 0, size, size);
         
         if (rawNames.length === 0) {
@@ -219,6 +206,15 @@
         }
 
         const arcSize = (2 * Math.PI) / rawNames.length;
+
+        // Sound Trigger Logic
+        const currentTick = Math.floor(currentRotation / arcSize);
+        if (currentTick !== lastTickAngle && isSpinning) {
+            tickSound.pause(); tickSound.currentTime = 0;
+            tickSound.play().catch(()=>{});
+            lastTickAngle = currentTick;
+        }
+
         rawNames.forEach((name, i) => {
             const angle = currentRotation + (i * arcSize);
             ctx.beginPath();
@@ -231,33 +227,20 @@
             ctx.translate(center, center);
             ctx.rotate(angle + arcSize / 2);
             ctx.textAlign = "right"; ctx.fillStyle = "white";
-            ctx.font = "bold 36px 'Inter', sans-serif";
-            ctx.fillText(name.substring(0, 18), radius - 50, 12);
+            ctx.font = "bold 34px 'Inter', sans-serif";
+            ctx.fillText(name.substring(0, 18), radius - 55, 12);
             ctx.restore();
         });
 
         // Center hub
-        ctx.beginPath();
-        ctx.arc(center, center, 40, 0, 2 * Math.PI);
-        ctx.fillStyle = "white";
-        ctx.fill();
-        ctx.stroke();
-    }
-
-    function changeLanguage(lang) {
-        currentLang = lang;
-        document.querySelectorAll('[data-i18n]').forEach(el => {
-            const key = el.getAttribute('data-i18n');
-            if (translations[lang][key]) el.innerText = translations[lang][key];
-        });
-        draw();
+        ctx.beginPath(); ctx.arc(center, center, 45, 0, 2 * Math.PI);
+        ctx.fillStyle = "white"; ctx.fill(); ctx.stroke();
     }
 
     function startSpin() {
         if (isSpinning || spinBtn.disabled) return;
-        isSpinning = true;
-        spinBtn.disabled = true;
-        const totalRot = (Math.random() * 5 + 10) * 2 * Math.PI;
+        isSpinning = true; spinBtn.disabled = true;
+        const totalRot = (Math.random() * 5 + 12) * 2 * Math.PI;
         const start = performance.now();
         const duration = 5000;
         const initialRot = currentRotation;
@@ -265,11 +248,14 @@
         function animate(now) {
             const elapsed = now - start;
             const progress = Math.min(elapsed / duration, 1);
-            const easeOut = 1 - Math.pow(1 - progress, 5); // Smoother ease
+            const easeOut = 1 - Math.pow(1 - progress, 5);
             currentRotation = initialRot + (totalRot * easeOut);
             draw();
             if (progress < 1) requestAnimationFrame(animate);
-            else { isSpinning = false; spinBtn.disabled = false; finishSpin(); }
+            else { 
+                isSpinning = false; spinBtn.disabled = false; 
+                winSound.play(); finishSpin(); 
+            }
         }
         requestAnimationFrame(animate);
     }
@@ -287,7 +273,7 @@
         confetti({ particleCount: 200, spread: 80, origin: { y: 0.6 } });
 
         const historyList = document.getElementById('history');
-        if (historyList.innerText.includes('No winners') || historyList.innerText.includes('कोही विजेता')) historyList.innerHTML = '';
+        if (historyList.innerText.includes('No winners')) historyList.innerHTML = '';
         const li = document.createElement('li');
         li.className = 'history-item';
         li.innerHTML = `<span><strong>${names[idx]}</strong></span><span style="color:#94a3b8; font-size:0.8rem;">${new Date().toLocaleTimeString()}</span>`;
@@ -299,6 +285,15 @@
         document.getElementById(id).classList.add('active');
         window.scrollTo(0,0);
         if(id === 'home') draw();
+    }
+
+    function changeLanguage(lang) {
+        currentLang = lang;
+        document.querySelectorAll('[data-i18n]').forEach(el => {
+            const key = el.getAttribute('data-i18n');
+            if (translations[lang][key]) el.innerText = translations[lang][key];
+        });
+        draw();
     }
 
     function toggleTheme() {
