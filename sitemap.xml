@@ -1,3 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" 
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+
   <url>
     <loc>https://thetasteofhimalaya2026-dotcom.github.io/SpinWheel/</loc>
     <lastmod>2026-01-15</lastmod>
@@ -13,6 +17,9 @@
     <lastmod>2026-01-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://thetasteofhimalaya2026-dotcom.github.io/SpinWheel/"/>
+    <xhtml:link rel="alternate" hreflang="hi" href="https://thetasteofhimalaya2026-dotcom.github.io/SpinWheel/?lang=hi"/>
+    <xhtml:link rel="alternate" hreflang="ne" href="https://thetasteofhimalaya2026-dotcom.github.io/SpinWheel/?lang=ne"/>
   </url>
 
   <url>
@@ -20,6 +27,9 @@
     <lastmod>2026-01-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://thetasteofhimalaya2026-dotcom.github.io/SpinWheel/"/>
+    <xhtml:link rel="alternate" hreflang="hi" href="https://thetasteofhimalaya2026-dotcom.github.io/SpinWheel/?lang=hi"/>
+    <xhtml:link rel="alternate" hreflang="ne" href="https://thetasteofhimalaya2026-dotcom.github.io/SpinWheel/?lang=ne"/>
   </url>
 
 </urlset>
