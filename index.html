@@ -31,8 +31,6 @@
         .active { display: block; }
 
         .ad-slot { background: #f1f5f9; border: 1px dashed #cbd5e1; border-radius: 12px; text-align: center; color: #94a3b8; font-size: 12px; padding: 20px; margin: 15px 0; }
-        [data-theme="dark"] .ad-slot { background: #1e293b; border-color: #334155; }
-
         .card { background: var(--card); padding: 25px; border-radius: 24px; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.05); margin-bottom: 25px; }
         
         .main-grid { display: grid; grid-template-columns: 1fr; gap: 25px; align-items: start; }
@@ -44,8 +42,8 @@
         .pointer { position: absolute; top: -15px; left: 50%; transform: translateX(-50%); width: 0; height: 0; border-left: 20px solid transparent; border-right: 20px solid transparent; border-top: 40px solid var(--accent); z-index: 50; }
 
         textarea { width: 100%; height: 200px; padding: 15px; border-radius: 15px; border: 2px solid #e2e8f0; font-size: 16px; box-sizing: border-box; background: var(--bg); color: var(--text); resize: none; font-family: inherit; }
-        .btn-spin { width: 100%; max-width: 400px; padding: 18px; background: var(--primary); color: white; border: none; border-radius: 15px; font-weight: 800; font-size: 1.2rem; cursor: pointer; margin-top: 15px; transition: 0.3s; box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3); }
-        .btn-spin:disabled { background: #cbd5e1; cursor: not-allowed; opacity: 0.6; box-shadow: none; }
+        .btn-spin { width: 100%; max-width: 400px; padding: 18px; background: var(--primary); color: white; border: none; border-radius: 15px; font-weight: 800; font-size: 1.2rem; cursor: pointer; margin-top: 15px; box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3); }
+        .btn-spin:disabled { background: #cbd5e1; cursor: not-allowed; opacity: 0.6; }
 
         .validation-msg { font-size: 0.9rem; color: var(--accent); margin-top: 10px; font-weight: 600; min-height: 1.5rem; }
         .history-list { list-style: none; padding: 0; margin-top: 15px; max-height: 200px; overflow-y: auto; }
@@ -78,7 +76,7 @@
 </nav>
 
 <div class="container">
-    <div class="ad-slot"><p>ADVERTISEMENT</p></div>
+    <div class="ad-slot"><p>ADVERTISEMENT - TOP BANNER</p></div>
 
     <div id="home" class="page active">
         <div class="main-grid">
@@ -112,22 +110,20 @@
 
         <article class="card seo-section">
             <h2 data-i18n="seo_title1">Most Reliable Online Random Name Picker</h2>
-            <p>Welcome to <strong>TeamSpin Pro</strong>, the ultimate <strong>spin the wheel</strong> tool for all your picking needs. Whether you are a teacher looking for a <strong>classroom name picker</strong> or an organizer running a <strong>raffle draw</strong>, our digital wheel ensures 100% fairness.</p>
-            <h2 data-i18n="seo_title2">Why Choose Our Randomizer Tool?</h2>
-            <p>Our tool is optimized with **realistic spin physics** and **loud sound effects**. Key features include duplicate prevention, responsive design, and multi-language support.</p>
+            <p>Welcome to <strong>TeamSpin Pro</strong>, the ultimate <strong>spin the wheel</strong> tool. Fair, fast, and <strong>realistic sound</strong> for raffles and classrooms.</p>
         </article>
     </div>
 
     <div id="privacy" class="page card policy-body">
         <h1>Privacy Policy</h1>
-        <p>Last Updated: January 2026</p>
-        <p>Your privacy is important to us. TeamSpin Pro does not store or collect names. Data processed locally in your browser.</p>
+        <p>Last Updated: January 15, 2026</p>
+        <p>TeamSpin Pro values your privacy. We do not collect names or store lists. All processing happens locally in your browser.</p>
         <h3>Google AdSense & Cookies</h3>
-        <p>We use cookies for ads. Visit Google Ads Settings to opt out of personalized advertising.</p>
+        <p>We use cookies for advertising purposes. Users can opt out of personalized ads via Google Settings.</p>
         <button onclick="showPage('home')" class="btn-spin" style="width:auto; padding:12px 30px;">Back to Wheel</button>
     </div>
 
-    <div class="ad-slot"><p>ADVERTISEMENT</p></div>
+    <div class="ad-slot"><p>ADVERTISEMENT - BOTTOM BANNER</p></div>
 </div>
 
 <div class="modal" id="winnerModal">
@@ -146,11 +142,11 @@
     const duplicateError = document.getElementById('duplicateError');
     const spinError = document.getElementById('spinError');
     
-    // SOUND EFFECTS (LOUDER SETTINGS)
+    // SOUND ENGINE
     const tickSound = new Audio('https://assets.mixkit.co/active_storage/sfx/2005/2005-preview.mp3');
-    const winSound = new Audio('https://assets.mixkit.co/active_storage/sfx/1435/1435-preview.mp3');
-    tickSound.volume = 1.0; // MAX LOUDNESS
-    winSound.volume = 1.0;  // MAX LOUDNESS
+    const winnerSound = new Audio('winner.mp3'); 
+    tickSound.volume = 1.0;
+    winnerSound.volume = 1.0;
 
     const palette = ['#6366f1', '#a855f7', '#ec4899', '#f43f5e', '#f59e0b', '#10b981', '#3b82f6', '#f97316'];
     let currentRotation = 0;
@@ -188,13 +184,14 @@
 
         const arcSize = (2 * Math.PI) / rawNames.length;
 
-        // Sound Trigger Logic
-        const currentTick = Math.floor(currentRotation / arcSize);
-        if (currentTick !== lastTickAngle && isSpinning) {
-            tickSound.pause(); 
-            tickSound.currentTime = 0;
-            tickSound.play().catch(()=>{});
-            lastTickAngle = currentTick;
+        // ACCURATE TICK LOGIC
+        if (isSpinning) {
+            const currentTickPos = Math.floor((currentRotation) / arcSize);
+            if (currentTickPos !== lastTickAngle) {
+                tickSound.currentTime = 0;
+                tickSound.play().catch(()=>{});
+                lastTickAngle = currentTickPos;
+            }
         }
 
         rawNames.forEach((name, i) => {
@@ -235,13 +232,9 @@
             draw();
             if (progress < 1) requestAnimationFrame(animate);
             else { 
-                isSpinning = false; 
-                spinBtn.disabled = false;
-                // STOP TICKING SOUND INSTANTLY
-                tickSound.pause(); 
-                tickSound.currentTime = 0;
-                // PLAY WINNER SOUND
-                winSound.play(); 
+                isSpinning = false; spinBtn.disabled = false; 
+                tickSound.pause(); tickSound.currentTime = 0; // HARD STOP SPIN SOUND
+                winnerSound.play().catch(()=>{}); // START WINNER MP3
                 finishSpin(); 
             }
         }
