@@ -1,5 +1,10 @@
-sitemap: https://thetasteofhimalaya2026-dotcom.github.io/SpinWheel/sitemap.xml
 User-agent: *
 Allow: /
 
-# sitemap Location
+sitemap: https://thetasteofhimalaya2026-dotcom.github.io/SpinWheel/sitemap.xml
+
+Disallow: /private/
+Disallow: /temp/
+
+User-agent: Google-InspectionTool
+Allow: /
