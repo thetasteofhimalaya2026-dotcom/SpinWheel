@@ -133,6 +133,11 @@ canvas{ width:100%; height:100%; border-radius:50%; box-shadow: 0 20px 60px rgba
     margin-top: 20px; padding: 12px 30px; background: var(--primary);
     color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold;
 }
+/* REMOVE BUTTON STYLE */
+.remove-btn {
+    background: #dc3545; margin-left: 10px;
+}
+
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
 .history-list {
@@ -153,18 +158,26 @@ footer{ margin-top:60px; padding:40px; background:#f9fafb; border-top:1px solid 
     .nav-links{ display:none; }
     .seo-grid { grid-template-columns: 1fr; }
 }
+
+/* SETTINGS GROUPING */
+.settings-section { margin-top: 20px; padding-top: 15px; border-top: 1px solid #eee; }
+.settings-label { display: block; font-size: 13px; font-weight: bold; margin-bottom: 5px; }
 </style>
 </head>
 
 <body data-theme="classic">
 
 <audio id="winSound" src="winner.mp3" preload="auto"></audio>
+<audio id="tickSound" src="tick.mp3" preload="auto"></audio>
 
 <div id="winnerModal" class="winner-modal">
     <div class="modal-content">
         <p style="font-size: 1.2rem; margin: 0;">🎉 We have a winner! 🎉</p>
         <h1 id="modalWinnerName">Winner</h1>
-        <button class="close-modal" onclick="closeModal()">Close & Continue</button>
+        <div style="display: flex; justify-content: center; gap: 10px;">
+            <button class="close-modal" onclick="closeModal()">Close</button>
+            <button class="close-modal remove-btn" onclick="removeWinnerAndClose()">Remove Winner</button>
+        </div>
     </div>
 </div>
 
@@ -203,6 +216,25 @@ Sara</textarea>
         <p><strong id="t_count">Entries:</strong> <span id="entryCount">4</span></p>
         <button class="control-btn" onclick="sortAsc()">Sort A–Z</button>
         <button class="control-btn" onclick="sortDesc()">Sort Z–A</button>
+
+        <div class="settings-section">
+            <label class="settings-label">Sound Settings</label>
+            <select id="spinSoundSelect" class="control-btn">
+                <option value="tick.mp3">Standard Tick</option>
+                <option value="none">Mute Spin</option>
+            </select>
+            <select id="winSoundSelect" class="control-btn">
+                <option value="winner.mp3">Applause</option>
+                <option value="none">Mute Win</option>
+            </select>
+        </div>
+
+        <div class="settings-section">
+            <label class="settings-label">Wheel Background</label>
+            <input type="file" id="bgUpload" accept="image/*" style="font-size:12px; margin-bottom:5px;" onchange="handleBgUpload(this)">
+            <button class="control-btn" style="font-size:12px; padding:4px;" onclick="resetBg()">Reset to Colors</button>
+        </div>
+
         <h4 style="margin-top:20px; border-top:1px solid #eee; padding-top:10px;">Quick Gallery</h4>
         <div class="gallery-grid">
             <div class="gallery-item" onclick="loadGallery('yesno')">Yes / No</div>
@@ -247,6 +279,9 @@ Sara</textarea>
 const canvas = document.getElementById("wheelCanvas");
 const ctx = canvas.getContext("2d");
 let names = [], angle = 0, spins = 0, spinning = false;
+let customBg = null;
+let lastTickAngle = 0;
+let currentWinner = "";
 
 const translations = {
     en: { entries: "Wheel Entries", count: "Entries:", spin: "SPIN THE WHEEL", winner: "Winner", history: "Winner History", privacy: "Privacy", terms: "Terms", faq: "FAQ" },
@@ -260,6 +295,20 @@ const galleries = {
     days: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
     dice: ["1", "2", "3", "4", "5", "6"]
 };
+
+// BACKGROUND UPLOAD LOGIC
+function handleBgUpload(input) {
+    if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const img = new Image();
+            img.onload = function() { customBg = img; draw(); };
+            img.src = e.target.result;
+        };
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+function resetBg() { customBg = null; document.getElementById('bgUpload').value = ''; draw(); }
 
 function loadGallery(type) {
     document.getElementById("nameInput").value = galleries[type].join("\n");
@@ -309,28 +358,43 @@ function draw(){
     const r = size / 2;
     const slice = 2 * Math.PI / names.length;
     ctx.clearRect(0, 0, size, size);
+
+    // DRAW BACKGROUND IMAGE IF EXISTS
+    if (customBg) {
+        ctx.save();
+        ctx.beginPath();
+        ctx.arc(r, r, r - 5, 0, Math.PI * 2);
+        ctx.clip();
+        ctx.drawImage(customBg, 0, 0, size, size);
+        ctx.restore();
+    }
+
     ctx.save();
     ctx.translate(r, r);
     ctx.rotate(angle);
 
     names.forEach((n, i) => {
-        ctx.beginPath();
-        ctx.moveTo(0, 0);
-        ctx.arc(0, 0, r - 5, i * slice, (i + 1) * slice);
-        const theme = document.body.dataset.theme || "classic";
-        const hue = (i * 360 / names.length);
+        // Only draw colors if no custom background
+        if (!customBg) {
+            ctx.beginPath();
+            ctx.moveTo(0, 0);
+            ctx.arc(0, 0, r - 5, i * slice, (i + 1) * slice);
+            const theme = document.body.dataset.theme || "classic";
+            const hue = (i * 360 / names.length);
 
-        if(theme === "classic") ctx.fillStyle = i % 2 === 0 ? "#007bff" : "#4dabff";
-        else if(theme === "neon") ctx.fillStyle = `hsl(${hue}, 100%, 50%)`;
-        else if(theme === "pastel") ctx.fillStyle = `hsl(${hue}, 70%, 85%)`;
-        else if(theme === "casino") ctx.fillStyle = i % 2 === 0 ? "#d4af37" : "#000000";
-        else if(theme === "dark") ctx.fillStyle = i % 2 === 0 ? "#1e293b" : "#334155";
-        
-        ctx.fill();
+            if(theme === "classic") ctx.fillStyle = i % 2 === 0 ? "#007bff" : "#4dabff";
+            else if(theme === "neon") ctx.fillStyle = `hsl(${hue}, 100%, 50%)`;
+            else if(theme === "pastel") ctx.fillStyle = `hsl(${hue}, 70%, 85%)`;
+            else if(theme === "casino") ctx.fillStyle = i % 2 === 0 ? "#d4af37" : "#000000";
+            else if(theme === "dark") ctx.fillStyle = i % 2 === 0 ? "#1e293b" : "#334155";
+            ctx.fill();
+        }
+
         ctx.save();
         ctx.rotate(i * slice + slice / 2);
         ctx.textAlign = "right";
-        ctx.fillStyle = (theme === "pastel" || theme === "neon") ? "#000" : "#fff";
+        const theme = document.body.dataset.theme || "classic";
+        ctx.fillStyle = (customBg) ? "#000" : (theme === "pastel" || theme === "neon") ? "#000" : "#fff";
         ctx.font = names.length > 50 ? "bold 10px sans-serif" : "bold 16px sans-serif";
         ctx.fillText(n, r - 30, 5);
         ctx.restore();
@@ -343,6 +407,14 @@ function idleAnimation() {
     requestAnimationFrame(idleAnimation);
 }
 
+function playTick(){
+    const src = document.getElementById("spinSoundSelect").value;
+    if(src === "none") return;
+    const tick = document.getElementById("tickSound");
+    tick.currentTime = 0;
+    tick.play().catch(()=>{});
+}
+
 function spin(){
     if(spinning || !names.length) return;
     spinning = true;
@@ -350,10 +422,19 @@ function spin(){
     let power = Math.random() * 2000 + 5000;
     let duration = 4000;
     let start = performance.now();
+    lastTickAngle = angle;
 
     function anim(t){
         let progress = Math.min((t - start) / duration, 1);
         angle += (power * (1 - progress) * 0.002);
+        
+        // TICK SOUND LOGIC
+        const slice = 2 * Math.PI / names.length;
+        if (Math.abs(angle - lastTickAngle) >= slice) {
+            playTick();
+            lastTickAngle = angle;
+        }
+
         draw();
         if(progress < 1) requestAnimationFrame(anim);
         else {
@@ -361,8 +442,8 @@ function spin(){
             const slice = 2 * Math.PI / names.length;
             const actualAngle = (angle % (2 * Math.PI));
             const idx = Math.floor(((2 * Math.PI - actualAngle + (3 * Math.PI / 2)) % (2 * Math.PI)) / slice);
-            const winner = names[idx];
-            announceWinner(winner);
+            currentWinner = names[idx];
+            announceWinner(currentWinner);
         }
     }
     requestAnimationFrame(anim);
@@ -372,21 +453,41 @@ function announceWinner(winner) {
     document.getElementById("latestWinner").innerText = winner;
     document.getElementById("modalWinnerName").innerText = winner;
     
-    // Show Modal and Ring
-    document.getElementById("winnerModal").style.display = "flex";
+    const modal = document.getElementById("winnerModal");
+    modal.style.display = "flex";
     document.getElementById("winRing").classList.add("active");
     
-    // Play Sound
-    const audio = document.getElementById("winSound");
-    audio.currentTime = 0;
-    audio.play().catch(e => console.log("Audio block:", e));
+    // Fullscreen support for modal
+    if (document.fullscreenElement) {
+        document.fullscreenElement.appendChild(modal);
+    }
+    
+    // WIN SOUND LOGIC
+    const winSrc = document.getElementById("winSoundSelect").value;
+    if(winSrc !== "none") {
+        const audio = document.getElementById("winSound");
+        audio.currentTime = 0;
+        audio.play().catch(e => console.log("Audio block:", e));
+    }
     
     updateHistory(winner);
-    confetti({ particleCount: 200, spread: 90, origin: { y: 0.6 } });
+    confetti({ particleCount: 200, spread: 90, origin: { y: 0.6 }, zIndex: 10000 });
+}
+
+function removeWinnerAndClose(){
+    const lines = document.getElementById("nameInput").value.split("\n");
+    const idx = lines.findIndex(l => l.trim() === currentWinner);
+    if(idx > -1) {
+        lines.splice(idx, 1);
+        document.getElementById("nameInput").value = lines.join("\n");
+        syncNames();
+    }
+    closeModal();
 }
 
 function closeModal() {
     document.getElementById("winnerModal").style.display = "none";
+    document.body.appendChild(document.getElementById("winnerModal"));
 }
 
 function updateHistory(name) {
