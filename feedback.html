@@ -6,22 +6,67 @@
 <title>Feedback | TeamSpin PRO</title>
 <meta name="description" content="Submit feedback for TeamSpin PRO to improve features, themes, and usability.">
 <link rel="stylesheet" href="css/style.css">
+<link rel="icon" href="images/aogo.jpg" type="image/jpeg">
+<style>
+  body { font-family: Arial, sans-serif; background:#f9f9f9; color:#222; }
+  main { max-width:600px; margin:auto; padding:20px; background:#fff; box-shadow:0 0 10px rgba(0,0,0,0.1); border-radius:8px; }
+  h1 { text-align:center; margin-bottom:20px; }
+  label { font-weight:bold; }
+  input, textarea { width:100%; padding:10px; margin-top:5px; margin-bottom:15px; border:1px solid #ccc; border-radius:6px; box-sizing:border-box; font-size:16px; }
+  button { background:#6366f1; color:#fff; padding:12px 20px; border:none; border-radius:6px; font-size:16px; cursor:pointer; transition:0.3s; }
+  button:hover { background:#4f46e5; }
+  p { font-size:0.9em; color:#555; margin-top:20px; }
+  .logo-container { text-align:center; margin-bottom:20px; }
+  .logo-container img { width:120px; height:auto; cursor:pointer; border-radius:8px; transition:0.3s; }
+  .logo-container img:hover { transform:scale(1.05); }
+</style>
 </head>
 <body>
-<nav>
-  <div class="nav-left"><a href="index.html">← Back to Home</a></div>
+<nav style="padding:10px; background:#f4f4f4;">
+  <div class="nav-left"><a href="index.html">← Back to Spin the Wheel</a></div>
 </nav>
 
-<main style="padding:20px;">
+<main>
+  <!-- Logo Backlink -->
+  <div class="logo-container">
+    <a href="index.html">
+      <img src="images/aogo.jpg" alt="TeamSpin PRO Logo">
+    </a>
+  </div>
+
   <h1>Feedback</h1>
-  <form>
-    <label for="name">Name (Optional):</label><br>
-    <input type="text" id="name" name="name" style="width:100%; margin-bottom:10px;"><br>
-    <label for="feedback">Your Feedback:</label><br>
-    <textarea id="feedback" name="feedback" rows="6" style="width:100%;"></textarea><br>
-    <button type="submit" class="btn btn-main" style="margin-top:10px;">Submit Feedback</button>
+  <p>Please write your feedback in the box below and click "Send via Gmail".</p>
+
+  <form id="feedbackForm">
+    <label for="name">Name (Optional):</label>
+    <input type="text" id="name" name="name" placeholder="Your name...">
+
+    <label for="feedback">Your Feedback:</label>
+    <textarea id="feedback" name="feedback" rows="6" placeholder="Write your feedback here..." required></textarea>
+
+    <button type="submit">Send via Gmail</button>
   </form>
-  <p>All feedback is handled locally or via optional email integration. Supports all devices.</p>
+
+  <p>All feedback is sent via your email client. No data is collected externally. Works on all devices.</p>
 </main>
+
+<script>
+document.getElementById('feedbackForm').addEventListener('submit', function(e) {
+    e.preventDefault(); // prevent default form submission
+
+    const name = encodeURIComponent(document.getElementById('name').value);
+    const feedback = encodeURIComponent(document.getElementById('feedback').value);
+
+    if(!feedback) {
+        alert("Please write your feedback before sending.");
+        return;
+    }
+
+    // Replace with your actual Gmail
+    const mailtoLink = `mailto:teamspinpro@gmail.com?subject=TeamSpin%20PRO%20Feedback&body=Name:%20${name}%0D%0AFeedback:%20${feedback}`;
+
+    window.location.href = mailtoLink;
+});
+</script>
 </body>
 </html>
