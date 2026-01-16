@@ -3,160 +3,69 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>About Us | Team Spin Pro</title>
-<meta name="description" content="Learn about Team Spin Pro: our mission, vision, team, values, and how we bring fun and fairness to schools, offices, events, and sports with our realistic spinning wheel.">
-<link rel="stylesheet" href="css/style.css">
-<link rel="icon" href="logo.jpg" type="image/jpeg">
+<title>About Us | TeamSpin PRO</title>
+<meta name="description" content="Learn about TeamSpin PRO, the free online Wheel of Names tool for random winners, decisions, and classroom fun.">
+<link rel="icon" type="image/jpeg" href="logo.jpg">
+<meta name="theme-color" content="#007bff">
+
 <style>
-  :root {
-    --primary: #6366f1;
-    --secondary: #fbbf24;
-    --bg: #f5f7fb;
-    --text: #222;
-    --card-bg: #fff;
-    --shadow: rgba(0, 0, 0, 0.1);
-  }
-  body {
-    margin: 0;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: var(--bg);
-    color: var(--text);
-  }
-  header {
-    background-color: var(--primary);
-    color: white;
-    padding: 2rem;
-    text-align: center;
-  }
-  header h1 { margin: 0; font-size: 2.5rem; }
-  header p { font-size: 1.1rem; margin-top:0.5rem; }
-  .about-section { max-width: 1000px; margin: 3rem auto; padding: 1rem; }
-  .about-card {
-    background-color: var(--card-bg);
-    border-radius: 15px;
-    padding: 2rem;
-    margin-bottom: 2rem;
-    box-shadow: 0 4px 10px var(--shadow);
-    transition: transform 0.3s;
-  }
-  .about-card:hover { transform: translateY(-5px); }
-  .about-card h2 { color: var(--primary); margin-top: 0; }
-  .about-card p { line-height: 1.6; text-align: justify; }
-  .team-members {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 1.5rem;
-  }
-  .member-card {
-    background-color: var(--card-bg);
-    border-radius: 10px;
-    padding: 1rem;
-    text-align: center;
-    box-shadow: 0 2px 6px var(--shadow);
-    transition: transform 0.3s;
-  }
-  .member-card:hover { transform: translateY(-5px); }
-  .member-card img {
-    border-radius: 50%;
-    width: 120px;
-    height: 120px;
-    object-fit: cover;
-  }
-  .member-card h3 { margin: 0.5rem 0 0.2rem 0; color: var(--primary); }
-  .member-card p { font-size: 0.9rem; color: #555; }
-  @media (max-width: 600px) {
-    header h1 { font-size: 2rem; }
-    .about-card { padding: 1rem; }
-  }
+:root{
+    --primary: #007bff;
+    --bg: #fff;
+    --text: #333;
+    --sidebar-bg: #f9fafb;
+}
+body { font-family: system-ui,-apple-system; margin:0; padding:0; background:var(--bg); color:var(--text); }
+.header-bar, footer { display:flex; align-items:center; padding:12px 16px; gap:16px; background:var(--bg); border-bottom:1px solid #e5e7eb; }
+.header-bar .brand img{ width:30px; height:30px; border-radius:4px; }
+.header-bar .brand span{ color:var(--primary); font-weight:700; }
+.nav-links a { margin-right:16px; text-decoration:none; color:var(--primary); font-size:14px; }
+.main-content { max-width: 900px; margin:40px auto; padding:20px; line-height:1.6; }
+h1,h2 { color:var(--primary); }
+footer { justify-content:center; border-top:1px solid #e5e7eb; text-align:center; padding:40px; margin-top:40px; }
 </style>
 </head>
 <body>
 
-<header>
-  <h1>About Team Spin Pro</h1>
-  <p>Your ultimate solution for realistic random selection and fun decision-making</p>
+<header class="header-bar">
+    <div class="brand"><img src="logo.jpg" alt="Logo"> TeamSpin <span>PRO</span></div>
+    <nav class="nav-links">
+        <a href="privacy.html">Privacy</a>
+        <a href="terms.html">Terms</a>
+        <a href="faq.html">FAQ</a>
+        <a href="index.html">Home</a>
+        <a href="contact.html">Contact</a>
+    </nav>
 </header>
 
-<section class="about-section">
+<div class="main-content">
+    <h1>About TeamSpin PRO</h1>
+    <p>Welcome to <strong>TeamSpin PRO</strong>, your ultimate free online <strong>Wheel of Names</strong> tool. Our mission is to make random selection fun, fast, and fair for everyone—whether you're a teacher, streamer, organizer, or just having fun with friends.</p>
 
-  <div class="about-card">
-    <h2>Who We Are</h2>
-    <p>Team Spin Pro is a passionate and innovative team of developers, designers, and tech enthusiasts who specialize in creating digital spinning wheel tools. Our platform is designed to bring fairness, excitement, and randomness to decision-making processes. We cater to schools, colleges, offices, sports events, parties, and online competitions, ensuring that users have an engaging and interactive experience every time they use our wheel. We strive to build trust by keeping all user data secure and processing entries locally on the device. By combining technology, creativity, and usability, we create a platform that is visually appealing, intuitive, and reliable for all age groups.</p>
-    <p>Our platform supports multiple sectors including education, corporate, entertainment, sports, and online gaming. We focus on creating tools that reduce bias in decision-making, making selections transparent and fun. From selecting classroom tasks to picking winners for competitions, Team Spin Pro has become a go-to solution for anyone looking for a reliable random picker tool.</p>
-  </div>
-
-  <div class="about-card">
-    <h2>Our Vision</h2>
-    <p>Our vision is to transform everyday decision-making into an enjoyable and stress-free process. We envision a world where technology not only solves problems but also enhances experiences by making them interactive and engaging. By providing a realistic spinning wheel experience, we aim to create moments of excitement, fairness, and delight across all sectors. Whether it’s a school assigning students for tasks, an office choosing employees for a prize, or sports events picking teams, our vision is to be the most trusted platform for randomness and fairness. We also aim to continuously innovate by adding new features, improving visuals, and optimizing performance across devices.</p>
-  </div>
-
-  <div class="about-card">
-    <h2>Our Mission</h2>
-    <p>Team Spin Pro’s mission is to deliver a secure, reliable, and interactive digital tool that can be used by anyone, anywhere. Our mission revolves around creating an engaging user experience with high performance, minimal load times, and device-friendly designs. We are committed to transparency, ensuring that all user inputs are processed locally, and optional sharing features are fully under user control. Our platform also supports accessibility for diverse users, allowing everyone to benefit from random decision-making in a fun and fair manner.</p>
-  </div>
-
-  <div class="about-card">
-    <h2>Our Values</h2>
-    <p>At Team Spin Pro, we are guided by a set of core values:</p>
+    <h2>Our Story</h2>
+    <p>TeamSpin PRO started with a simple idea: replace manual random selections with an interactive, visually appealing, and mobile-friendly spinning wheel. Since then, we've expanded features to include:</p>
     <ul>
-      <li><strong>Fairness:</strong> Ensuring that every spin is random and unbiased.</li>
-      <li><strong>Privacy:</strong> Processing all data locally, respecting user privacy.</li>
-      <li><strong>Innovation:</strong> Constantly improving features and designs for a better user experience.</li>
-      <li><strong>Accessibility:</strong> Making the platform easy to use across all devices and for all users.</li>
-      <li><strong>Fun & Engagement:</strong> Creating tools that are visually appealing and enjoyable to use.</li>
+        <li>Customizable wheel entries</li>
+        <li>Different themes and backgrounds</li>
+        <li>Sound effects for spins and wins</li>
+        <li>Winner history tracking</li>
+        <li>Quick entry galleries</li>
     </ul>
-  </div>
 
-  <div class="about-card">
-    <h2>Meet the Team</h2>
-    <div class="team-members">
-      <div class="member-card">
-        <img src="images1.jpg" alt="Roshani Purwar">
-        <h3>Roshani Purwar</h3>
-        <p>Founder & Graphic Designer</p>
-      </div>
-      <div class="member-card">
-        <img src="images2.jpg" alt="Sabina Kandel">
-        <h3>Sabina Kandel</h3>
-        <p>Co-Founder & Lead Developer</p>
-      </div>
-      <div class="member-card">
-        <img src="images3.jpg" alt="Cheheta Shrestha">
-        <h3>Cheheta Shrestha</h3>
-        <p>Front-End Developer/ UX Designer</p>
-      </div>
+    <h2>Our Mission</h2>
+    <p>We aim to provide an easy-to-use tool that brings excitement and fairness to classroom activities, office events, parties, raffles, and live streams.</p>
 
-  <div class="about-card">
-    <h2>Why Choose Team Spin Pro?</h2>
-    <p>Our platform stands out because of its reliability, realistic spinning wheel animations, and commitment to user privacy. Unlike other random picker tools, Team Spin Pro processes all data locally, does not require sign-ups, and allows users to share results voluntarily. Our tool can be used in multiple sectors including schools, offices, sports events, parties, and online competitions. With a focus on engagement, fairness, and security, Team Spin Pro has become a preferred choice for educators, event organizers, and game enthusiasts.</p>
-    <p>We also pay attention to SEO-friendly usability, ensuring that keywords like “free random picker”, “school spin wheel”, “office task selector”, and “fair winner picker” help users find our platform easily while keeping competition low. Our goal is to provide value for everyone while maintaining a secure, intuitive, and visually appealing platform.</p>
-  </div>
+    <h2>Why Choose Us?</h2>
+    <ul>
+        <li>100% Free and accessible online</li>
+        <li>Mobile and desktop friendly</li>
+        <li>Cryptographically secure randomness</li>
+        <li>No registration required</li>
+    </ul>
+</div>
 
-  <div class="about-card">
-    <h2>Contact & Collaboration</h2>
-    <p>If you want to collaborate with Team Spin Pro or provide feedback, you can reach us at <a href="mailto:support@teamspinpro.com">support@teamspinpro.com</a>. We welcome ideas for improvements, new features, and sector-specific customizations. Our team is dedicated to responding promptly and ensuring your experience is smooth and enjoyable. You can also navigate to <a href="index.html">Spin the Wheel</a>, <a href="privacy-policy.html">Privacy Policy</a>, <a href="terms.html">Terms & Conditions</a>, or <a href="feedback.html">Feedback</a> pages for more information.</p>
-  </div>
-
-  <div class="about-card">
-    <h2>Our Commitment to Privacy & Security</h2>
-    <p>All data entered into Team Spin Pro is stored temporarily on your device. No personal information is collected without user consent. Optional sharing features allow you to send results via email or social media, but all control remains in your hands. This ensures GDPR compliance, user safety, and trust across all sectors. Whether you’re a student, teacher, employee, event organizer, or sports coach, you can use Team Spin Pro safely without worrying about data leaks or privacy issues.</p>
-  </div>
-
-  <div class="about-card">
-    <h2>Future Plans</h2>
-    <p>We plan to introduce new features such as customizable wheel templates, multi-wheel setups, advanced analytics for decision-making, and enhanced mobile animations. Our vision includes integrating the wheel with online event management platforms and gamified learning experiences. We also intend to provide language support and accessibility features to cater to global users.</p>
-  </div>
-
-  <div class="about-card">
-    <h2>Summary</h2>
-    <p>Team Spin Pro is a comprehensive, secure, and fun random selection tool suitable for multiple sectors. We focus on fairness, innovation, and engagement, ensuring every user has an enjoyable and trustworthy experience. Our team of dedicated developers, designers, and UX experts continuously work to improve the platform while prioritizing privacy and accessibility. With Team Spin Pro, decision-making becomes exciting, transparent, and hassle-free for everyone.</p>
-  </div>
-
-</section>
-
-<footer style="background:#1f2937; color:#fff; text-align:center; padding:20px; margin-top:40px;">
-  <p>© 2026 Team Spin Pro. All rights reserved.</p>
-  <p>Return to <a href="index.html" style="color:#6366f1;">Spin the Wheel</a> | <a href="privacy.html" style="color:#6366f1;">Privacy Policy</a> | <a href="terms.html" style="color:#6366f1;">Terms & Conditions</a> | <a href="feedback.html" style="color:#6366f1;">Feedback</a></p>
+<footer>
+    <p>© 2026 TeamSpin PRO – Professional Random Name Picker. <a href="feedback.html" style="color:#6366f1;">Give Feedback</a></p>
 </footer>
 
 </body>
