@@ -29,7 +29,7 @@
 body{
     margin:0; font-family:system-ui,-apple-system;
     background:var(--bg); color:var(--text);
-    transition: 0.3s;
+    transition: 0.3s; overflow-x: hidden;
 }
 
 .header-bar{
@@ -82,7 +82,6 @@ select, .header-btn{padding:6px 10px; border:1px solid #ccc; border-radius:6px; 
 
 .wheel-column{ text-align:center; display:flex; flex-direction:column; align-items:center; }
 
-/* FULLSCREEN & SHAPE PERSISTENCE */
 .wheel-container{
     width: min(85vw, 500px); 
     height: min(85vw, 500px);
@@ -90,17 +89,24 @@ select, .header-btn{padding:6px 10px; border:1px solid #ccc; border-radius:6px; 
     display: flex; align-items: center; justify-content: center;
 }
 
+/* WINNING RING EFFECT */
+.winner-ring {
+    position: absolute; width: 100%; height: 100%;
+    border-radius: 50%; border: 8px solid #ffd700;
+    box-shadow: 0 0 30px #ffd700, inset 0 0 20px #ffd700;
+    opacity: 0; pointer-events: none; z-index: 5;
+    transition: opacity 0.5s ease;
+}
+.winner-ring.active { opacity: 1; animation: pulseRing 1.5s infinite; }
+@keyframes pulseRing { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
+
 #wheelSection:fullscreen {
     background: var(--bg); width: 100vw; height: 100vh;
     display: flex; flex-direction: column; justify-content: center; align-items: center;
 }
+#wheelSection:fullscreen canvas { width: min(90vh, 90vw) !important; height: min(90vh, 90vw) !important; }
 
-#wheelSection:fullscreen canvas {
-    width: min(90vh, 90vw) !important;
-    height: min(90vh, 90vw) !important;
-}
-
-canvas{ width:100%; height:100%; border-radius:50%; box-shadow: 0 20px 60px rgba(0,0,0,0.2); transition: transform 0.1s;}
+canvas{ width:100%; height:100%; border-radius:50%; box-shadow: 0 20px 60px rgba(0,0,0,0.2); }
 
 /* RED 3D POINTER */
 .pointer{
@@ -111,18 +117,32 @@ canvas{ width:100%; height:100%; border-radius:50%; box-shadow: 0 20px 60px rgba
     filter: drop-shadow(0 6px 4px rgba(0,0,0,0.4));
 }
 
+/* WINNER POPUP MODAL */
+.winner-modal {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.8); display: none; align-items: center; justify-content: center;
+    z-index: 9999; animation: fadeIn 0.3s;
+}
+.modal-content {
+    background: var(--bg); color: var(--text); padding: 40px; border-radius: 20px;
+    text-align: center; max-width: 400px; width: 90%;
+    box-shadow: 0 10px 50px rgba(0,0,0,0.5); border: 4px solid var(--primary);
+}
+.modal-content h1 { font-size: 3rem; margin: 10px 0; color: var(--primary); }
+.close-modal {
+    margin-top: 20px; padding: 12px 30px; background: var(--primary);
+    color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold;
+}
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
 .history-list {
     list-style: none; padding: 0; margin: 0;
     max-height: 400px; overflow-y: auto; border: 1px solid #eee; border-radius: 8px;
 }
 .history-item { padding: 10px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; }
 
-/* SEO CONTENT SECTION */
-.seo-section {
-    max-width: 1000px; margin: 40px auto; padding: 20px; line-height: 1.6;
-}
+.seo-section { max-width: 1000px; margin: 40px auto; padding: 20px; line-height: 1.6; }
 .seo-section h1 { color: var(--primary); text-align: center; }
-.seo-section h2 { margin-top: 30px; border-bottom: 2px solid var(--primary-light); padding-bottom: 5px; }
 .seo-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-top: 20px; }
 
 footer{ margin-top:60px; padding:40px; background:#f9fafb; border-top:1px solid #e5e7eb; text-align:center; }
@@ -137,6 +157,16 @@ footer{ margin-top:60px; padding:40px; background:#f9fafb; border-top:1px solid 
 </head>
 
 <body data-theme="classic">
+
+<audio id="winSound" src="winner.mp3" preload="auto"></audio>
+
+<div id="winnerModal" class="winner-modal">
+    <div class="modal-content">
+        <p style="font-size: 1.2rem; margin: 0;">🎉 We have a winner! 🎉</p>
+        <h1 id="modalWinnerName">Winner</h1>
+        <button class="close-modal" onclick="closeModal()">Close & Continue</button>
+    </div>
+</div>
 
 <header class="header-bar">
     <div class="brand"><img src="logo.jpg" alt="Logo"> TeamSpin <span>PRO</span></div>
@@ -171,10 +201,8 @@ Bob
 Sara</textarea>
         <div id="duplicateMsg" class="duplicate-msg">⚠️ Duplicate names found!</div>
         <p><strong id="t_count">Entries:</strong> <span id="entryCount">4</span></p>
-        
         <button class="control-btn" onclick="sortAsc()">Sort A–Z</button>
         <button class="control-btn" onclick="sortDesc()">Sort Z–A</button>
-        
         <h4 style="margin-top:20px; border-top:1px solid #eee; padding-top:10px;">Quick Gallery</h4>
         <div class="gallery-grid">
             <div class="gallery-item" onclick="loadGallery('yesno')">Yes / No</div>
@@ -187,10 +215,11 @@ Sara</textarea>
 
     <main class="wheel-column">
         <div class="wheel-container" id="wheelSection" onclick="spin()">
+            <div id="winRing" class="winner-ring"></div>
             <div class="pointer"></div>
             <canvas id="wheelCanvas"></canvas>
         </div>
-        <button onclick="spin()" id="btn_spin" style="padding:20px 80px; background:var(--primary); color:#fff; border:none; border-radius:12px; font-size:1.3rem; font-weight:bold; cursor:pointer; box-shadow: 0 5px 15px rgba(0,0,0,0.2);">
+        <button onclick="spin()" id="btn_spin" style="padding:20px 80px; background:var(--primary); color:#fff; border:none; border-radius:12px; font-size:1.3rem; font-weight:bold; cursor:pointer;">
             SPIN THE WHEEL
         </button>
         <p style="margin-top:25px; font-size:24px;"><span id="t_winner_label">Winner</span>: <span id="latestWinner" style="color:var(--primary); font-weight:bold">-</span></p>
@@ -207,34 +236,11 @@ Sara</textarea>
 
 <section class="seo-section">
     <h1>TeamSpin PRO: The Best Free Random Name Picker</h1>
-    <p>Welcome to <strong>TeamSpin PRO</strong>, the ultimate online tool for picking random names, winners, or making decisions. Whether you are a teacher looking for a random student picker, a YouTuber running a giveaway, or a group of friends deciding where to eat, our <em>Wheel of Names</em> is fast, fair, and free to use.</p>
-
-    <div class="seo-grid">
-        <div>
-            <h2>How to Use the Wheel of Names?</h2>
-            <ol>
-                <li><strong>Enter Names:</strong> Type your list of names or items in the "Wheel Entries" text box.</li>
-                <li><strong>Customize:</strong> Use the "Quick Gallery" to load presets or change the wheel's theme (Neon, Casino, Dark).</li>
-                <li><strong>Spin:</strong> Click the "SPIN THE WHEEL" button or tap the wheel itself to start the random selection.</li>
-                <li><strong>Win:</strong> The wheel will stop, and the winner will be displayed instantly and saved in your history.</li>
-            </ol>
-        </div>
-        <div>
-            <h2>Why Choose TeamSpin PRO?</h2>
-            <ul>
-                <li><strong>100% Free:</strong> No hidden costs or subscriptions.</li>
-                <li><strong>Mobile Optimized:</strong> Works perfectly on smartphones, tablets, and desktops.</li>
-                <li><strong>Multi-Language:</strong> Support for English, Nepali, and Hindi.</li>
-                <li><strong>High Capacity:</strong> Add up to 500 names with no lag.</li>
-                <li><strong>No Borders:</strong> Modern, clean flat design for high visibility.</li>
-            </ul>
-        </div>
-    </div>
+    <p>Welcome to <strong>TeamSpin PRO</strong>, the ultimate online tool for picking random names, winners, or making decisions. Fast, fair, and mobile-optimized.</p>
 </section>
 
-<footer><p>© 2026 TeamSpin PRO – Professional Random Name Picker. All Rights Reserved.</p></footer>
+<footer><p>© 2026 TeamSpin PRO – Professional Random Name Picker.</p></footer>
 
-<audio id="winSound" src="winner.mp3"></audio>
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
 <script>
@@ -281,12 +287,9 @@ function resizeCanvas(){
     const container = canvas.parentElement;
     const size = Math.min(container.clientWidth, container.clientHeight);
     const dpr = window.devicePixelRatio || 1;
-    canvas.width = size * dpr; 
-    canvas.height = size * dpr;
-    ctx.scale(dpr, dpr); 
-    draw();
+    canvas.width = size * dpr; canvas.height = size * dpr;
+    ctx.scale(dpr, dpr); draw();
 }
-
 window.addEventListener("resize", resizeCanvas);
 document.addEventListener('fullscreenchange', resizeCanvas);
 
@@ -342,7 +345,8 @@ function idleAnimation() {
 
 function spin(){
     if(spinning || !names.length) return;
-    spinning = true; spins++;
+    spinning = true;
+    document.getElementById("winRing").classList.remove("active");
     let power = Math.random() * 2000 + 5000;
     let duration = 4000;
     let start = performance.now();
@@ -358,12 +362,31 @@ function spin(){
             const actualAngle = (angle % (2 * Math.PI));
             const idx = Math.floor(((2 * Math.PI - actualAngle + (3 * Math.PI / 2)) % (2 * Math.PI)) / slice);
             const winner = names[idx];
-            document.getElementById("latestWinner").innerText = winner;
-            updateHistory(winner);
-            confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+            announceWinner(winner);
         }
     }
     requestAnimationFrame(anim);
+}
+
+function announceWinner(winner) {
+    document.getElementById("latestWinner").innerText = winner;
+    document.getElementById("modalWinnerName").innerText = winner;
+    
+    // Show Modal and Ring
+    document.getElementById("winnerModal").style.display = "flex";
+    document.getElementById("winRing").classList.add("active");
+    
+    // Play Sound
+    const audio = document.getElementById("winSound");
+    audio.currentTime = 0;
+    audio.play().catch(e => console.log("Audio block:", e));
+    
+    updateHistory(winner);
+    confetti({ particleCount: 200, spread: 90, origin: { y: 0.6 } });
+}
+
+function closeModal() {
+    document.getElementById("winnerModal").style.display = "none";
 }
 
 function updateHistory(name) {
