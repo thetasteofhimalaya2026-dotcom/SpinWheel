@@ -64,7 +64,7 @@ select, .header-btn{padding:6px 10px; border:1px solid #ccc; border-radius:6px; 
     box-sizing:border-box; border-radius:8px; border:1px solid #ccc;
 }
 
-.duplicate-msg{color:#dc3545; font-size:12px; margin-top:5px; display:none; font-weight:bold;}
+.duplicate-msg{color:#28a745; font-size:12px; margin-top:5px; display:none; font-weight:bold;}
 
 .control-btn{
     padding:10px; border:1px solid #ccc; border-radius:8px;
@@ -259,7 +259,7 @@ footer{ margin-top:60px; padding:40px; background:#f9fafb; border-top:1px solid 
 Alice
 Bob
 Sara</textarea>
-        <div id="duplicateMsg" class="duplicate-msg">⚠️ Duplicate names found!</div>
+        <div id="duplicateMsg" class="duplicate-msg">✨ Duplicates included on wheel</div>
         <p><strong id="t_count">Entries:</strong> <span id="entryCount">4</span></p>
         <button class="control-btn" onclick="sortAsc()">Sort A–Z</button>
         <button class="control-btn" onclick="sortDesc()">Sort Z–A</button>
@@ -432,10 +432,14 @@ window.addEventListener("resize", resizeCanvas);
 document.addEventListener('fullscreenchange', resizeCanvas);
 
 function syncNames(){
+    // Updated: Now accepts all lines including duplicates
     const rawLines = document.getElementById("nameInput").value.split("\n").map(n=>n.trim()).filter(Boolean);
-    const unique = [...new Set(rawLines)];
-    document.getElementById("duplicateMsg").style.display = rawLines.length !== unique.length ? "block" : "none";
-    names = unique.slice(0, 500);
+    const uniqueTest = [...new Set(rawLines)];
+    
+    // Show duplicate message if there are matches, but keep them in the 'names' array
+    document.getElementById("duplicateMsg").style.display = rawLines.length !== uniqueTest.length ? "block" : "none";
+    
+    names = rawLines.slice(0, 500); // Now 'names' includes duplicates
     document.getElementById("entryCount").innerText = names.length;
     draw();
 }
@@ -505,7 +509,9 @@ function playTick(){
 }
 
 function spin(){
-    if(spinning || !names.length) return;
+    // Safeguard: Do not spin if 0 or 1 name is available
+    if(spinning || names.length <= 1) return;
+    
     spinning = true;
     document.getElementById("winRing").classList.remove("active");
     let power = Math.random() * 2000 + 5000;
