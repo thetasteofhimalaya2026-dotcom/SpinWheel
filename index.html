@@ -4,15 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>TeamSpin PRO – Free Wheel of Names | Random Picker</title>
-<!-- TAB & APP LOGO -->
-<link rel="icon" type="image/png" sizes="32x32" href="logo.png">
-<link rel="icon" type="image/png" sizes="16x16" href="logo.png">
-<link rel="apple-touch-icon" sizes="180x180" href="logo.png">
+<link rel="icon" type="image/png" href="logo.png">
 <meta name="theme-color" content="#007bff">
-
-<meta name="description" content="TeamSpin PRO is a free wheel of names tool to spin, save, share, and randomly pick winners.">
-<meta name="keywords" content="wheel of names, random picker, spin wheel">
-<meta name="author" content="TeamSpin PRO">
 
 <style>
 :root{
@@ -61,7 +54,7 @@ gap:20px;padding:20px;
 background:#fff;border:1px solid #eee;padding:16px;border-radius:12px;
 }
 #nameInput{
-width:100%;height:260px;padding:10px;font-size:15px;
+width:100%;height:260px;padding:10px;font-size:15px;box-sizing:border-box;
 border-radius:8px;border:1px solid #ccc;
 }
 .control-btn{
@@ -69,75 +62,59 @@ padding:10px;border:1px solid #ccc;border-radius:8px;
 background:#f8fafc;cursor:pointer
 }
 
-/* WHEEL */
+/* WHEEL COLUMN */
 .wheel-column{
 text-align:center;display:flex;flex-direction:column;align-items:center;
-}
-.wheel-container{
-width:min(90vw,520px);
-height:min(90vw,520px);
-border-radius:50%;
-position:relative;
-box-shadow:
-inset 0 0 40px rgba(0,0,0,.35),
-0 25px 60px rgba(0,0,0,.35);
-background:#000;
-}
-canvas{
-width:100%!important;
-height:100%!important;
-border-radius:50%;
-}
-.pointer{
-position:absolute;top:-18px;left:50%;transform:translateX(-50%);
-border-left:18px solid transparent;
-border-right:18px solid transparent;
-border-top:36px solid var(--primary);
-filter:drop-shadow(0 0 6px rgba(0,0,0,.5));
+justify-content: flex-start;
 }
 
-/* GLOSS */
+.wheel-container{
+width:min(85vw, 500px);
+height:min(85vw, 500px);
+position:relative;
+margin-bottom: 40px; /* Added spacing between wheel and button */
+cursor: pointer;
+transition: transform 0.1s;
+}
+
+.wheel-container:active { transform: scale(0.98); }
+
+canvas{
+width:100%;
+height:100%;
+border-radius:50%;
+box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+}
+
+.pointer{
+position:absolute;top:-10px;left:50%;transform:translateX(-50%);
+z-index: 10;
+border-left: 20px solid transparent;
+border-right: 20px solid transparent;
+border-top: 40px solid var(--primary);
+filter: drop-shadow(0 4px 4px rgba(0,0,0,0.3));
+}
+
 .wheel-container::after{
 content:"";
 position:absolute;inset:0;border-radius:50%;
-background:radial-gradient(circle at 30% 30%,var(--wheel-gloss),transparent 60%);
+background:radial-gradient(circle at 30% 30%,var(--wheel-gloss),transparent 70%);
 pointer-events:none;
+border: 8px solid rgba(255,255,255,0.1); /* Subtle outer ring */
 }
 
-/* ADS */
-.ad-box{
-margin-top:20px;
-padding:14px;
-border:1px dashed #ccc;
-border-radius:12px;
-font-size:13px;
-opacity:.8;
-}
-
-/* CTA */
-.cta-box{
-margin-top:40px;padding:28px;
-background:#eef6ff;border-radius:14px;
-}
-.cta-box a{
-display:inline-block;margin-top:15px;
-padding:14px 28px;background:var(--primary);
-color:#fff;border-radius:8px;text-decoration:none;font-weight:600
-}
+/* ADS & CTA */
+.ad-box{margin-top:20px;padding:14px;border:1px dashed #ccc;border-radius:12px;font-size:13px;opacity:.8;}
+.cta-box{margin-top:40px;padding:28px;background:#eef6ff;border-radius:14px;}
+.cta-box a{display:inline-block;margin-top:15px;padding:14px 28px;background:var(--primary);color:#fff;border-radius:8px;text-decoration:none;font-weight:600}
 
 /* FOOTER */
-footer{
-margin-top:60px;padding:28px;background:#f9fafb;
-border-top:1px solid #e5e7eb;text-align:center;
-}
-footer nav{
-display:flex;gap:16px;justify-content:center;flex-wrap:wrap;
-}
+footer{margin-top:60px;padding:28px;background:#f9fafb;border-top:1px solid #e5e7eb;text-align:center;}
+footer nav{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;}
 footer a{color:var(--primary);text-decoration:none;font-size:14px}
 
-/* MOBILE */
-@media(max-width:768px){
-.app-grid{display:flex;flex-direction:column;}
+@media(max-width:992px){
+.app-grid{grid-template-columns: 1fr; display: flex; flex-direction: column;}
 .wheel-column{order:-1;}
 .nav-links{display:none;}
 }
@@ -148,7 +125,6 @@ footer a{color:var(--primary);text-decoration:none;font-size:14px}
 
 <header class="header-bar">
 <div class="brand">TeamSpin <span>PRO</span></div>
-
 <nav class="nav-links">
 <a href="privacy.html">Privacy</a>
 <a href="terms.html">Terms</a>
@@ -161,7 +137,6 @@ footer a{color:var(--primary);text-decoration:none;font-size:14px}
 <option value="np">NP</option>
 <option value="hi">HI</option>
 </select>
-
 <select id="themeSelect">
 <option value="classic">Classic</option>
 <option value="neon">Neon</option>
@@ -169,46 +144,38 @@ footer a{color:var(--primary);text-decoration:none;font-size:14px}
 <option value="dark">Dark</option>
 <option value="casino">Casino</option>
 </select>
-
 <button class="header-btn" onclick="toggleFullscreen()">Fullscreen</button>
 </div>
 </header>
 
 <div class="app-grid">
-
 <aside class="sidebar">
 <h3 id="t_entries">Wheel Entries</h3>
 <textarea id="nameInput">John
 Alice
 Bob
 Sara</textarea>
-
 <p><strong>User Count:</strong> <span id="entryCount">4</span></p>
-
 <div style="display:grid;gap:8px;margin-top:10px;">
 <button class="control-btn" onclick="sortAsc()">Sort A–Z</button>
 <button class="control-btn" onclick="sortDesc()">Sort Z–A</button>
 <button class="control-btn" onclick="saveEntries()">Save</button>
 <button class="control-btn" onclick="shareEntries()">Share</button>
 </div>
-
-<div class="ad-box">
-🔔 Ad Space (Google AdSense / Custom Ads)
-</div>
+<div class="ad-box">🔔 Ad Space (Google AdSense / Custom Ads)</div>
 </aside>
 
 <main class="wheel-column">
-
-<div class="wheel-container" id="wheelSection">
+<div class="wheel-container" id="wheelSection" onclick="spin()">
 <div class="pointer"></div>
 <canvas id="wheelCanvas"></canvas>
 </div>
 
-<button onclick="spin()" style="padding:18px 60px;background:var(--primary);color:#fff;border:none;border-radius:8px;font-size:1.2rem;font-weight:bold;">
+<button onclick="spin()" style="padding:18px 60px;background:var(--primary);color:#fff;border:none;border-radius:8px;font-size:1.2rem;font-weight:bold;cursor:pointer;box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
 SPIN THE WHEEL
 </button>
 
-<p style="margin-top:15px;font-size:18px;">
+<p style="margin-top:20px;font-size:22px;">
 Winner: <span id="latestWinner" style="color:var(--primary);font-weight:bold">-</span>
 </p>
 
@@ -217,12 +184,8 @@ Winner: <span id="latestWinner" style="color:var(--primary);font-weight:bold">-<
 <p>If you are interested to spin then click here.</p>
 <a href="#wheelSection">Want to know your luck? Spin here</a>
 </div>
-
-<p style="margin-top:25px;font-size:13px;color:#888;">
-Version 2.2.0 | Total Spins: <span id="spinCount">0</span>
-</p>
+<p style="margin-top:25px;font-size:13px;color:#888;">Version 2.2.0 | Total Spins: <span id="spinCount">0</span></p>
 </main>
-
 <aside></aside>
 </div>
 
@@ -245,33 +208,21 @@ const ctx=canvas.getContext("2d");
 let names=[],angle=0,spins=0,spinning=false;
 const sound=document.getElementById("winSound");
 
-/* RESPONSIVE CANVAS */
 function resizeCanvas(){
 const size=canvas.parentElement.clientWidth;
 const dpr=window.devicePixelRatio||1;
 canvas.width=size*dpr;
 canvas.height=size*dpr;
-ctx.setTransform(dpr,0,0,dpr,0,0);
+ctx.scale(dpr,dpr);
 draw();
 }
 window.addEventListener("resize",resizeCanvas);
 
-/* THEMES */
-themeSelect.onchange=e=>{
-document.body.dataset.theme=e.target.value;
-};
+themeSelect.onchange=e=>{document.body.dataset.theme=e.target.value; draw();};
 
-/* LANGUAGE */
-const lang={
-en:{entries:"Wheel Entries"},
-np:{entries:"नाम सूची"},
-hi:{entries:"नाम सूची"}
-};
-langSelect.onchange=e=>{
-document.getElementById("t_entries").innerText=lang[e.target.value].entries;
-};
+const lang={en:{entries:"Wheel Entries"},np:{entries:"नाम सूची"},hi:{entries:"नाम सूची"}};
+langSelect.onchange=e=>{document.getElementById("t_entries").innerText=lang[e.target.value].entries;};
 
-/* DATA */
 function syncNames(){
 const raw=nameInput.value.split("\n").map(n=>n.trim()).filter(Boolean);
 names=[...new Set(raw)];
@@ -280,67 +231,73 @@ draw();
 }
 nameInput.addEventListener("input",syncNames);
 
-/* DRAW */
 function draw(){
 if(!names.length)return;
-const r=canvas.width/2;
-const slice=2*Math.PI/names.length;
-ctx.clearRect(0,0,canvas.width,canvas.height);
+const size = canvas.width / (window.devicePixelRatio || 1);
+const r = size / 2;
+const slice = 2 * Math.PI / names.length;
+ctx.clearRect(0,0,size,size);
+
 ctx.save();
 ctx.translate(r,r);
 ctx.rotate(angle);
+
 names.forEach((n,i)=>{
-const g=ctx.createRadialGradient(0,0,r*0.2,0,0,r);
-g.addColorStop(0,"#fff");
-g.addColorStop(1,`hsl(${i*360/names.length},80%,50%)`);
-ctx.fillStyle=g;
 ctx.beginPath();
 ctx.moveTo(0,0);
-ctx.arc(0,0,r,i*slice,(i+1)*slice);
+ctx.arc(0,0,r-5,i*slice,(i+1)*slice); // Radius - 5 ensures no edge clipping
+ctx.fillStyle = `hsl(${i*360/names.length}, 70%, 60%)`;
 ctx.fill();
+ctx.strokeStyle = "#fff";
+ctx.lineWidth = 2;
+ctx.stroke();
+
+// Text
 ctx.save();
 ctx.rotate(i*slice+slice/2);
 ctx.textAlign="right";
-ctx.font="bold 18px sans-serif";
-ctx.fillStyle="#000";
-ctx.fillText(n,r-20,6);
+ctx.fillStyle="#fff";
+ctx.font="bold 16px sans-serif";
+ctx.fillText(n, r-30, 6);
 ctx.restore();
 });
 ctx.restore();
 }
 
-/* SPIN */
 function spin(){
 if(spinning||!names.length)return;
-spinning=true;spins++;
+spinning=true; spins++;
 spinCount.innerText=spins;
-let power=Math.random()*3000+2000;
+let power=Math.random()*2000 + 3000;
+let duration=4000;
 let start=performance.now();
+
 function anim(t){
-let p=Math.min((t-start)/3000,1);
-angle+=power*(1-p)*0.002;
+let elapsed = t - start;
+let progress = Math.min(elapsed / duration, 1);
+let easeOut = 1 - Math.pow(1 - progress, 3); // Cubic ease out
+angle += (power * (1 - progress) * 0.002);
 draw();
-if(p<1)requestAnimationFrame(anim);
+
+if(progress < 1) requestAnimationFrame(anim);
 else{
 spinning=false;
 let slice=2*Math.PI/names.length;
-let idx=Math.floor(((2*Math.PI-angle%(2*Math.PI))/slice)%names.length);
+let actualAngle = (angle % (2*Math.PI));
+let idx=Math.floor(((2*Math.PI - actualAngle + (3*Math.PI/2)) % (2*Math.PI)) / slice);
 latestWinner.innerText=names[idx];
-sound.play();
-confetti({particleCount:200,spread:80});
+sound.play().catch(()=>{});
+confetti({particleCount:150, spread:70, origin:{y:0.6}});
 }
 }
 requestAnimationFrame(anim);
 }
 
-/* EXTRAS */
 function saveEntries(){localStorage.names=nameInput.value;alert("Saved!");}
 function shareEntries(){navigator.share?navigator.share({text:nameInput.value}):navigator.clipboard.writeText(nameInput.value);}
 function sortAsc(){names.sort();nameInput.value=names.join("\n");syncNames();}
 function sortDesc(){names.sort().reverse();nameInput.value=names.join("\n");syncNames();}
-function toggleFullscreen(){
-document.fullscreenElement?document.exitFullscreen():wheelSection.requestFullscreen();
-}
+function toggleFullscreen(){document.fullscreenElement?document.exitFullscreen():wheelSection.requestFullscreen();}
 
 resizeCanvas();
 syncNames();
