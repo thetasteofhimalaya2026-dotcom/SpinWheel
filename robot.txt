@@ -1,5 +1,11 @@
+# TeamSpin PRO Robots.txt
 User-agent: *
 Allow: /
 
-# Sitemaps
+# Block access to any private or system files
+Disallow: /admin/
+Disallow: /config/
+Disallow: /temp/
+
+# Tell search engines where the sitemap is
 Sitemap: https://thetasteofhimalaya2026-dotcom.github.io/SpinWheel/sitemap.xml
