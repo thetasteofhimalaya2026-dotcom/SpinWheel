@@ -9,114 +9,110 @@
 
 <style>
 :root{
---primary:#007bff;
---bg:#fff;
---text:#333;
---wheel-gloss:rgba(255,255,255,.25);
+    --primary: #007bff; /* Your Primary Blue */
+    --primary-light: #e7f3ff;
+    --bg: #fff;
+    --text: #333;
+    --sidebar-bg: #ffffff;
 }
 
-/* THEMES */
-[data-theme="neon"]{--primary:#00ffe0;--bg:#050b12;--text:#e5f9ff}
-[data-theme="pastel"]{--primary:#ff8fab;--bg:#fff0f6;--text:#4a2c2a}
-[data-theme="dark"]{--primary:#7dd3fc;--bg:#0f172a;--text:#f8fafc}
-[data-theme="casino"]{--primary:#ffd700;--bg:#062a1f;--text:#fff8dc}
+[data-theme="dark"]{--primary:#7dd3fc;--bg:#0f172a;--text:#f8fafc;--sidebar-bg:#1e293b;}
 
 body{
-margin:0;font-family:system-ui,-apple-system;
-background:var(--bg);color:var(--text);
-transition:.3s;
+    margin:0; font-family:system-ui,-apple-system;
+    background:var(--bg); color:var(--text);
+    transition: 0.3s;
 }
 
 /* HEADER */
 .header-bar{
-display:flex;align-items:center;gap:16px;
-padding:12px 16px;border-bottom:1px solid #e5e7eb;
-background:var(--bg);position:sticky;top:0;z-index:1000;
+    display:flex; align-items:center; gap:16px;
+    padding:12px 16px; border-bottom:1px solid #e5e7eb;
+    background:var(--bg); position:sticky; top:0; z-index:1000;
 }
-.brand{font-size:20px;font-weight:700;}
+.brand{font-size:20px; font-weight:700;}
 .brand span{color:var(--primary);}
-.nav-links{display:flex;gap:16px;flex-grow:1;}
-.nav-links a{color:var(--primary);text-decoration:none;font-size:14px;}
-.header-right{display:flex;gap:8px;}
-select,.header-btn{
-padding:6px 10px;border:1px solid #ccc;border-radius:6px;background:#fff;
-}
+.nav-links{display:flex; gap:16px; flex-grow:1;}
+.nav-links a{color:var(--primary); text-decoration:none; font-size:14px;}
+.header-right{display:flex; gap:8px;}
+select, .header-btn{padding:6px 10px; border:1px solid #ccc; border-radius:6px; background:#fff; cursor:pointer;}
 
-/* GRID */
+/* GRID LAYOUT */
 .app-grid{
-display:grid;
-grid-template-columns:320px 1fr 260px;
-gap:20px;padding:20px;
+    display:grid;
+    grid-template-columns: 320px 1fr 300px; /* Three columns for Entry, Wheel, and History */
+    gap:20px; padding:20px;
 }
 
-/* SIDEBAR */
+/* SIDEBARS */
 .sidebar{
-background:#fff;border:1px solid #eee;padding:16px;border-radius:12px;
+    background: var(--sidebar-bg);
+    border: 1px solid #eee;
+    padding: 20px;
+    border-radius: 12px;
+    height: fit-content;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
 }
 #nameInput{
-width:100%;height:260px;padding:10px;font-size:15px;box-sizing:border-box;
-border-radius:8px;border:1px solid #ccc;
+    width:100%; height:250px; padding:12px; font-size:15px; 
+    box-sizing:border-box; border-radius:8px; border:1px solid #ccc;
+    margin-bottom: 10px; resize: vertical;
 }
 .control-btn{
-padding:10px;border:1px solid #ccc;border-radius:8px;
-background:#f8fafc;cursor:pointer
+    padding:10px; border:1px solid #ccc; border-radius:8px;
+    background:#f8fafc; cursor:pointer; width: 100%; margin-bottom: 8px;
+    font-weight: 500; transition: 0.2s;
+}
+.control-btn:hover{ background: #edf2f7; border-color: var(--primary); }
+
+/* WINNER HISTORY SECTION */
+.history-container { margin-top: 10px; }
+.history-list {
+    list-style: none; padding: 0; margin: 0;
+    max-height: 450px; overflow-y: auto;
+    border: 1px solid #eee; border-radius: 8px;
+}
+.history-item {
+    padding: 10px 15px; border-bottom: 1px solid #eee;
+    display: flex; justify-content: space-between; align-items: center;
+}
+.history-item:first-child { 
+    background: var(--primary-light); 
+    font-weight: bold; 
+    color: var(--primary); 
+    border-left: 4px solid var(--primary);
 }
 
 /* WHEEL COLUMN */
-.wheel-column{
-text-align:center;display:flex;flex-direction:column;align-items:center;
-justify-content: flex-start;
-}
-
+.wheel-column{ text-align:center; display:flex; flex-direction:column; align-items:center; }
 .wheel-container{
-width:min(85vw, 500px);
-height:min(85vw, 500px);
-position:relative;
-margin-bottom: 40px; /* Added spacing between wheel and button */
-cursor: pointer;
-transition: transform 0.1s;
+    width: min(85vw, 500px);
+    height: min(85vw, 500px);
+    position: relative;
+    margin-bottom: 40px; /* Gap between wheel and button */
+    cursor: pointer;
 }
-
-.wheel-container:active { transform: scale(0.98); }
-
-canvas{
-width:100%;
-height:100%;
-border-radius:50%;
-box-shadow: 0 10px 40px rgba(0,0,0,0.2);
-}
+canvas{ width:100%; height:100%; border-radius:50%; box-shadow: 0 20px 60px rgba(0,0,0,0.15); }
 
 .pointer{
-position:absolute;top:-10px;left:50%;transform:translateX(-50%);
-z-index: 10;
-border-left: 20px solid transparent;
-border-right: 20px solid transparent;
-border-top: 40px solid var(--primary);
-filter: drop-shadow(0 4px 4px rgba(0,0,0,0.3));
+    position:absolute; top:-15px; left:50%; transform:translateX(-50%);
+    z-index: 10;
+    border-left: 20px solid transparent;
+    border-right: 20px solid transparent;
+    border-top: 40px solid var(--primary); /* Primary color pointer */
+    filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3));
 }
-
-.wheel-container::after{
-content:"";
-position:absolute;inset:0;border-radius:50%;
-background:radial-gradient(circle at 30% 30%,var(--wheel-gloss),transparent 70%);
-pointer-events:none;
-border: 8px solid rgba(255,255,255,0.1); /* Subtle outer ring */
-}
-
-/* ADS & CTA */
-.ad-box{margin-top:20px;padding:14px;border:1px dashed #ccc;border-radius:12px;font-size:13px;opacity:.8;}
-.cta-box{margin-top:40px;padding:28px;background:#eef6ff;border-radius:14px;}
-.cta-box a{display:inline-block;margin-top:15px;padding:14px 28px;background:var(--primary);color:#fff;border-radius:8px;text-decoration:none;font-weight:600}
 
 /* FOOTER */
-footer{margin-top:60px;padding:28px;background:#f9fafb;border-top:1px solid #e5e7eb;text-align:center;}
-footer nav{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;}
-footer a{color:var(--primary);text-decoration:none;font-size:14px}
+footer{ margin-top:60px; padding:40px; background:#f9fafb; border-top:1px solid #e5e7eb; text-align:center; }
+footer nav{ display:flex; gap:20px; justify-content:center; margin-bottom: 15px; }
+footer a{ color:var(--primary); text-decoration:none; font-size:14px; }
 
-@media(max-width:992px){
-.app-grid{grid-template-columns: 1fr; display: flex; flex-direction: column;}
-.wheel-column{order:-1;}
-.nav-links{display:none;}
+/* RESPONSIVE */
+@media(max-width:1100px){
+    .app-grid{ grid-template-columns: 1fr; display: flex; flex-direction: column; }
+    .wheel-column{ order: -1; }
+    .nav-links{ display:none; }
 }
 </style>
 </head>
@@ -124,183 +120,218 @@ footer a{color:var(--primary);text-decoration:none;font-size:14px}
 <body data-theme="classic">
 
 <header class="header-bar">
-<div class="brand">TeamSpin <span>PRO</span></div>
-<nav class="nav-links">
-<a href="privacy.html">Privacy</a>
-<a href="terms.html">Terms</a>
-<a href="faq.html">FAQ</a>
-</nav>
-
-<div class="header-right">
-<select id="langSelect">
-<option value="en">EN</option>
-<option value="np">NP</option>
-<option value="hi">HI</option>
-</select>
-<select id="themeSelect">
-<option value="classic">Classic</option>
-<option value="neon">Neon</option>
-<option value="pastel">Pastel</option>
-<option value="dark">Dark</option>
-<option value="casino">Casino</option>
-</select>
-<button class="header-btn" onclick="toggleFullscreen()">Fullscreen</button>
-</div>
+    <div class="brand">TeamSpin <span>PRO</span></div>
+    <nav class="nav-links">
+        <a href="privacy.html">Privacy</a>
+        <a href="terms.html">Terms</a>
+        <a href="faq.html">FAQ</a>
+    </nav>
+    <div class="header-right">
+        <select id="langSelect"><option value="en">EN</option><option value="np">NP</option><option value="hi">HI</option></select>
+        <select id="themeSelect"><option value="classic">Classic</option><option value="dark">Dark</option></select>
+        <button class="header-btn" onclick="toggleFullscreen()">Fullscreen</button>
+    </div>
 </header>
 
 <div class="app-grid">
-<aside class="sidebar">
-<h3 id="t_entries">Wheel Entries</h3>
-<textarea id="nameInput">John
+    <aside class="sidebar">
+        <h3 id="t_entries">Wheel Entries</h3>
+        <textarea id="nameInput" placeholder="Enter names, one per line...">John
 Alice
 Bob
 Sara</textarea>
-<p><strong>User Count:</strong> <span id="entryCount">4</span></p>
-<div style="display:grid;gap:8px;margin-top:10px;">
-<button class="control-btn" onclick="sortAsc()">Sort A–Z</button>
-<button class="control-btn" onclick="sortDesc()">Sort Z–A</button>
-<button class="control-btn" onclick="saveEntries()">Save</button>
-<button class="control-btn" onclick="shareEntries()">Share</button>
-</div>
-<div class="ad-box">🔔 Ad Space (Google AdSense / Custom Ads)</div>
-</aside>
+        <p><strong>Entries:</strong> <span id="entryCount">4</span></p>
+        <button class="control-btn" onclick="sortAsc()">Sort A–Z</button>
+        <button class="control-btn" onclick="sortDesc()">Sort Z–A</button>
+        <button class="control-btn" onclick="saveEntries()">Save List</button>
+    </aside>
 
-<main class="wheel-column">
-<div class="wheel-container" id="wheelSection" onclick="spin()">
-<div class="pointer"></div>
-<canvas id="wheelCanvas"></canvas>
-</div>
+    <main class="wheel-column">
+        <div class="wheel-container" id="wheelSection" onclick="spin()">
+            <div class="pointer"></div>
+            <canvas id="wheelCanvas"></canvas>
+        </div>
 
-<button onclick="spin()" style="padding:18px 60px;background:var(--primary);color:#fff;border:none;border-radius:8px;font-size:1.2rem;font-weight:bold;cursor:pointer;box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
-SPIN THE WHEEL
-</button>
+        <button onclick="spin()" style="padding:20px 80px; background:var(--primary); color:#fff; border:none; border-radius:12px; font-size:1.3rem; font-weight:bold; cursor:pointer; box-shadow: 0 10px 20px rgba(0,123,255,0.3);">
+            SPIN THE WHEEL
+        </button>
 
-<p style="margin-top:20px;font-size:22px;">
-Winner: <span id="latestWinner" style="color:var(--primary);font-weight:bold">-</span>
-</p>
+        <p style="margin-top:25px; font-size:24px;">Winner: <span id="latestWinner" style="color:var(--primary); font-weight:bold">-</span></p>
+        <p style="font-size:14px; color:#888;">Total Spins in Session: <span id="spinCount">0</span></p>
+    </main>
 
-<div class="cta-box">
-<h3>Feeling Lucky?</h3>
-<p>If you are interested to spin then click here.</p>
-<a href="#wheelSection">Want to know your luck? Spin here</a>
-</div>
-<p style="margin-top:25px;font-size:13px;color:#888;">Version 2.2.0 | Total Spins: <span id="spinCount">0</span></p>
-</main>
-<aside></aside>
+    <aside class="sidebar">
+        <h3>Winner History</h3>
+        <div class="history-container">
+            <ul id="historyList" class="history-list">
+                <li style="color:#aaa; text-align:center; padding:30px;">No winners yet</li>
+            </ul>
+        </div>
+        <button class="control-btn" style="margin-top:15px; color: #dc3545;" onclick="clearHistory()">Clear History</button>
+    </aside>
 </div>
 
 <footer>
-<p>© 2026 TeamSpin PRO – Free Wheel of Names</p>
-<nav>
-<a href="index.html">Home</a>
-<a href="privacy.html">Privacy</a>
-<a href="terms.html">Terms</a>
-<a href="faq.html">FAQ</a>
-</nav>
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="privacy.html">Privacy Policy</a>
+        <a href="terms.html">Terms of Service</a>
+        <a href="faq.html">FAQ</a>
+    </nav>
+    <p>© 2026 TeamSpin PRO – Professional Random Name Picker</p>
 </footer>
 
 <audio id="winSound" src="winner.mp3"></audio>
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
 <script>
-const canvas=document.getElementById("wheelCanvas");
-const ctx=canvas.getContext("2d");
-let names=[],angle=0,spins=0,spinning=false;
-const sound=document.getElementById("winSound");
+const canvas = document.getElementById("wheelCanvas");
+const ctx = canvas.getContext("2d");
+let names = [], angle = 0, spins = 0, spinning = false;
+const sound = document.getElementById("winSound");
 
+// 1. RESPONSIVE SETUP
 function resizeCanvas(){
-const size=canvas.parentElement.clientWidth;
-const dpr=window.devicePixelRatio||1;
-canvas.width=size*dpr;
-canvas.height=size*dpr;
-ctx.scale(dpr,dpr);
-draw();
+    const size = canvas.parentElement.clientWidth;
+    const dpr = window.devicePixelRatio || 1;
+    canvas.width = size * dpr;
+    canvas.height = size * dpr;
+    ctx.scale(dpr, dpr);
+    draw();
 }
-window.addEventListener("resize",resizeCanvas);
+window.addEventListener("resize", resizeCanvas);
 
-themeSelect.onchange=e=>{document.body.dataset.theme=e.target.value; draw();};
-
-const lang={en:{entries:"Wheel Entries"},np:{entries:"नाम सूची"},hi:{entries:"नाम सूची"}};
-langSelect.onchange=e=>{document.getElementById("t_entries").innerText=lang[e.target.value].entries;};
-
+// 2. DATA MANAGEMENT
 function syncNames(){
-const raw=nameInput.value.split("\n").map(n=>n.trim()).filter(Boolean);
-names=[...new Set(raw)];
-entryCount.innerText=names.length;
-draw();
+    const raw = document.getElementById("nameInput").value.split("\n").map(n=>n.trim()).filter(Boolean);
+    names = [...new Set(raw)];
+    document.getElementById("entryCount").innerText = names.length;
+    draw();
 }
-nameInput.addEventListener("input",syncNames);
+document.getElementById("nameInput").addEventListener("input", syncNames);
 
+// 3. DRAWING THE WHEEL
 function draw(){
-if(!names.length)return;
-const size = canvas.width / (window.devicePixelRatio || 1);
-const r = size / 2;
-const slice = 2 * Math.PI / names.length;
-ctx.clearRect(0,0,size,size);
+    if(!names.length) return;
+    const size = canvas.width / (window.devicePixelRatio || 1);
+    const r = size / 2;
+    const slice = 2 * Math.PI / names.length;
+    ctx.clearRect(0, 0, size, size);
 
-ctx.save();
-ctx.translate(r,r);
-ctx.rotate(angle);
+    ctx.save();
+    ctx.translate(r, r);
+    ctx.rotate(angle);
 
-names.forEach((n,i)=>{
-ctx.beginPath();
-ctx.moveTo(0,0);
-ctx.arc(0,0,r-5,i*slice,(i+1)*slice); // Radius - 5 ensures no edge clipping
-ctx.fillStyle = `hsl(${i*360/names.length}, 70%, 60%)`;
-ctx.fill();
-ctx.strokeStyle = "#fff";
-ctx.lineWidth = 2;
-ctx.stroke();
+    names.forEach((n, i) => {
+        ctx.beginPath();
+        ctx.moveTo(0, 0);
+        ctx.arc(0, 0, r - 10, i * slice, (i + 1) * slice);
+        
+        // Alternate Primary Blue Colors
+        ctx.fillStyle = i % 2 === 0 ? "#007bff" : "#4dabff";
+        ctx.fill();
+        ctx.strokeStyle = "#ffffff";
+        ctx.lineWidth = 2;
+        ctx.stroke();
 
-// Text
-ctx.save();
-ctx.rotate(i*slice+slice/2);
-ctx.textAlign="right";
-ctx.fillStyle="#fff";
-ctx.font="bold 16px sans-serif";
-ctx.fillText(n, r-30, 6);
-ctx.restore();
-});
-ctx.restore();
+        // Draw Names
+        ctx.save();
+        ctx.rotate(i * slice + slice / 2);
+        ctx.textAlign = "right";
+        ctx.fillStyle = "#ffffff";
+        ctx.font = "bold 16px sans-serif";
+        ctx.fillText(n, r - 40, 6);
+        ctx.restore();
+    });
+    ctx.restore();
 }
 
+// 4. IDLE ROTATION (The "Slight Rotation" you requested)
+function idleAnimation() {
+    if (!spinning) {
+        angle += 0.003; // Very slow crawl
+        draw();
+    }
+    requestAnimationFrame(idleAnimation);
+}
+
+// 5. SPIN LOGIC
 function spin(){
-if(spinning||!names.length)return;
-spinning=true; spins++;
-spinCount.innerText=spins;
-let power=Math.random()*2000 + 3000;
-let duration=4000;
-let start=performance.now();
+    if(spinning || !names.length) return;
+    spinning = true;
+    spins++;
+    document.getElementById("spinCount").innerText = spins;
+    
+    let power = Math.random() * 2000 + 4000; // Random strength
+    let duration = 4000; // 4 seconds
+    let start = performance.now();
 
-function anim(t){
-let elapsed = t - start;
-let progress = Math.min(elapsed / duration, 1);
-let easeOut = 1 - Math.pow(1 - progress, 3); // Cubic ease out
-angle += (power * (1 - progress) * 0.002);
-draw();
+    function anim(t){
+        let elapsed = t - start;
+        let progress = Math.min(elapsed / duration, 1);
+        
+        // Custom easing for smooth stop
+        let easeOut = 1 - Math.pow(1 - progress, 4);
+        angle += (power * (1 - progress) * 0.002);
+        
+        draw();
 
-if(progress < 1) requestAnimationFrame(anim);
-else{
-spinning=false;
-let slice=2*Math.PI/names.length;
-let actualAngle = (angle % (2*Math.PI));
-let idx=Math.floor(((2*Math.PI - actualAngle + (3*Math.PI/2)) % (2*Math.PI)) / slice);
-latestWinner.innerText=names[idx];
-sound.play().catch(()=>{});
-confetti({particleCount:150, spread:70, origin:{y:0.6}});
+        if(progress < 1) {
+            requestAnimationFrame(anim);
+        } else {
+            spinning = false;
+            const slice = 2 * Math.PI / names.length;
+            const actualAngle = (angle % (2 * Math.PI));
+            const idx = Math.floor(((2 * Math.PI - actualAngle + (3 * Math.PI / 2)) % (2 * Math.PI)) / slice);
+            const winner = names[idx];
+            
+            document.getElementById("latestWinner").innerText = winner;
+            updateHistory(winner);
+            
+            sound.play().catch(()=>{});
+            confetti({
+                particleCount: 150,
+                spread: 70,
+                origin: { y: 0.6 }
+            });
+        }
+    }
+    requestAnimationFrame(anim);
 }
-}
-requestAnimationFrame(anim);
+
+// 6. HISTORY MANAGEMENT
+function updateHistory(name) {
+    const list = document.getElementById("historyList");
+    if (spins === 1) list.innerHTML = ""; // Remove placeholder on first win
+    
+    const item = document.createElement("li");
+    item.className = "history-item";
+    const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    item.innerHTML = `<span>${name}</span> <span style="color:#888; font-size:12px;">${time}</span>`;
+    
+    list.prepend(item);
 }
 
-function saveEntries(){localStorage.names=nameInput.value;alert("Saved!");}
-function shareEntries(){navigator.share?navigator.share({text:nameInput.value}):navigator.clipboard.writeText(nameInput.value);}
-function sortAsc(){names.sort();nameInput.value=names.join("\n");syncNames();}
-function sortDesc(){names.sort().reverse();nameInput.value=names.join("\n");syncNames();}
-function toggleFullscreen(){document.fullscreenElement?document.exitFullscreen():wheelSection.requestFullscreen();}
+function clearHistory() {
+    document.getElementById("historyList").innerHTML = '<li style="color:#aaa; text-align:center; padding:30px;">No winners yet</li>';
+    spins = 0;
+    document.getElementById("spinCount").innerText = 0;
+    document.getElementById("latestWinner").innerText = "-";
+}
 
+// 7. UTILITIES
+function sortAsc(){ names.sort(); document.getElementById("nameInput").value = names.join("\n"); syncNames(); }
+function sortDesc(){ names.sort().reverse(); document.getElementById("nameInput").value = names.join("\n"); syncNames(); }
+function saveEntries(){ localStorage.setItem("savedNames", document.getElementById("nameInput").value); alert("Names saved locally!"); }
+function toggleFullscreen(){ 
+    const el = document.getElementById("wheelSection");
+    if(!document.fullscreenElement) el.requestFullscreen(); else document.exitFullscreen();
+}
+
+// INITIALIZE
 resizeCanvas();
 syncNames();
+idleAnimation();
 </script>
 
 </body>
