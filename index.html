@@ -3,7 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>TeamSpin PRO – Free Wheel of Names</title>
+<title>TeamSpin PRO – Free Wheel of Names | Random Name Picker & Decision Maker</title>
+<meta name="description" content="TeamSpin PRO is the best free online Wheel of Names. Perfect for teachers, raffles, and random giveaways. Spin the wheel to pick a winner instantly!">
+<meta name="keywords" content="wheel of names, random name picker, spin the wheel, random winner generator, TeamSpin PRO, decision maker">
+
 <link rel="icon" type="image/jpeg" href="logo.jpg">
 <link rel="apple-touch-icon" href="logo.jpg">
 <meta name="theme-color" content="#007bff">
@@ -70,7 +73,6 @@ select, .header-btn{padding:6px 10px; border:1px solid #ccc; border-radius:6px; 
 }
 .control-btn:hover { border-color: var(--primary); background: var(--primary-light); }
 
-/* GALLERY SECTION */
 .gallery-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; }
 .gallery-item { 
     padding: 8px; background: #eee; border-radius: 6px; 
@@ -79,27 +81,34 @@ select, .header-btn{padding:6px 10px; border:1px solid #ccc; border-radius:6px; 
 .gallery-item:hover { border-color: var(--primary); background: #e2e2e2; }
 
 .wheel-column{ text-align:center; display:flex; flex-direction:column; align-items:center; }
+
+/* FULLSCREEN & SHAPE PERSISTENCE */
 .wheel-container{
-    width: min(85vw, 500px); height: min(85vw, 500px);
+    width: min(85vw, 500px); 
+    height: min(85vw, 500px);
     position: relative; margin-bottom: 40px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
 }
 
-canvas{ width:100%; height:100%; border-radius:50%; box-shadow: 0 20px 60px rgba(0,0,0,0.2); }
+#wheelSection:fullscreen {
+    background: var(--bg); width: 100vw; height: 100vh;
+    display: flex; flex-direction: column; justify-content: center; align-items: center;
+}
+
+#wheelSection:fullscreen canvas {
+    width: min(90vh, 90vw) !important;
+    height: min(90vh, 90vw) !important;
+}
+
+canvas{ width:100%; height:100%; border-radius:50%; box-shadow: 0 20px 60px rgba(0,0,0,0.2); transition: transform 0.1s;}
 
 /* RED 3D POINTER */
 .pointer{
     position:absolute; top:-15px; left:50%; transform:translateX(-50%);
-    z-index: 20;
-    width: 0; height: 0;
-    border-left: 20px solid transparent;
-    border-right: 20px solid transparent;
+    z-index: 20; width: 0; height: 0;
+    border-left: 20px solid transparent; border-right: 20px solid transparent;
     border-top: 45px solid #ff0000;
     filter: drop-shadow(0 6px 4px rgba(0,0,0,0.4));
-}
-.pointer::after {
-    content: ''; position: absolute; top: -45px; left: -20px;
-    border-left: 20px solid transparent; border-right: 20px solid transparent;
-    border-top: 45px solid rgba(255,255,255,0.3);
 }
 
 .history-list {
@@ -108,12 +117,21 @@ canvas{ width:100%; height:100%; border-radius:50%; box-shadow: 0 20px 60px rgba
 }
 .history-item { padding: 10px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; }
 
+/* SEO CONTENT SECTION */
+.seo-section {
+    max-width: 1000px; margin: 40px auto; padding: 20px; line-height: 1.6;
+}
+.seo-section h1 { color: var(--primary); text-align: center; }
+.seo-section h2 { margin-top: 30px; border-bottom: 2px solid var(--primary-light); padding-bottom: 5px; }
+.seo-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-top: 20px; }
+
 footer{ margin-top:60px; padding:40px; background:#f9fafb; border-top:1px solid #e5e7eb; text-align:center; }
 
 @media(max-width:1100px){
     .app-grid{ grid-template-columns: 1fr; display: flex; flex-direction: column; }
     .wheel-column{ order: -1; }
     .nav-links{ display:none; }
+    .seo-grid { grid-template-columns: 1fr; }
 }
 </style>
 </head>
@@ -187,7 +205,34 @@ Sara</textarea>
     </aside>
 </div>
 
-<footer><p>© 2026 TeamSpin PRO – Professional Random Name Picker</p></footer>
+<section class="seo-section">
+    <h1>TeamSpin PRO: The Best Free Random Name Picker</h1>
+    <p>Welcome to <strong>TeamSpin PRO</strong>, the ultimate online tool for picking random names, winners, or making decisions. Whether you are a teacher looking for a random student picker, a YouTuber running a giveaway, or a group of friends deciding where to eat, our <em>Wheel of Names</em> is fast, fair, and free to use.</p>
+
+    <div class="seo-grid">
+        <div>
+            <h2>How to Use the Wheel of Names?</h2>
+            <ol>
+                <li><strong>Enter Names:</strong> Type your list of names or items in the "Wheel Entries" text box.</li>
+                <li><strong>Customize:</strong> Use the "Quick Gallery" to load presets or change the wheel's theme (Neon, Casino, Dark).</li>
+                <li><strong>Spin:</strong> Click the "SPIN THE WHEEL" button or tap the wheel itself to start the random selection.</li>
+                <li><strong>Win:</strong> The wheel will stop, and the winner will be displayed instantly and saved in your history.</li>
+            </ol>
+        </div>
+        <div>
+            <h2>Why Choose TeamSpin PRO?</h2>
+            <ul>
+                <li><strong>100% Free:</strong> No hidden costs or subscriptions.</li>
+                <li><strong>Mobile Optimized:</strong> Works perfectly on smartphones, tablets, and desktops.</li>
+                <li><strong>Multi-Language:</strong> Support for English, Nepali, and Hindi.</li>
+                <li><strong>High Capacity:</strong> Add up to 500 names with no lag.</li>
+                <li><strong>No Borders:</strong> Modern, clean flat design for high visibility.</li>
+            </ul>
+        </div>
+    </div>
+</section>
+
+<footer><p>© 2026 TeamSpin PRO – Professional Random Name Picker. All Rights Reserved.</p></footer>
 
 <audio id="winSound" src="winner.mp3"></audio>
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
@@ -233,24 +278,22 @@ themeSelect.onchange = (e) => {
 };
 
 function resizeCanvas(){
-    const size = canvas.parentElement.clientWidth;
+    const container = canvas.parentElement;
+    const size = Math.min(container.clientWidth, container.clientHeight);
     const dpr = window.devicePixelRatio || 1;
-    canvas.width = size * dpr; canvas.height = size * dpr;
-    ctx.scale(dpr, dpr); draw();
+    canvas.width = size * dpr; 
+    canvas.height = size * dpr;
+    ctx.scale(dpr, dpr); 
+    draw();
 }
+
 window.addEventListener("resize", resizeCanvas);
+document.addEventListener('fullscreenchange', resizeCanvas);
 
 function syncNames(){
     const rawLines = document.getElementById("nameInput").value.split("\n").map(n=>n.trim()).filter(Boolean);
     const unique = [...new Set(rawLines)];
-    
-    // Duplicate Detection logic
-    if(rawLines.length !== unique.length) {
-        document.getElementById("duplicateMsg").style.display = "block";
-    } else {
-        document.getElementById("duplicateMsg").style.display = "none";
-    }
-    
+    document.getElementById("duplicateMsg").style.display = rawLines.length !== unique.length ? "block" : "none";
     names = unique.slice(0, 500);
     document.getElementById("entryCount").innerText = names.length;
     draw();
@@ -271,7 +314,6 @@ function draw(){
         ctx.beginPath();
         ctx.moveTo(0, 0);
         ctx.arc(0, 0, r - 5, i * slice, (i + 1) * slice);
-        
         const theme = document.body.dataset.theme || "classic";
         const hue = (i * 360 / names.length);
 
@@ -282,7 +324,6 @@ function draw(){
         else if(theme === "dark") ctx.fillStyle = i % 2 === 0 ? "#1e293b" : "#334155";
         
         ctx.fill();
-
         ctx.save();
         ctx.rotate(i * slice + slice / 2);
         ctx.textAlign = "right";
@@ -338,9 +379,12 @@ function clearHistory() { document.getElementById("historyList").innerHTML = '<l
 function sortAsc(){ names.sort(); document.getElementById("nameInput").value = names.join("\n"); syncNames(); }
 function sortDesc(){ names.sort().reverse(); document.getElementById("nameInput").value = names.join("\n"); syncNames(); }
 function saveEntries(){ localStorage.setItem("savedNames", document.getElementById("nameInput").value); alert("Saved!"); }
-function toggleFullscreen(){ const el = document.getElementById("wheelSection"); if(!document.fullscreenElement) el.requestFullscreen(); else document.exitFullscreen(); }
+function toggleFullscreen(){ 
+    const el = document.getElementById("wheelSection"); 
+    if(!document.fullscreenElement) el.requestFullscreen(); else document.exitFullscreen();
+}
 
-resizeCanvas();
+setTimeout(resizeCanvas, 100);
 syncNames();
 idleAnimation();
 </script>
