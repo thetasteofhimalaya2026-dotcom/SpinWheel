@@ -1,38 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" 
-        xmlns:xhtml="http://www.w3.org/1999/xhtml">
-
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://thetasteofhimalaya2026-dotcom.github.io/SpinWheel/</loc>
-    <lastmod>2026-01-15</lastmod>
+    <loc>https://www.teamspinpro.com/</loc>
+    <lastmod>2026-01-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://thetasteofhimalaya2026-dotcom.github.io/SpinWheel/"/>
-    <xhtml:link rel="alternate" hreflang="hi" href="https://thetasteofhimalaya2026-dotcom.github.io/SpinWheel/?lang=hi"/>
-    <xhtml:link rel="alternate" hreflang="ne" href="https://thetasteofhimalaya2026-dotcom.github.io/SpinWheel/?lang=ne"/>
-    <xhtml:link rel="alternate" hreflang="es" href="https://thetasteofhimalaya2026-dotcom.github.io/SpinWheel/?lang=es"/>
-    <xhtml:link rel="alternate" hreflang="fr" href="https://thetasteofhimalaya2026-dotcom.github.io/SpinWheel/?lang=fr"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://thetasteofhimalaya2026-dotcom.github.io/SpinWheel/"/>
   </url>
 
   <url>
-    <loc>https://thetasteofhimalaya2026-dotcom.github.io/SpinWheel/?lang=hi</loc>
-    <lastmod>2026-01-15</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://thetasteofhimalaya2026-dotcom.github.io/SpinWheel/"/>
-    <xhtml:link rel="alternate" hreflang="hi" href="https://thetasteofhimalaya2026-dotcom.github.io/SpinWheel/?lang=hi"/>
-    <xhtml:link rel="alternate" hreflang="ne" href="https://thetasteofhimalaya2026-dotcom.github.io/SpinWheel/?lang=ne"/>
+    <loc>https://www.teamspinpro.com/privacy.html</loc>
+    <lastmod>2026-01-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
   </url>
 
   <url>
-    <loc>https://thetasteofhimalaya2026-dotcom.github.io/SpinWheel/?lang=ne</loc>
-    <lastmod>2026-01-15</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="en" href="https://thetasteofhimalaya2026-dotcom.github.io/SpinWheel/"/>
-    <xhtml:link rel="alternate" hreflang="hi" href="https://thetasteofhimalaya2026-dotcom.github.io/SpinWheel/?lang=hi"/>
-    <xhtml:link rel="alternate" hreflang="ne" href="https://thetasteofhimalaya2026-dotcom.github.io/SpinWheel/?lang=ne"/>
+    <loc>https://www.teamspinpro.com/terms.html</loc>
+    <lastmod>2026-01-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
   </url>
 
+  <url>
+    <loc>https://www.teamspinpro.com/faq.html</loc>
+    <lastmod>2026-01-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
 </urlset>
