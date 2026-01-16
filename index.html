@@ -278,8 +278,10 @@ Ram</textarea>
         <div id="duplicateMsg" class="duplicate-msg">Duplicates included on wheel</div>
         <div id="errorMsg" class="error-msg">⚠️ Add at least 2 names to spin!</div>
         <p><strong id="t_count">Entries:</strong> <span id="entryCount">4</span></p>
+        
         <button class="control-btn" onclick="sortAsc()">Sort A–Z</button>
         <button class="control-btn" onclick="sortDesc()">Sort Z–A</button>
+        <button class="control-btn" onclick="shuffleNames()">Shuffle Entries</button>
 
         <div class="settings-section">
             <label class="settings-label">Sound Settings</label>
@@ -620,6 +622,19 @@ function updateHistory(name) {
 function clearHistory() { document.getElementById("historyList").innerHTML = '<li style="color:#aaa; text-align:center; padding:20px;">No winners yet</li>'; }
 function sortAsc(){ names.sort(); document.getElementById("nameInput").value = names.join("\n"); syncNames(); }
 function sortDesc(){ names.sort().reverse(); document.getElementById("nameInput").value = names.join("\n"); syncNames(); }
+
+// --- ADDED SHUFFLE LOGIC ---
+function shuffleNames() {
+    // Fisher-Yates Shuffle Algorithm
+    for (let i = names.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [names[i], names[j]] = [names[j], names[i]];
+    }
+    document.getElementById("nameInput").value = names.join("\n");
+    syncNames();
+}
+// ----------------------------
+
 function saveEntries(){ localStorage.setItem("savedNames", document.getElementById("nameInput").value); alert("Saved!"); }
 function toggleFullscreen(){ 
     const el = document.getElementById("wheelSection"); 
@@ -627,305 +642,9 @@ function toggleFullscreen(){
 }
 
 setTimeout(resizeCanvas, 100);
-syncNames();<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>TeamSpin PRO – Wheel of Names</title>
-
-<link rel="icon" href="logo.jpg">
-
-<style>
-:root{
-    --primary:#007bff;
-    --bg:#ffffff;
-    --text:#1f2937;
-    --card:#ffffff;
-    --border:#e5e7eb;
-}
-
-body{
-    margin:0;
-    font-family:system-ui,-apple-system,Segoe UI,Roboto;
-    background:var(--bg);
-    color:var(--text);
-}
-
-/* HEADER */
-header{
-    padding:14px 20px;
-    border-bottom:1px solid var(--border);
-    font-size:20px;
-    font-weight:700;
-}
-header span{color:var(--primary);}
-
-/* LAYOUT */
-.app{
-    display:grid;
-    grid-template-columns:320px 1fr 300px;
-    gap:20px;
-    padding:20px;
-}
-
-/* SIDEBARS */
-.sidebar{
-    background:var(--card);
-    border:1px solid var(--border);
-    border-radius:12px;
-    padding:16px;
-}
-
-/* INPUT */
-textarea{
-    width:100%;
-    height:220px;
-    padding:10px;
-    border-radius:8px;
-    border:1px solid var(--border);
-    resize:none;
-}
-
-/* BUTTONS */
-.btn{
-    width:100%;
-    margin-top:8px;
-    padding:10px;
-    border-radius:8px;
-    border:1px solid var(--border);
-    background:#f8fafc;
-    cursor:pointer;
-}
-.btn.primary{
-    background:var(--primary);
-    color:white;
-    font-size:18px;
-}
-
-/* CENTER */
-.center{
-    text-align:center;
-}
-.wheel-wrap{
-    position:relative;
-    width:420px;
-    height:420px;
-    margin:0 auto 20px;
-}
-canvas{
-    width:100%;
-    height:100%;
-    border-radius:50%;
-}
-.pointer{
-    position:absolute;
-    top:-12px;
-    left:50%;
-    transform:translateX(-50%);
-    width:0;height:0;
-    border-left:18px solid transparent;
-    border-right:18px solid transparent;
-    border-top:36px solid red;
-}
-
-/* HISTORY */
-ul{padding-left:18px;}
-li{margin-bottom:6px;}
-
-/* AD */
-.ad-box{
-    margin-top:16px;
-}
-.ad-placeholder{
-    height:250px;
-    border:1px dashed #cbd5e1;
-    border-radius:10px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-size:14px;
-    color:#64748b;
-    background:#f8fafc;
-}
-
-/* MOBILE */
-@media(max-width:1100px){
-    .app{grid-template-columns:1fr;}
-    .wheel-wrap{width:300px;height:300px;}
-}
-</style>
-</head>
-
-<body>
-
-<header>TeamSpin <span>PRO</span></header>
-
-<div class="app">
-
-<!-- LEFT SIDEBAR -->
-<aside class="sidebar">
-    <h3>Wheel Entries</h3>
-
-    <textarea id="nameInput">Ram
-Sita
-Hari
-Gita
-Alex</textarea>
-
-    <p>Total Entries: <strong id="count">5</strong></p>
-
-    <button class="btn" onclick="sortAsc()">Sort A–Z</button>
-    <button class="btn" onclick="sortDesc()">Sort Z–A</button>
-
-    <!-- ✅ SHUFFLE BUTTON -->
-    <button class="btn" onclick="shuffleNames()">Shuffle Entries</button>
-
-    <!-- ✅ ADVERTISEMENT -->
-    <div class="ad-box">
-        <strong>Advertisement</strong>
-        <div class="ad-placeholder">
-            Ad Space<br>(300 × 250)
-        </div>
-    </div>
-</aside>
-
-<!-- CENTER -->
-<main class="center">
-    <div class="wheel-wrap">
-        <div class="pointer"></div>
-        <canvas id="wheel"></canvas>
-    </div>
-
-    <button class="btn primary" onclick="spin()">SPIN</button>
-
-    <h2>Winner: <span id="winner">—</span></h2>
-</main>
-
-<!-- RIGHT SIDEBAR -->
-<aside class="sidebar">
-    <h3>Winner History</h3>
-    <ul id="history">
-        <li>No winners yet</li>
-    </ul>
-    <button class="btn" onclick="clearHistory()">Clear History</button>
-</aside>
-
-</div>
-
-<script>
-const canvas = document.getElementById("wheel");
-const ctx = canvas.getContext("2d");
-
-let names=[],angle=0,spinning=false;
-
-/* SYNC */
-function sync(){
-    names=document.getElementById("nameInput").value
-        .split("\n").map(n=>n.trim()).filter(Boolean);
-    document.getElementById("count").innerText=names.length;
-    draw();
-}
-document.getElementById("nameInput").addEventListener("input",sync);
-
-/* DRAW */
-function draw(){
-    if(!names.length) return;
-    const size=canvas.width=canvas.height=420;
-    const r=size/2;
-    const slice=2*Math.PI/names.length;
-
-    ctx.clearRect(0,0,size,size);
-    ctx.save();
-    ctx.translate(r,r);
-    ctx.rotate(angle);
-
-    names.forEach((n,i)=>{
-        ctx.beginPath();
-        ctx.moveTo(0,0);
-        ctx.arc(0,0,r,i*slice,(i+1)*slice);
-        ctx.fillStyle=i%2?"#60a5fa":"#2563eb";
-        ctx.fill();
-
-        ctx.rotate(slice/2);
-        ctx.fillStyle="#fff";
-        ctx.textAlign="right";
-        ctx.font="bold 16px sans-serif";
-        ctx.fillText(n,r-15,5);
-        ctx.rotate(-slice/2);
-    });
-
-    ctx.restore();
-}
-
-/* SPIN */
-function spin(){
-    if(spinning||names.length<2) return;
-    spinning=true;
-
-    let power=Math.random()*3000+4000;
-    let start=performance.now();
-
-    function animate(t){
-        let p=Math.min((t-start)/4000,1);
-        angle+=power*(1-p)*0.002;
-        draw();
-
-        if(p<1) requestAnimationFrame(animate);
-        else{
-            spinning=false;
-            const slice=2*Math.PI/names.length;
-            const index=Math.floor(((2*Math.PI-angle+1.5*Math.PI)%(2*Math.PI))/slice);
-            const win=names[index];
-            document.getElementById("winner").innerText=win;
-            addHistory(win);
-        }
-    }
-    requestAnimationFrame(animate);
-}
-
-/* SORT */
-function sortAsc(){names.sort();update();}
-function sortDesc(){names.sort().reverse();update();}
-
-/* ✅ SHUFFLE */
-function shuffleNames(){
-    for(let i=names.length-1;i>0;i--){
-        const j=Math.floor(Math.random()*(i+1));
-        [names[i],names[j]]=[names[j],names[i]];
-    }
-    update();
-}
-
-function update(){
-    document.getElementById("nameInput").value=names.join("\n");
-    sync();
-}
-
-/* HISTORY */
-function addHistory(name){
-    const h=document.getElementById("history");
-    if(h.innerText.includes("No winners")) h.innerHTML="";
-    const li=document.createElement("li");
-    li.textContent=name;
-    h.prepend(li);
-}
-function clearHistory(){
-    document.getElementById("history").innerHTML="<li>No winners yet</li>";
-}
-
-sync();
-</script>
-
-</body>
-</html>
-
+syncNames();
 idleAnimation();
 </script>
 
 </body>
 </html>
-
-
-
-
