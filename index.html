@@ -65,6 +65,13 @@ select, .header-btn{padding:6px 10px; border:1px solid #ccc; border-radius:6px; 
 }
 
 .duplicate-msg{color:#28a745; font-size:12px; margin-top:5px; display:none; font-weight:bold;}
+.error-msg{color:#dc3545; font-size:12px; margin-top:5px; display:none; font-weight:bold; animation: shake 0.5s;}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
+}
 
 .control-btn{
     padding:10px; border:1px solid #ccc; border-radius:8px;
@@ -198,6 +205,12 @@ canvas{ width:100%; height:100%; border-radius:50%; box-shadow: 0 20px 60px rgba
 .blue-btn:hover { opacity: 0.9; }
 hr { border: 0; border-top: 1px solid #eee; margin: 20px 0; }
 
+#btn_spin.disabled {
+    background: #ccc !important;
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
 footer{ margin-top:60px; padding:40px; background:#f9fafb; border-top:1px solid #e5e7eb; text-align:center; }
 
 @media(max-width:1100px){
@@ -260,6 +273,7 @@ Alice
 Bob
 Sara</textarea>
         <div id="duplicateMsg" class="duplicate-msg">✨ Duplicates included on wheel</div>
+        <div id="errorMsg" class="error-msg">⚠️ Add at least 2 names to spin!</div>
         <p><strong id="t_count">Entries:</strong> <span id="entryCount">4</span></p>
         <button class="control-btn" onclick="sortAsc()">Sort A–Z</button>
         <button class="control-btn" onclick="sortDesc()">Sort Z–A</button>
@@ -432,14 +446,25 @@ window.addEventListener("resize", resizeCanvas);
 document.addEventListener('fullscreenchange', resizeCanvas);
 
 function syncNames(){
-    // Updated: Now accepts all lines including duplicates
     const rawLines = document.getElementById("nameInput").value.split("\n").map(n=>n.trim()).filter(Boolean);
     const uniqueTest = [...new Set(rawLines)];
     
-    // Show duplicate message if there are matches, but keep them in the 'names' array
+    // Duplicate Message Toggle
     document.getElementById("duplicateMsg").style.display = rawLines.length !== uniqueTest.length ? "block" : "none";
     
-    names = rawLines.slice(0, 500); // Now 'names' includes duplicates
+    // Error Message & Spin Button State
+    const errorEl = document.getElementById("errorMsg");
+    const spinBtn = document.getElementById("btn_spin");
+    
+    if (rawLines.length <= 1) {
+        errorEl.style.display = "block";
+        spinBtn.classList.add("disabled");
+    } else {
+        errorEl.style.display = "none";
+        spinBtn.classList.remove("disabled");
+    }
+    
+    names = rawLines.slice(0, 500); 
     document.getElementById("entryCount").innerText = names.length;
     draw();
 }
@@ -452,7 +477,6 @@ function draw(){
     const slice = 2 * Math.PI / names.length;
     ctx.clearRect(0, 0, size, size);
 
-    // DRAW BACKGROUND IMAGE IF EXISTS
     if (customBg) {
         ctx.save();
         ctx.beginPath();
@@ -467,7 +491,6 @@ function draw(){
     ctx.rotate(angle);
 
     names.forEach((n, i) => {
-        // Only draw colors if no custom background
         if (!customBg) {
             ctx.beginPath();
             ctx.moveTo(0, 0);
@@ -509,7 +532,6 @@ function playTick(){
 }
 
 function spin(){
-    // Safeguard: Do not spin if 0 or 1 name is available
     if(spinning || names.length <= 1) return;
     
     spinning = true;
@@ -523,7 +545,6 @@ function spin(){
         let progress = Math.min((t - start) / duration, 1);
         angle += (power * (1 - progress) * 0.002);
         
-        // TICK SOUND LOGIC
         const slice = 2 * Math.PI / names.length;
         if (Math.abs(angle - lastTickAngle) >= slice) {
             playTick();
@@ -534,7 +555,6 @@ function spin(){
         if(progress < 1) requestAnimationFrame(anim);
         else {
             spinning = false;
-            const slice = 2 * Math.PI / names.length;
             const actualAngle = (angle % (2 * Math.PI));
             const idx = Math.floor(((2 * Math.PI - actualAngle + (3 * Math.PI / 2)) % (2 * Math.PI)) / slice);
             currentWinner = names[idx];
@@ -547,17 +567,14 @@ function spin(){
 function announceWinner(winner) {
     document.getElementById("latestWinner").innerText = winner;
     document.getElementById("modalWinnerName").innerText = winner;
-    
     const modal = document.getElementById("winnerModal");
     modal.style.display = "flex";
     document.getElementById("winRing").classList.add("active");
     
-    // Fullscreen support for modal
     if (document.fullscreenElement) {
         document.fullscreenElement.appendChild(modal);
     }
     
-    // WIN SOUND LOGIC
     const winSrc = document.getElementById("winSoundSelect").value;
     if(winSrc !== "none") {
         const audio = document.getElementById("winSound");
