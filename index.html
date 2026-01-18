@@ -8,191 +8,142 @@
     <meta name="description" content="Professional wheel of names for teachers and offices. Features 3D rendering, CSV import, and winner history.">
     <meta name="keywords" content="wheel of names, teacher tool, random picker, नेपाली नाम छान्ने, TeamSpin PRO, classroom spinner, raffle tool">
     
-    <style>
-        :root {
-            --primary: #2563eb;
-            --primary-dark: #1e40af;
-            --bg-body: #f8fafc;
-            --bg-panel: #ffffff;
-            --text-main: #0f172a;
-            --text-muted: #64748b;
-            --border: #e2e8f0;
-            --accent: #f1f5f9;
-            --success: #10b981;
-            --danger: #ef4444;
-        }
-        /* --- RESTORED SEO & FEEDBACK STYLES --- */
-.seo-grid {
-    max-width: 1200px; margin: 80px auto;
-    display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 40px; padding: 0 20px;
-}
-.seo-card {
-    background: var(--bg-panel); padding: 35px; border-radius: 24px;
-    border: 1px solid var(--border); transition: 0.3s;
-}
-.seo-card:hover { transform: translateY(-10px); box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); }
-.seo-card h2 { color: var(--primary); margin-top: 0; font-size: 1.6rem; }
+   <style>
+    :root {
+        --primary: #2563eb;
+        --primary-dark: #1e40af;
+        --bg-body: #f8fafc;
+        --bg-panel: #ffffff;
+        --text-main: #0f172a;
+        --text-muted: #64748b;
+        --border: #e2e8f0;
+        --accent: #f1f5f9;
+        --success: #10b981;
+        --danger: #ef4444;
+    }
 
-.faq-container { max-width: 900px; margin: 60px auto; padding: 0 20px; }
-.faq-item { background: var(--bg-panel); border: 1px solid var(--border); border-radius: 15px; margin-bottom: 15px; padding: 20px; }
-.faq-q { font-weight: 800; color: var(--primary); margin-bottom: 10px; display: block; }
+    [data-theme="dark"] {
+        --primary: #3b82f6;
+        --bg-body: #020617;
+        --bg-panel: #0f172a;
+        --text-main: #f1f5f9;
+        --text-muted: #94a3b8;
+        --border: #1e293b;
+        --accent: #1e293b;
+    }
 
-.feedback-container {
-    max-width: 800px; margin: 40px auto; padding: 40px; 
-    background: var(--bg-panel); border-radius: 30px; border: 1px solid var(--border);
-}
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
-        [data-theme="dark"] {
-            --primary: #3b82f6;
-            --bg-body: #020617;
-            --bg-panel: #0f172a;
-            --text-main: #f1f5f9;
-            --text-muted: #94a3b8;
-            --border: #1e293b;
-            --accent: #1e293b;
-        }
+    body {
+        margin: 0; padding: 0;
+        font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        background-color: var(--bg-body);
+        color: var(--text-main);
+        transition: background 0.3s ease;
+        line-height: 1.5;
+    }
 
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    /* --- NAVIGATION --- */
+    .navbar {
+        height: 75px; background: var(--bg-panel);
+        border-bottom: 1px solid var(--border);
+        display: flex; align-items: center; justify-content: space-between;
+        padding: 0 40px; position: sticky; top: 0; z-index: 1000;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.02);
+    }
+    .logo-area { display: flex; align-items: center; gap: 12px; font-weight: 800; font-size: 24px; cursor: pointer; }
+    .logo-area span { color: var(--primary); }
+    
+    .nav-links { display: flex; gap: 25px; }
+    .nav-link { text-decoration: none; color: var(--text-muted); font-weight: 600; font-size: 14px; transition: 0.2s; }
+    .nav-link:hover { color: var(--primary); }
 
-        body {
-            margin: 0; padding: 0;
-            font-family: 'Inter', system-ui, -apple-system, sans-serif;
-            background-color: var(--bg-body);
-            color: var(--text-main);
-            transition: background 0.3s ease;
-            line-height: 1.5;
-        }
+    /* --- MOBILE MENU BUTTON (HIDDEN ON DESKTOP) --- */
+    .mobile-menu-btn {
+        display: none; 
+        background: var(--accent); border: 1px solid var(--border);
+        padding: 10px 16px; border-radius: 10px; font-weight: bold; cursor: pointer;
+        color: var(--text-main);
+    }
 
-        /* --- NAVIGATION --- */
-        .navbar {
-            height: 75px; background: var(--bg-panel);
-            border-bottom: 1px solid var(--border);
-            display: flex; align-items: center; justify-content: space-between;
-            padding: 0 40px; position: sticky; top: 0; z-index: 1000;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.02);
-        }
-        .logo-area { display: flex; align-items: center; gap: 12px; font-weight: 800; font-size: 24px; cursor: pointer; }
-        .logo-area span { color: var(--primary); }
-        
-        .nav-links { display: flex; gap: 25px; }
-        .nav-link { 
-            text-decoration: none; color: var(--text-muted); 
-            font-weight: 600; font-size: 14px; cursor: pointer; transition: 0.2s;
-        }
-        .nav-link:hover { color: var(--primary); }
+    /* --- MAIN LAYOUT --- */
+    .master-container {
+        max-width: 1600px; margin: 30px auto;
+        display: grid; grid-template-columns: 380px 1fr 340px;
+        gap: 25px; padding: 0 20px;
+    }
 
-        /* --- MAIN LAYOUT --- */
-        .master-container {
-            max-width: 1600px; margin: 30px auto;
-            display: grid; grid-template-columns: 380px 1fr 340px;
-            gap: 25px; padding: 0 20px;
-        }
+    .side-panel {
+        background: var(--bg-panel); border: 1px solid var(--border);
+        border-radius: 24px; padding: 25px; height: fit-content;
+        box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05);
+    }
 
-        .side-panel {
-            background: var(--bg-panel); border: 1px solid var(--border);
-            border-radius: 24px; padding: 25px; height: fit-content;
-            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05);
-        }
+    /* --- WHEEL CORE --- */
+    .wheel-stage { display: flex; flex-direction: column; align-items: center; }
+    .canvas-wrapper {
+        position: relative; width: 100%; max-width: 550px; aspect-ratio: 1 / 1;
+        cursor: pointer; transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        margin: 0 auto;
+    }
+    .canvas-wrapper:hover { transform: scale(1.02); }
+    #wheelCanvas { width: 100%; height: 100%; display: block; filter: drop-shadow(0 15px 30px rgba(0,0,0,0.2)); }
+    
+    .wheel-indicator {
+        position: absolute; top: -15px; left: 50%; transform: translateX(-50%);
+        z-index: 50; width: 50px; filter: drop-shadow(0 4px 10px rgba(0,0,0,0.3));
+    }
 
-        /* --- WHEEL CORE --- */
-        .wheel-stage { 
-            display: flex; flex-direction: column; align-items: center; justify-content: flex-start; 
-        }
-        .canvas-wrapper {
-            position: relative;
-            width: 90vw;
-            max-width: 600px;
-            aspect-ratio: 1 / 1;
-            cursor: pointer;
-            transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
-            border-radius: 50%;
-            margin: 0 auto;
-        }
-        .canvas-wrapper:hover { transform: scale(1.02); }
-        #wheelCanvas {
-            width: 100% !important;
-            height: 100% !important;
-            display: block;
-            filter: drop-shadow(0 10px 20px rgba(0,0,0,0.15));
-        }
-        .wheel-indicator {
-            position: absolute; top: -15px; left: 50%; transform: translateX(-50%);
-            z-index: 50; width: 60px; filter: drop-shadow(0 4px 10px rgba(0,0,0,0.3));
-        }
+    /* --- INPUTS & BUTTONS --- */
+    .name-editor {
+        width: 100%; height: 350px; border-radius: 16px;
+        border: 2px solid var(--border); background: var(--bg-body);
+        color: var(--text-main); padding: 15px; font-size: 16px; resize: none;
+    }
+    .btn {
+        padding: 14px 20px; border-radius: 12px; font-weight: 700;
+        cursor: pointer; border: none; display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; margin-bottom: 10px;
+    }
+    .btn-blue { background: var(--primary); color: white; }
+    .btn-ghost { background: var(--accent); color: var(--text-main); border: 1px solid var(--border); }
 
-        /* --- INPUTS & EDITOR --- */
-        .name-editor {
-            width: 100%; height: 420px; border-radius: 16px;
-            border: 2px solid var(--border); background: var(--bg-body);
-            color: var(--text-main); padding: 20px; font-size: 16px;
-            line-height: 1.6; resize: none; transition: 0.3s;
-        }
-        .name-editor:focus { border-color: var(--primary); outline: none; box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1); }
+    /* --- SEO & FEEDBACK --- */
+    .seo-grid { max-width: 1200px; margin: 60px auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; padding: 0 20px; }
+    .seo-card { background: var(--bg-panel); padding: 30px; border-radius: 20px; border: 1px solid var(--border); }
+    .feedback-container { max-width: 800px; margin: 40px auto; padding: 30px; background: var(--bg-panel); border-radius: 25px; border: 1px solid var(--border); }
 
-        /* --- BUTTONS --- */
-        .btn {
-            padding: 14px 20px; border-radius: 12px; font-weight: 700;
-            cursor: pointer; border: none; transition: 0.3s;
-            display: flex; align-items: center; justify-content: center; gap: 10px;
-            width: 100%; font-size: 14px; margin-bottom: 12px;
-        }
-        .btn-blue { background: var(--primary); color: white; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2); }
-        .btn-blue:hover { background: var(--primary-dark); transform: translateY(-2px); }
-        .btn-ghost { background: var(--accent); color: var(--text-main); border: 1px solid var(--border); }
-        .btn-ghost:hover { background: var(--border); }
-
-        /* --- SEO CONTENT SECTIONS --- */
-        .seo-grid {
-            max-width: 1200px; margin: 80px auto;
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 40px; padding: 0 20px;
-        }
-        .seo-card {
-            background: var(--bg-panel); padding: 35px; border-radius: 24px;
-            border: 1px solid var(--border); transition: 0.3s;
-        }
-        .seo-card:hover { transform: translateY(-10px); box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); }
-        .seo-card h2 { color: var(--primary); margin-top: 0; font-size: 1.6rem; }
-
-        /* --- HISTORY LIST --- */
-        .history-list { max-height: 200px; overflow-y: auto; list-style: none; padding: 0; margin: 0; }
-        .history-item { 
-            padding: 10px; border-bottom: 1px solid var(--border); font-size: 14px; 
-            display: flex; justify-content: space-between;
-        }
-
-        /* --- RESPONSIVE --- */
-        @media (max-width: 1200px) {
-            .master-container { grid-template-columns: 1fr; }
-            .side-panel { order: 2; }
-            .wheel-stage { order: 1; }
-        }
-    </style>
+    /* --- RESPONSIVE FIX (THE MOST IMPORTANT PART) --- */
+    @media (max-width: 1100px) {
+        .master-container { grid-template-columns: 1fr; }
+        .nav-links { display: none; } /* Prevents overlapping */
+        .mobile-menu-btn { display: block; } /* Shows the menu button */
+        .navbar { padding: 0 20px; }
+        .logo-area { font-size: 20px; }
+    }
+</style>
 </head>
 <body>
 
 <header class="navbar">
     <div class="logo-area" onclick="location.reload()">
-        <div style="background:var(--primary); color:white; width:35px; height:35px; display:flex; align-items:center; justify-content:center; border-radius:8px;">T</div>
+        <div style="background:var(--primary); color:white; width:30px; height:30px; display:flex; align-items:center; justify-content:center; border-radius:6px; font-size:16px;">T</div>
         TeamSpin <span>PRO</span>
     </div>
+
     <nav class="nav-links">
         <a href="#features" class="nav-link">Features</a>
-        <a href="#about" class="nav-link">About</a>
         <a href="#faq" class="nav-link">FAQ</a>
-    </nav>
-    <div style="display:flex; gap:12px; align-items:center;">
-        <select id="langSwitcher" onchange="logic.changeLang(this.value)" class="btn-ghost" style="padding:8px 15px; border-radius:8px; font-weight:bold; cursor:pointer;">
+        <select id="langSwitcher" onchange="logic.changeLang(this.value)" class="btn-ghost" style="padding:5px 10px; font-size:12px;">
             <option value="en">English</option>
-            <option value="np">नेपाली (Nepali)</option>
-            <option value="hi">हिन्दी (Hindi)</option>
+            <option value="np">नेपाली</option>
         </select>
-        <button class="btn-ghost" style="width:45px; height:45px; border-radius:50%; cursor:pointer;" onclick="ui.toggleTheme()">🌓</button>
+    </nav>
+
+    <div style="display:flex; gap:8px; align-items:center;">
+        <button class="mobile-menu-btn" onclick="ui.showMobileMenu()">☰ Menu</button>
+        <button class="btn-ghost" style="width:40px; height:40px; border-radius:50%;" onclick="ui.toggleTheme()">🌓</button>
     </div>
 </header>
-
 <main class="master-container">
     <aside class="side-panel">
         <h3 id="lblInputTitle">Classroom & Office Names</h3>
@@ -269,7 +220,26 @@
         SUBMIT FEEDBACK
     </button>
 </div>
+    <section class="content-area" style="max-width: 1200px; margin: 40px auto; padding: 20px; line-height: 1.6;">
+    <div id="faq">
+        <h2 style="text-align: center; margin-bottom: 30px;">Frequently Asked Questions (FAQ)</h2>
+        <div style="display: grid; gap: 20px;">
+            <details style="background: var(--bg-panel); padding: 15px; border-radius: 12px; border: 1px solid var(--border); cursor: pointer;">
+                <summary><strong>Is this name picker truly random?</strong></summary>
+                <p>Yes. We use <code>window.crypto.getRandomValues</code>, which is a cryptographically strong random number generator, ensuring 100% fairness.</p>
+            </details>
+            <details style="background: var(--bg-panel); padding: 15px; border-radius: 12px; border: 1px solid var(--border); cursor: pointer;">
+                <summary><strong>How many names can I add?</strong></summary>
+                <p>You can add up to 10,000 names. However, for the best visual experience on the wheel, we recommend 2 to 100 names.</p>
+            </details>
+        </div>
+    </div>
+</section>
 <footer style="background:var(--bg-panel); padding:60px 20px; text-align:center; border-top:1px solid var(--border); margin-top:50px;">
+    <div style="margin-bottom: 20px;">
+        <a href="javascript:void(0)" onclick="showPrivacy()" style="margin: 0 10px; color: var(--primary); text-decoration: none; font-size: 14px;">Privacy Policy</a>
+        <a href="javascript:void(0)" onclick="showTerms()" style="margin: 0 10px; color: var(--primary); text-decoration: none; font-size: 14px;">Terms of Service</a>
+    </div>
     <p id="lblLegalText" style="max-width:700px; margin:0 auto 20px; font-size:13px; color:var(--text-muted);"></p>
     <div style="font-size:12px; color:var(--text-muted);">&copy; 2026 TeamSpin PRO. Built for Fairness.</div>
 </footer>
@@ -281,188 +251,233 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
-    const ui = {
-        theme: 'light',
-        toggleTheme() {
-            this.theme = this.theme === 'light' ? 'dark' : 'light';
-            document.body.setAttribute('data-theme', this.theme);
-            logic.draw();
-        }
-    };
-
-    const logic = {
-        names: [], angle: 0, isSpinning: false, history: [], totalSpins: 0, lang: 'en',
-        translations: {
-    en: {
-        title: "Classroom & Office Names",
-        sub: "One name per line. Best for teachers and HR raffle events.",
-        spin: "Click the Wheel to Spin!",
-        status: "Name list is valid.",
-        winner: "The winner is: ",
-        legal: "TeamSpin PRO respects your privacy. No data is stored on our servers."
+const ui = {
+    theme: 'light',
+    toggleTheme() {
+        this.theme = this.theme === 'light' ? 'dark' : 'light';
+        document.body.setAttribute('data-theme', this.theme);
+        logic.draw();
     },
-    np: {
-        title: "कक्षा र कार्यालयका नामहरू",
-        sub: "प्रति पङ्क्ति एक नाम। शिक्षक र राफल कार्यक्रमका लागि उत्तम।",
-        spin: "घुमाउनका लागि व्हीलमा क्लिक गर्नुहोस्!",
-        status: "नाम सूची मान्य छ।",
-        winner: "विजेता हुनुहुन्छ: ",
-        legal: "TeamSpin PRO तपाईंको गोपनीयताको सम्मान गर्दछ। कुनै डाटा राखिँदैन।"
-    },
-    hi: {
-        title: "कक्षा और कार्यालय के नाम",
-        sub: "प्रति पंक्ति एक नाम। शिक्षकों और रैफल कार्यक्रमों के लिए उत्तम।",
-        spin: "स्पिन करने के लिए व्हील पर क्लिक करें!",
-        status: "नाम सूची मान्य है।",
-        winner: "विजेता है: ",
-        legal: "TeamSpin PRO आपकी गोपनीयता का सम्मान करता है।"
+    showMobileMenu() {
+        Swal.fire({
+            title: 'TeamSpin Menu',
+            html: `
+                <div style="display:flex; flex-direction:column; gap:12px;">
+                    <button class="btn btn-ghost" onclick="location.hash='#features'; Swal.close()">🚀 Features (विशेषताहरू)</button>
+                    <button class="btn btn-ghost" onclick="location.hash='#faq'; Swal.close()">❓ FAQ (प्रश्नोत्तर)</button>
+                    <hr style="border:0; border-top:1px solid var(--border)">
+                    <p style="font-size:12px; margin:5px 0; color:var(--text-muted);">Language / भाषा:</p>
+                    <button class="btn btn-ghost" onclick="logic.changeLang('en'); Swal.close()">🇺🇸 English</button>
+                    <button class="btn btn-ghost" onclick="logic.changeLang('np'); Swal.close()">🇳🇵 नेपाली (Nepali)</button>
+                    <button class="btn btn-ghost" onclick="logic.changeLang('hi'); Swal.close()">🇮🇳 हिन्दी (Hindi)</button>
+                </div>
+            `,
+            showConfirmButton: false,
+            showCloseButton: true
+        });
     }
-        },
+};
 
-        changeLang(val) {
-            this.lang = val;
-            const t = this.translations[val];
-            document.getElementById('lblInputTitle').innerText = t.title;
-            document.getElementById('lblInputSub').innerText = t.sub;
-            document.getElementById('lblStatus').innerText = t.status;
-            document.getElementById('lblClickToSpin').innerText = t.spin;
-            document.getElementById('dynamic-seo').innerHTML = t.seoHTML;
-            document.getElementById('lblLegalText').innerHTML = t.legal;
+const logic = {
+    names: [], angle: 0, isSpinning: false, history: [], totalSpins: 0, lang: 'en',
+    translations: {
+        en: {
+            title: "Classroom & Office Names",
+            sub: "One name per line. Best for teachers and HR raffle events.",
+            spin: "Click the Wheel to Spin!",
+            status: "Name list is valid.",
+            winner: "The winner is: ",
+            legal: "TeamSpin PRO respects your privacy. No data is stored on our servers.",
+            seoHTML: `<div class="seo-grid" id="features"><div class="seo-card"><h2>🚀 Features</h2><p>High-speed rendering and CSV support.</p></div><div class="seo-card"><h2>🔒 Private</h2><p>Data stays on your device.</p></div></div>`
+        },
+        np: {
+            title: "कक्षा र कार्यालयका नामहरू",
+            sub: "प्रति पङ्क्ति एक नाम। शिक्षक र राफल कार्यक्रमका लागि उत्तम।",
+            spin: "घुमाउनका लागि व्हीलमा क्लिक गर्नुहोस्!",
+            status: "नाम सूची मान्य छ।",
+            winner: "विजेता हुनुहुन्छ: ",
+            legal: "TeamSpin PRO तपाईंको गोपनीयताको सम्मान गर्दछ। कुनै डाटा राखिँदैन।",
+            seoHTML: `<div class="seo-grid" id="features"><div class="seo-card"><h2>🚀 विशेषताहरू</h2><p>उच्च गतिको व्हील र फाइल आयात गर्ने सुविधा।</p></div><div class="seo-card"><h2>🔒 गोप्य</h2><p>तपाईंको डाटा सुरक्षित रहन्छ।</p></div></div>`
+        },
+        hi: {
+            title: "कक्षा और कार्यालय के नाम",
+            sub: "प्रति पंक्ति एक नाम। शिक्षकों और रैफल कार्यक्रमों के लिए उत्तम।",
+            spin: "स्पिन करने के लिए व्हील पर क्लिक करें!",
+            status: "नाम सूची मान्य है।",
+            winner: "विजेता है: ",
+            legal: "TeamSpin PRO आपकी गोपनीयता का सम्मान करता है। कोई डेटा सेव नहीं होता।",
+            seoHTML: `<div class="seo-grid" id="features"><div class="seo-card"><h2>🚀 विशेषताएं</h2><p>तेज़ रेंडरिंग और आसान फाइल इम्पोर्ट।</p></div><div class="seo-card"><h2>🔒 सुरक्षित</h2><p>आपका डेटा आपके पास सुरक्षित है।</p></div></div>`
+        }
+    },
+
+    changeLang(val) {
+        this.lang = val;
+        const t = this.translations[val];
+        document.getElementById('lblInputTitle').innerText = t.title;
+        document.getElementById('lblInputSub').innerText = t.sub;
+        document.getElementById('lblStatus').innerText = t.status;
+        document.getElementById('lblClickToSpin').innerText = t.spin;
+        document.getElementById('dynamic-seo').innerHTML = t.seoHTML || "";
+        document.getElementById('lblLegalText').innerHTML = t.legal;
+        this.draw();
+    },
+
+    init() {
+        this.totalSpins = parseInt(localStorage.getItem('ts_lifetime_spins')) || 0;
+        document.getElementById('valTotalSpins').innerText = this.totalSpins;
+        document.getElementById('mainInput').addEventListener('input', () => this.sync());
+        this.sync();
+        this.changeLang('en');
+    },
+
+    sync() {
+        const val = document.getElementById('mainInput').value;
+        this.names = val.split('\n').map(n => n.trim()).filter(n => n !== "");
+        document.getElementById('valCount').innerText = this.names.length;
+        this.draw();
+    },
+
+    draw() {
+        const canvas = document.getElementById('wheelCanvas');
+        if (!canvas) return;
+        canvas.width = 1000; canvas.height = 1000;
+        const ctx = canvas.getContext('2d');
+        const len = this.names.length;
+        const center = 500; const radius = 480;
+        ctx.clearRect(0, 0, 1000, 1000);
+
+        if (len === 0) {
+            ctx.fillStyle = ui.theme === 'light' ? '#cbd5e1' : '#1e293b';
+            ctx.beginPath(); ctx.arc(center, center, radius, 0, Math.PI * 2); ctx.fill();
+            return;
+        }
+
+        const arc = (Math.PI * 2) / len;
+        const colors = ui.theme === 'light' ? 
+            ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6'] :
+            ['#1d4ed8', '#065f46', '#92400e', '#991b1b', '#5b21b6'];
+
+        this.names.forEach((name, i) => {
+            const ang = this.angle + (i * arc);
+            ctx.beginPath(); ctx.fillStyle = colors[i % colors.length];
+            ctx.moveTo(center, center); ctx.arc(center, center, radius, ang, ang + arc); ctx.fill(); 
+            ctx.strokeStyle = ui.theme === 'light' ? '#fff' : '#0f172a';
+            ctx.lineWidth = 4; ctx.stroke();
+            ctx.save(); ctx.translate(center, center); ctx.rotate(ang + arc / 2);
+            ctx.textAlign = "right"; ctx.fillStyle = "#fff"; ctx.font = "bold 35px Inter";
+            ctx.fillText(name.substring(0, 18), radius - 40, 12); ctx.restore();
+        });
+        ctx.beginPath(); ctx.fillStyle = "white"; ctx.arc(center, center, 40, 0, Math.PI * 2); ctx.fill();
+    },
+
+    spin() {
+        if (this.isSpinning || this.names.length < 2) return;
+        this.isSpinning = true;
+        if (document.getElementById('cfgSound').checked) document.getElementById('sndSpin').play();
+        const startAngle = this.angle;
+        const array = new Uint32Array(1);
+        window.crypto.getRandomValues(array);
+        const totalRotation = (Math.PI * 2 * 12) + ((array[0] / 0xFFFFFFFF) * Math.PI * 2);
+        const duration = 5000; const start = performance.now();
+
+        const animate = (time) => {
+            const elapsed = time - start;
+            const progress = Math.min(elapsed / duration, 1);
+            const ease = 1 - Math.pow(1 - progress, 5);
+            this.angle = startAngle + (totalRotation * ease);
             this.draw();
-        },
+            if (progress < 1) requestAnimationFrame(animate);
+            else this.finish();
+        };
+        requestAnimationFrame(animate);
+    },
 
-       init() {
-    // Add this line at the start of init:
-    this.totalSpins = parseInt(localStorage.getItem('ts_lifetime_spins')) || 0;
-    document.getElementById('valTotalSpins').innerText = this.totalSpins;
+    finish() {
+        this.isSpinning = false;
+        const arc = (Math.PI * 2) / this.names.length;
+        const normalizedAngle = ((Math.PI * 1.5) - this.angle) % (Math.PI * 2);
+        const idx = Math.floor((normalizedAngle < 0 ? normalizedAngle + Math.PI * 2 : normalizedAngle) / arc) % this.names.length;
+        const winner = this.names[idx];
 
-    document.getElementById('mainInput').addEventListener('input', () => this.sync());
-            this.changeLang('en');
-        },
+        this.totalSpins++;
+        localStorage.setItem('ts_lifetime_spins', this.totalSpins);
+        document.getElementById('valTotalSpins').innerText = this.totalSpins;
 
-        sync() {
-            const val = document.getElementById('mainInput').value;
-            this.names = val.split('\n').map(n => n.trim()).filter(n => n !== "");
-            document.getElementById('valCount').innerText = this.names.length;
-            this.draw();
-        },
+        confetti({ particleCount: 200, spread: 80, origin: { y: 0.6 } });
+        if (document.getElementById('cfgSound').checked) document.getElementById('sndWin').play();
 
-        draw() {
-            const canvas = document.getElementById('wheelCanvas');
-            const size = canvas.parentElement.offsetWidth;
-            canvas.width = size; canvas.height = size;
-            const ctx = canvas.getContext('2d');
-            const len = this.names.length;
-            ctx.clearRect(0,0,size,size);
+        Swal.fire({
+            title: `${this.translations[this.lang].winner} <span style="color:#2563eb">${winner}</span>`,
+            icon: 'success',
+            confirmButtonColor: '#2563eb'
+        });
 
-            if (len === 0) {
-                ctx.fillStyle = ui.theme === 'light' ? '#cbd5e1' : '#1e293b';
-                ctx.beginPath(); ctx.arc(size/2, size/2, size/2-10, 0, Math.PI*2); ctx.fill();
-                return;
-            }
-
-            const arc = (Math.PI * 2) / len;
-            const colors = ui.theme === 'light' ? 
-                ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6'] :
-                ['#1d4ed8', '#065f46', '#92400e', '#991b1b', '#5b21b6'];
-
-            this.names.forEach((name, i) => {
-                const ang = this.angle + (i * arc);
-                ctx.beginPath(); ctx.fillStyle = colors[i % colors.length];
-                ctx.moveTo(size/2, size/2); ctx.arc(size/2, size/2, size/2-10, ang, ang+arc);
-                ctx.fill(); ctx.strokeStyle = ui.theme === 'light' ? '#fff' : '#0f172a';
-                ctx.lineWidth = 2; ctx.stroke();
-
-                ctx.save(); ctx.translate(size/2, size/2); ctx.rotate(ang + arc/2);
-                ctx.textAlign="right"; ctx.fillStyle="#fff"; ctx.font=`bold ${size/22}px Inter`;
-                ctx.fillText(name.substring(0,15), size/2-30, 10); ctx.restore();
-            });
-            ctx.beginPath(); ctx.fillStyle = "white"; ctx.arc(size/2, size/2, size/15, 0, Math.PI*2); ctx.fill();
-        },
-
-        spin() {
-            if (this.isSpinning || this.names.length < 2) return;
-            this.isSpinning = true;
-            if (document.getElementById('cfgSound').checked) document.getElementById('sndSpin').play();
-            
-            const startAngle = this.angle;
-            const array = new Uint32Array(1);
-            window.crypto.getRandomValues(array);
-            const totalRotation = (Math.PI * 2 * 12) + ((array[0] / 0xFFFFFFFF) * Math.PI * 2);
-            const duration = 5000;
-            const start = performance.now();
-
-            const animate = (time) => {
-                const elapsed = time - start;
-                const progress = Math.min(elapsed / duration, 1);
-                const ease = 1 - Math.pow(1 - progress, 5);
-                this.angle = startAngle + (totalRotation * ease);
-                this.draw();
-                if (progress < 1) requestAnimationFrame(animate);
-                else this.finish();
-            };
-            requestAnimationFrame(animate);
-        },
-
-        finish() {
-    this.isSpinning = false;
-    
-    // Update and save lifetime spins
-    this.totalSpins++;
-    localStorage.setItem('ts_lifetime_spins', this.totalSpins);
-    document.getElementById('valTotalSpins').innerText = this.totalSpins;
-
-            confetti({ particleCount: 200, spread: 80, origin: { y: 0.6 } });
-            if (document.getElementById('cfgSound').checked) document.getElementById('sndWin').play();
-
-            Swal.fire({
-                title: `${this.translations[this.lang].winner} <span style="color:#2563eb">${winner}</span>`,
-                icon: 'success',
-                confirmButtonText: 'Great!'
-            });
-
-            this.addToHistory(winner);
-            if (document.getElementById('cfgRemove').checked) {
-                this.names.splice(idx, 1);
-                document.getElementById('mainInput').value = this.names.join('\n');
-                this.sync();
-            }
-        },
-
-        addToHistory(name) {
-            const time = new Date().toLocaleTimeString();
-            this.history.unshift({name, time});
-            document.getElementById('historyList').innerHTML = this.history.slice(0, 8).map(h => `
-                <li class="history-item"><strong>${h.name}</strong> <small>${h.time}</small></li>
-            `).join('');
-        },
-
-        shuffle() {
-            this.names.sort(() => Math.random() - 0.5);
+        this.addToHistory(winner);
+        if (document.getElementById('cfgRemove').checked) {
+            this.names.splice(idx, 1);
             document.getElementById('mainInput').value = this.names.join('\n');
             this.sync();
-        },
-
-        reset() { if(confirm("Clear everything?")) { document.getElementById('mainInput').value=""; this.sync(); } },
-
-        clearHistory() { this.history = []; document.getElementById('historyList').innerHTML = ""; },
-
-        importFile(e) {
-            const reader = new FileReader();
-            reader.onload = (ev) => { document.getElementById('mainInput').value = ev.target.result; this.sync(); };
-            reader.readAsText(e.target.files[0]);
-        },
-
-        exportNames() {
-            const blob = new Blob([this.names.join('\n')], {type: 'text/plain'});
-            const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
-            a.download = "TeamSpin_List.txt"; a.click();
         }
-    };
+    },
 
-    window.onload = () => logic.init();
+    addToHistory(name) {
+        const time = new Date().toLocaleTimeString();
+        this.history.unshift({name, time});
+        document.getElementById('historyList').innerHTML = this.history.slice(0, 8).map(h => `
+            <li class="history-item"><strong>${h.name}</strong> <small>${h.time}</small></li>
+        `).join('');
+    },
+
+    shuffle() {
+        this.names.sort(() => Math.random() - 0.5);
+        document.getElementById('mainInput').value = this.names.join('\n');
+        this.sync();
+    },
+
+    reset() { if(confirm("Clear everything?")) { document.getElementById('mainInput').value=""; this.sync(); } },
+    clearHistory() { this.history = []; document.getElementById('historyList').innerHTML = ""; },
+    importFile(e) {
+        const reader = new FileReader();
+        reader.onload = (ev) => { document.getElementById('mainInput').value = ev.target.result; this.sync(); };
+        reader.readAsText(e.target.files[0]);
+    },
+    exportNames() {
+        const blob = new Blob([this.names.join('\n')], {type: 'text/plain'});
+        const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
+        a.download = "TeamSpin_List.txt"; a.click();
+    }
+};
+
+window.onload = () => logic.init();
+    function showPrivacy() {
+    Swal.fire({
+        title: 'Privacy Policy',
+        html: `<div style="text-align:left; font-size:14px; color: var(--text-main);">
+            <p><strong>TeamSpin PRO</strong> takes your privacy seriously:</p>
+            <ul>
+                <li><strong>Local Execution:</strong> Your name lists are processed entirely in your browser. We never upload your data to any server.</li>
+                <li><strong>Storage:</strong> We only use your browser's Local Storage to remember your lifetime spin count.</li>
+                <li><strong>Third Parties:</strong> We do not sell or share any user data.</li>
+            </ul>
+        </div>`,
+        confirmButtonColor: '#2563eb'
+    });
+}
+
+function showTerms() {
+    Swal.fire({
+        title: 'Terms of Service',
+        html: `<div style="text-align:left; font-size:14px; color: var(--text-main);">
+            <p>By using this tool, you agree that:</p>
+            <ul>
+                <li>The results are generated randomly for entertainment and educational purposes.</li>
+                <li>TeamSpin PRO is not liable for any decisions made based on the spin results.</li>
+                <li>You will not use this tool for illegal gambling activities.</li>
+            </ul>
+        </div>`,
+        confirmButtonColor: '#2563eb'
+    });
+}
 </script>
 </body>
 </html>
-
-
