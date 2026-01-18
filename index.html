@@ -10,7 +10,7 @@
     
     <style>
         /* ========================================
-           CSS DESIGN SYSTEM
+           CSS DESIGN SYSTEM 
            ========================================
         */
         :root {
@@ -43,7 +43,55 @@
             background-color: var(--bg-body);
             color: var(--text-main);
             transition: background 0.3s ease;
+            min-height: 100vh;
         }
+
+        /* --- FULL SCREEN MODE STYLES --- */
+        body.is-fullscreen {
+            overflow: hidden;
+        }
+
+        body.is-fullscreen .navbar, 
+        body.is-fullscreen .side-panel,
+        body.is-fullscreen #btnSpinBottom { 
+            display: none !important; 
+        }
+
+        body.is-fullscreen .master-container {
+            display: flex;
+            height: 100vh;
+            width: 100vw;
+            margin: 0;
+            padding: 0;
+            max-width: none;
+            align-items: center;
+            justify-content: center;
+            background: var(--bg-body);
+        }
+
+        body.is-fullscreen .wheel-stage {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+        }
+
+        .exit-fs-btn {
+            display: none;
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 3000;
+            background: #ef4444;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 10px;
+            border: none;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        body.is-fullscreen .exit-fs-btn { display: block; }
 
         /* --- NAVIGATION --- */
         .navbar {
@@ -142,6 +190,8 @@
 <audio id="sndSpin" loop><source src="https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3"></audio>
 <audio id="sndWin"><source src="https://assets.mixkit.co/active_storage/sfx/1435/1435-preview.mp3"></audio>
 
+<button class="exit-fs-btn" onclick="logic.toggleFullScreen()">EXIT FULL SCREEN (ESC)</button>
+
 <header class="navbar">
     <div class="logo-area" onclick="location.reload()">
         <img src="logo.jpg" width="35" style="border-radius:8px;" alt="Logo">
@@ -159,7 +209,6 @@
         <select id="langSwitcher" onchange="logic.changeLang(this.value)" class="btn-ghost" style="width:auto; padding:5px 10px;">
             <option value="en">English (US)</option>
             <option value="np">नेपाली (Nepal)</option>
-            <option value="hi">हिन्दी (Hindi)</option>
         </select>
         <button class="btn-ghost" style="width:auto; padding:5px 10px;" onclick="ui.toggleTheme()">🌓</button>
     </div>
@@ -190,7 +239,7 @@
             <canvas id="wheelCanvas" width="900" height="900"></canvas>
         </div>
         <h1 id="lblStatus" style="margin-top:25px; font-weight:900;">Click to Spin the Wheel</h1>
-        <button id="btnSpinMain" class="btn btn-blue" style="width:280px; font-size:18px; height:60px;" onclick="logic.spin()">SPIN THE WHEEL</button>
+        <button id="btnSpinBottom" class="btn btn-blue" style="width:280px; font-size:18px; height:60px;" onclick="logic.spin()">SPIN THE WHEEL</button>
     </section>
 
     <aside class="side-panel">
@@ -209,21 +258,22 @@
         <h3 style="margin-top:30px;" id="lblSettings">Preferences</h3>
         <div style="display:flex; flex-direction:column; gap:15px;">
             <label style="display:flex; justify-content:space-between; cursor:pointer;">
-                <span id="txtRemove">Remove winner auto</span>
+                <span>Remove winner auto</span>
                 <input type="checkbox" id="cfgRemove" style="width:20px; height:20px;">
             </label>
             <label style="display:flex; justify-content:space-between; cursor:pointer;">
-                <span id="txtSound">Sound Effects</span>
+                <span>Sound Effects</span>
                 <input type="checkbox" id="cfgSound" checked style="width:20px; height:20px;">
             </label>
             <label style="display:flex; justify-content:space-between; cursor:pointer;">
-                <span id="txtConfetti">Confetti Burst</span>
+                <span>Confetti Burst</span>
                 <input type="checkbox" id="cfgConfetti" checked style="width:20px; height:20px;">
             </label>
         </div>
 
-        <button class="btn btn-ghost" style="margin-top:30px;" onclick="ui.showModal('modalHistory')">📜 View Winner History</button>
-        <button class="btn btn-blue" style="margin-top:10px;" onclick="logic.exportNames()">📤 Export List</button>
+        <button class="btn btn-blue" style="margin-top:25px;" onclick="logic.toggleFullScreen()">📺 Full Screen Mode</button>
+        <button class="btn btn-ghost" style="margin-top:10px;" onclick="ui.showModal('modalHistory')">📜 View Winner History</button>
+        <button class="btn btn-ghost" style="margin-top:10px;" onclick="logic.exportNames()">📤 Export List</button>
     </aside>
 </main>
 
@@ -236,7 +286,51 @@
             <p>Simply enter your list of participants in the box on the left. Each name must be on a new line. Click the wheel or the spin button to select a random winner.</p>
             <h3>Is it truly random?</h3>
             <p>Yes. TeamSpin PRO uses the browser's high-entropy Math.random() function combined with physics-based deceleration to ensure a non-deterministic outcome.</p>
+            <h3>Can I use this for giveaways?</h3>
+            <p>Absolutely! Many teachers use it for student selection, and HR managers use it for office raffles.</p>
         </div>
+    </div>
+</div>
+
+<div id="modalPrivacy" class="modal-overlay">
+    <div class="modal-card">
+        <span class="close-btn" onclick="ui.closeAll()">&times;</span>
+        <h2>Privacy Policy</h2>
+        <div class="legal-content">
+            <p>Your privacy is our priority. TeamSpin PRO is a "Client-Side" application.</p>
+            <h3>Data Storage</h3>
+            <p>We do not store your name lists on our servers. All names you enter stay within your browser's local memory.</p>
+            <h3>Cookies</h3>
+            <p>We use minimal cookies/local storage only to remember your theme settings and spin count. No tracking or advertising data is collected.</p>
+        </div>
+    </div>
+</div>
+
+<div id="modalTerms" class="modal-overlay">
+    <div class="modal-card">
+        <span class="close-btn" onclick="ui.closeAll()">&times;</span>
+        <h2>Terms of Service</h2>
+        <div class="legal-content">
+            <p>By using TeamSpin PRO, you agree to the following:</p>
+            <ul>
+                <li>The tool is provided "as is" for entertainment and educational use.</li>
+                <li>We are not responsible for any disputes resulting from the wheel's outcome.</li>
+                <li>Commercial use is permitted as long as the tool is not being resold as your own product.</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div id="modalContact" class="modal-overlay">
+    <div class="modal-card">
+        <span class="close-btn" onclick="ui.closeAll()">&times;</span>
+        <h2>Contact Support</h2>
+        <p>Email: support@teamspinpro.com</p>
+        <form onsubmit="event.preventDefault(); alert('Request Sent!'); ui.closeAll();">
+            <input type="text" placeholder="Subject" style="width:100%; padding:12px; margin-bottom:15px; border:1px solid var(--border); border-radius:10px;">
+            <textarea placeholder="Message" style="width:100%; height:100px; padding:12px; border:1px solid var(--border); border-radius:10px;"></textarea>
+            <button class="btn btn-blue">Send Feedback</button>
+        </form>
     </div>
 </div>
 
@@ -263,6 +357,10 @@
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
 <script>
+    /*
+        OBJECT-ORIENTED ARCHITECTURE
+    */
+    
     const ui = {
         theme: 'light',
         toggleTheme() {
@@ -271,6 +369,7 @@
             logic.draw();
         },
         showModal(id) {
+            if(id === 'modalHistory') logic.renderHistory();
             document.getElementById(id).style.display = 'flex';
         },
         closeAll() {
@@ -288,25 +387,11 @@
         angle: 0,
         isSpinning: false,
         lang: 'en',
-        idleRotation: 0.002, // ROTATING STATE FEATURE
         lifetimeSpins: parseInt(localStorage.getItem('lifetimeSpins')) || 0,
 
         dict: {
-            en: { 
-                names: "Entries List", status: "Click to Spin the Wheel", stats: "Real-time Stats", 
-                set: "Preferences", win: "WE HAVE A WINNER!", btn: "SPIN THE WHEEL", 
-                remove: "Remove winner auto", sound: "Sound Effects", confetti: "Confetti Burst" 
-            },
-            np: { 
-                names: "नामहरूको सूची", status: "घुमाउनका लागि क्लिक गर्नुहोस्", stats: "प्रत्यक्ष तथ्याङ्क", 
-                set: "सेटिङहरू", win: "विजेता घोषणा!", btn: "ह्विल घुमाउनुहोस्",
-                remove: "विजेता आफै हटाउनुहोस्", sound: "ध्वनि प्रभाव", confetti: "बधाई एनिमेसन"
-            },
-            hi: { 
-                names: "नामों की सूची", status: "घूमने के लिए क्लिक करें", stats: "रियल-टाइम आंकड़े", 
-                set: "प्राथमिकताएं", win: "विजेता घोषित!", btn: "पहिया घुमाएं",
-                remove: "विजेता को स्वतः हटाएं", sound: "ध्वनि प्रभाव", confetti: "बधाई एनीमेशन"
-            }
+            en: { names: "Entries List", status: "Click to Spin the Wheel", stats: "Real-time Stats", set: "Preferences", win: "WE HAVE A WINNER!" },
+            np: { names: "नामहरूको सूची", status: "घुमाउनका लागि क्लिक गर्नुहोस्", stats: "प्रत्यक्ष तथ्याङ्क", set: "सेटिङहरू", win: "विजेता घोषणा!" }
         },
 
         init() {
@@ -314,21 +399,24 @@
             input.addEventListener('input', () => this.sync());
             document.getElementById('valSpins').innerText = this.lifetimeSpins;
             this.sync();
-            this.animateIdle(); // START IDLE ROTATION
+
+            // Keyboard support for full screen exit
+            window.addEventListener('keydown', (e) => {
+                if (e.key === "Escape" && document.body.classList.contains('is-fullscreen')) {
+                    this.toggleFullScreen();
+                }
+            });
+        },
+
+        toggleFullScreen() {
+            const isFS = document.body.classList.toggle('is-fullscreen');
+            this.draw(); // Redraw to ensure canvas looks good in new layout
         },
 
         sync() {
             this.names = document.getElementById('mainInput').value.split('\n').map(n => n.trim()).filter(n => n !== "");
             ui.updateBadge(this.names.length);
             this.draw();
-        },
-
-        animateIdle() {
-            if (!this.isSpinning) {
-                this.angle += this.idleRotation;
-                this.draw();
-            }
-            requestAnimationFrame(() => this.animateIdle());
         },
 
         draw() {
@@ -344,15 +432,20 @@
 
             for(let i = 0; i < len; i++) {
                 const currentAngle = this.angle + (i * arc);
+                
+                // Draw Wedge
                 ctx.beginPath();
                 ctx.fillStyle = colors[i % colors.length];
                 ctx.moveTo(450, 450);
                 ctx.arc(450, 450, 430, currentAngle, currentAngle + arc);
                 ctx.fill();
+                
+                // Glow/Shadow effect
                 ctx.strokeStyle = "rgba(255,255,255,0.15)";
                 ctx.lineWidth = 2;
                 ctx.stroke();
 
+                // Draw Text
                 ctx.save();
                 ctx.translate(450, 450);
                 ctx.rotate(currentAngle + arc/2);
@@ -365,6 +458,7 @@
                 ctx.restore();
             }
 
+            // Center Pin
             ctx.beginPath();
             ctx.arc(450, 450, 40, 0, Math.PI*2);
             ctx.fillStyle = ui.theme === 'light' ? '#fff' : '#0f172a';
@@ -391,8 +485,11 @@
             const animate = (now) => {
                 const elapsed = now - startTime;
                 const progress = Math.min(elapsed / duration, 1);
+                
+                // Ease out cubic
                 const ease = 1 - Math.pow(1 - progress, 3);
                 this.angle = startAngle + (totalRotation * ease);
+                
                 this.draw();
 
                 if(progress < 1) {
@@ -425,6 +522,7 @@
 
             document.getElementById('winnerName').innerText = winner;
             ui.showModal('modalWinner');
+
             this.history.unshift({ name: winner, time: new Date().toLocaleTimeString() });
             
             if(document.getElementById('cfgRemove').checked) {
@@ -457,6 +555,20 @@
             }
         },
 
+        renderHistory() {
+            const list = document.getElementById('historyList');
+            if(this.history.length === 0) {
+                list.innerHTML = "<p style='padding:20px; text-align:center;'>No winners yet.</p>";
+                return;
+            }
+            list.innerHTML = this.history.map(h => `
+                <div style="padding:12px; border-bottom:1px solid var(--border); display:flex; justify-content:space-between;">
+                    <strong>${h.name}</strong>
+                    <span style="font-size:12px; color:var(--text-muted);">${h.time}</span>
+                </div>
+            `).join('');
+        },
+
         changeLang(val) {
             this.lang = val;
             const d = this.dict[val];
@@ -465,10 +577,6 @@
             document.getElementById('lblStats').innerText = d.stats;
             document.getElementById('lblSettings').innerText = d.set;
             document.getElementById('lblWinHeader').innerText = d.win;
-            document.getElementById('btnSpinMain').innerText = d.btn;
-            document.getElementById('txtRemove').innerText = d.remove;
-            document.getElementById('txtSound').innerText = d.sound;
-            document.getElementById('txtConfetti').innerText = d.confetti;
         },
 
         importFile(e) {
@@ -490,7 +598,7 @@
 
         clearHistory() {
             this.history = [];
-            ui.closeAll();
+            this.renderHistory();
         }
     };
 
@@ -499,6 +607,7 @@
     };
 
     logic.init();
+
 </script>
 </body>
 </html>
