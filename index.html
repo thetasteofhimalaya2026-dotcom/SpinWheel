@@ -286,57 +286,65 @@ showMobileMenu() {
 
 const logic = {
     names: [], angle: 0, isSpinning: false, history: [], totalSpins: 0, lang: 'en',
-    // REPLACE your translations object inside logic with this:
-translations: {
-    en: {
-        title: "Classroom & Office Names",
-        sub: "One name per line. Best for teachers and HR raffle events.",
-        spin: "Click the Wheel to Spin!",
-        status: "Name list is valid.",
-        winner: "The winner is: ",
-        legal: "TeamSpin PRO respects your privacy. No data is stored on our servers.",
-        blogTitle: "Latest from TeamSpin Blog",
-        seoHTML: `<div class="seo-grid"><h2>Random Name Picker</h2><p>Professional tool for teachers and giveaways.</p></div>`
+    translations: {
+        en: {
+            title: "Classroom & Office Names",
+            sub: "One name per line. Best for teachers and HR raffle events.",
+            spin: "Click the Wheel to Spin!",
+            status: "Name list is valid.",
+            winner: "The winner is: ",
+            legal: "TeamSpin PRO respects your privacy. No data is stored on our servers.",
+            blogTitle: "Latest from TeamSpin Blog",
+            seoHTML: `<div class="seo-grid"><h2>Random Name Picker</h2><p>Professional tool for teachers and giveaways.</p></div>`
+        },
+        np: {
+            title: "कक्षा र कार्यालयका नामहरू",
+            sub: "प्रति पङ्क्ति एक नाम। शिक्षक र राफल कार्यक्रमका लागि उत्तम।",
+            spin: "घुमाउनका लागि व्हीलमा क्लिक गर्नुहोस्!",
+            status: "नाम सूची मान्य छ।",
+            winner: "विजेता हुनुहुन्छ: ",
+            legal: "TeamSpin PRO तपाईंको गोपनीयताको सम्मान गर्दछ।",
+            blogTitle: "हाम्रो ब्लगबाट नयाँ जानकारी",
+            seoHTML: `<div class="seo-grid"><h2>गोलाप्रथा र नाम छान्ने मेसिन</h2><p>शिक्षक र अफिसका लागि उत्कृष्ट डिजिटल व्हील।</p></div>`
+        },
+        hi: {
+            title: "कक्षा और कार्यालय के नाम",
+            sub: "प्रति पंक्ति एक नाम। शिक्षकों और रैफल कार्यक्रमों के लिए उत्तम।",
+            spin: "स्पिन करने के लिए व्हील पर क्लिक करें!",
+            status: "नाम सूची मान्य है।",
+            winner: "विजेता है: ",
+            legal: "TeamSpin PRO आपकी गोपनीयता का सम्मान करता है।",
+            blogTitle: "ब्लॉग से नवीनतम जानकारी",
+            seoHTML: `<div class="seo-grid"><h2>नाम चुनने वाला रैंडम व्हील</h2><p>शिक्षकों और ऑफिस लकी ड्रा के लिए सबसे अच्छा टूल।</p></div>`
+        }
     },
-    np: {
-        title: "कक्षा र कार्यालयका नामहरू",
-        sub: "प्रति पङ्क्ति एक नाम। शिक्षक र राफल कार्यक्रमका लागि उत्तम।",
-        spin: "घुमाउनका लागि व्हीलमा क्लिक गर्नुहोस्!",
-        status: "नाम सूची मान्य छ।",
-        winner: "विजेता हुनुहुन्छ: ",
-        legal: "TeamSpin PRO तपाईंको गोपनीयताको सम्मान गर्दछ।",
-        blogTitle: "हाम्रो ब्लगबाट नयाँ जानकारी",
-        seoHTML: `<div class="seo-grid"><h2>गोलाप्रथा र नाम छान्ने मेसिन</h2><p>शिक्षक र अफिसका लागि उत्कृष्ट डिजिटल व्हील।</p></div>`
-    },
-    hi: {
-        title: "कक्षा और कार्यालय के नाम",
-        sub: "प्रति पंक्ति एक नाम। शिक्षकों और रैफल कार्यक्रमों के लिए उत्तम।",
-        spin: "स्पिन करने के लिए व्हील पर क्लिक करें!",
-        status: "नाम सूची मान्य है।",
-        winner: "विजेता है: ",
-        legal: "TeamSpin PRO आपकी गोपनीयता का सम्मान करता है।",
-        blogTitle: "ब्लॉग से नवीनतम जानकारी",
-        seoHTML: `<div class="seo-grid"><h2>नाम चुनने वाला रैंडम व्हील</h2><p>शिक्षकों और ऑफिस लकी ड्रा के लिए सबसे अच्छा टूल।</p></div>`
-    }
-},
 
-// UPDATE your changeLang(val) function to include this line:
-changeLang(val) {
-    this.lang = val;
-    const t = this.translations[val];
-    // ... your existing document.getElementById lines ...
-    document.getElementById('lblBlogTitle').innerText = t.blogTitle; // New line
-    this.draw();
-}
+    changeLang(val) {
+        this.lang = val;
+        const t = this.translations[val];
+        
+        // Update UI Elements
+        document.getElementById('lblInputTitle').innerText = t.title;
+        document.getElementById('lblInputSub').innerText = t.sub;
+        document.getElementById('lblStatus').innerText = t.status;
+        document.getElementById('lblClickToSpin').innerText = t.spin;
+        document.getElementById('lblLegalText').innerText = t.legal;
+        document.getElementById('lblBlogTitle').innerText = t.blogTitle;
+        document.getElementById('dynamic-seo').innerHTML = t.seoHTML;
+        
+        this.draw();
+    },
 
     init() {
         this.totalSpins = parseInt(localStorage.getItem('ts_lifetime_spins')) || 0;
         document.getElementById('valTotalSpins').innerText = this.totalSpins;
         document.getElementById('mainInput').addEventListener('input', () => this.sync());
+        
+        // Set default language based on dropdown
+        const savedLang = document.getElementById('langSwitcher').value;
+        this.changeLang(savedLang);
         this.sync();
-        this.changeLang('en');
     },
-
     sync() {
         const val = document.getElementById('mainInput').value;
         this.names = val.split('\n').map(n => n.trim()).filter(n => n !== "");
@@ -488,4 +496,5 @@ function showTerms() {
 </script>
 </body>
 </html>
+
 
