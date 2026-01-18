@@ -6,225 +6,62 @@
 <title>TeamSpin PRO – Free Wheel of Names | Random Name Picker & Decision Maker</title>
 <meta name="description" content="TeamSpin PRO is the best free online Wheel of Names. Perfect for teachers, raffles, and random giveaways. Spin the wheel to pick a winner instantly!">
 <meta name="keywords" content="wheel of names, random name picker, spin the wheel, random winner generator, TeamSpin PRO, decision maker">
-
 <link rel="icon" type="image/jpeg" href="logo.jpg">
 <link rel="apple-touch-icon" href="logo.jpg">
 <meta name="theme-color" content="#007bff">
 
 <style>
-:root{
-    --primary: #007bff;
-    --primary-light: #e7f3ff;
-    --bg: #fff;
-    --text: #333;
-    --sidebar-bg: #ffffff;
-}
-
-/* THEMES */
+:root{--primary:#007bff;--primary-light:#e7f3ff;--bg:#fff;--text:#333;--sidebar-bg:#ffffff;}
 [data-theme="neon"]{--primary:#00ffe0;--bg:#050b12;--text:#e5f9ff;--sidebar-bg:#101a26;}
 [data-theme="dark"]{--primary:#7dd3fc;--bg:#0f172a;--text:#f8fafc;--sidebar-bg:#1e293b;}
 [data-theme="pastel"]{--primary:#ff8fab;--bg:#fff0f6;--text:#4a2c2a;--sidebar-bg:#ffffff;}
 [data-theme="casino"]{--primary:#ffd700;--bg:#062a1f;--text:#fff8dc;--sidebar-bg:#0a3d2e;}
-
-body{
-    margin:0; font-family:system-ui,-apple-system;
-    background:var(--bg); color:var(--text);
-    transition: 0.3s; overflow-x: hidden;
-}
-
-.header-bar{
-    display:flex; align-items:center; gap:16px;
-    padding:12px 16px; border-bottom:1px solid #e5e7eb;
-    background:var(--bg); position:sticky; top:0; z-index:1000;
-}
-.brand{display:flex; align-items:center; gap:8px; font-size:20px; font-weight:700;}
-.brand img{width:30px; height:30px; border-radius:4px;}
+body{margin:0;font-family:system-ui,-apple-system;background:var(--bg);color:var(--text);transition:0.3s;overflow-x:hidden;}
+.header-bar{display:flex;align-items:center;gap:16px;padding:12px 16px;border-bottom:1px solid #e5e7eb;background:var(--bg);position:sticky;top:0;z-index:1000;}
+.brand{display:flex;align-items:center;gap:8px;font-size:20px;font-weight:700;}
+.brand img{width:30px;height:30px;border-radius:4px;}
 .brand span{color:var(--primary);}
-
-.nav-links{display:flex; gap:16px; flex-grow:1;}
-.nav-links a{color:var(--primary); text-decoration:none; font-size:14px;}
-
-.header-right{display:flex; gap:8px;}
-select, .header-btn{padding:6px 10px; border:1px solid #ccc; border-radius:6px; background:#fff; cursor:pointer;}
-
-.app-grid{
-    display:grid;
-    grid-template-columns: 320px 1fr 300px;
-    gap:20px; padding:20px;
-}
-
-.sidebar{
-    background: var(--sidebar-bg);
-    border: 1px solid #eee; padding: 20px; border-radius: 12px;
-    height: fit-content; box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-}
-
-#nameInput{
-    width:100%; height:200px; padding:12px; font-size:15px; 
-    box-sizing:border-box; border-radius:8px; border:1px solid #ccc;
-}
-
-.duplicate-msg{color:#28a745; font-size:12px; margin-top:5px; display:none; font-weight:bold;}
-.error-msg{color:#dc3545; font-size:12px; margin-top:5px; display:none; font-weight:bold; animation: shake 0.5s;}
-
-@keyframes shake {
-  0%, 100% { transform: translateX(0); }
-  25% { transform: translateX(-5px); }
-  75% { transform: translateX(5px); }
-}
-
-.control-btn{
-    padding:10px; border:1px solid #ccc; border-radius:8px;
-    background:#f8fafc; cursor:pointer; width: 100%; margin-top: 8px;
-    font-weight: 500; transition: 0.2s;
-}
-.control-btn:hover { border-color: var(--primary); background: var(--primary-light); }
-
-.gallery-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; }
-.gallery-item { 
-    padding: 8px; background: #eee; border-radius: 6px; 
-    font-size: 12px; text-align: center; cursor: pointer; border: 1px solid transparent;
-}
-.gallery-item:hover { border-color: var(--primary); background: #e2e2e2; }
-
-.wheel-column{ text-align:center; display:flex; flex-direction:column; align-items:center; }
-
-.wheel-container{
-    width: min(85vw, 500px); 
-    height: min(85vw, 500px);
-    position: relative; margin-bottom: 40px; cursor: pointer;
-    display: flex; align-items: center; justify-content: center;
-}
-
-/* WINNING RING EFFECT */
-.winner-ring {
-    position: absolute; width: 100%; height: 100%;
-    border-radius: 50%; border: 8px solid #ffd700;
-    box-shadow: 0 0 30px #ffd700, inset 0 0 20px #ffd700;
-    opacity: 0; pointer-events: none; z-index: 5;
-    transition: opacity 0.5s ease;
-}
-.winner-ring.active { opacity: 1; animation: pulseRing 1.5s infinite; }
-@keyframes pulseRing { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
-
-#wheelSection:fullscreen {
-    background: var(--bg); width: 100vw; height: 100vh;
-    display: flex; flex-direction: column; justify-content: center; align-items: center;
-}
-#wheelSection:fullscreen canvas { width: min(90vh, 90vw) !important; height: min(90vh, 90vw) !important; }
-
-canvas{ width:100%; height:100%; border-radius:50%; box-shadow: 0 20px 60px rgba(0,0,0,0.2); }
-
-/* RED 3D POINTER */
-.pointer{
-    position:absolute; top:-15px; left:50%; transform:translateX(-50%);
-    z-index: 20; width: 0; height: 0;
-    border-left: 20px solid transparent; border-right: 20px solid transparent;
-    border-top: 45px solid #ff0000;
-    filter: drop-shadow(0 6px 4px rgba(0,0,0,0.4));
-}
-
-/* WINNER POPUP MODAL */
-.winner-modal {
-    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0,0,0,0.8); display: none; align-items: center; justify-content: center;
-    z-index: 9999; animation: fadeIn 0.3s;
-}
-.modal-content {
-    background: var(--bg); color: var(--text); padding: 40px; border-radius: 20px;
-    text-align: center; max-width: 400px; width: 90%;
-    box-shadow: 0 10px 50px rgba(0,0,0,0.5); border: 4px solid var(--primary);
-}
-.modal-content h1 { font-size: 3rem; margin: 10px 0; color: var(--primary); }
-.close-modal {
-    margin-top: 20px; padding: 12px 30px; background: var(--primary);
-    color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold;
-}
-/* REMOVE BUTTON STYLE */
-.remove-btn {
-    background: #dc3545; margin-left: 10px;
-}
-
-@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
-.history-list {
-    list-style: none; padding: 0; margin: 0;
-    max-height: 400px; overflow-y: auto; border: 1px solid #eee; border-radius: 8px;
-}
-.history-item { padding: 10px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; }
-
-.seo-section { max-width: 1000px; margin: 40px auto; padding: 20px; line-height: 1.6; }
-.seo-section h1 { color: var(--primary); text-align: center; }
-
-/* NEW FEATURES & FAQ SECTION STYLES */
-.features-container {
-    max-width: 1200px;
-    margin: 40px auto;
-    padding: 0 20px;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-    gap: 30px;
-}
-.feature-card {
-    background: var(--sidebar-bg);
-    border: 1px solid #e5e7eb;
-    border-radius: 12px;
-    padding: 24px;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-}
-.feature-card h3 {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    color: var(--text);
-    margin-top: 0;
-    font-size: 1.25rem;
-}
-.feature-card h3 img { width: 24px; height: 24px; border-radius: 4px; }
-.feature-card p, .feature-card li { font-size: 0.95rem; line-height: 1.6; color: var(--text); }
-.feature-card ul { padding-left: 20px; margin-bottom: 0; }
-.feature-card code {
-    background: #f1f5f9;
-    padding: 2px 6px;
-    border-radius: 4px;
-    font-family: monospace;
-    font-weight: bold;
-    color: var(--primary);
-}
-.blue-btn {
-    background: #007bff;
-    color: #fff;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 6px;
-    font-weight: 600;
-    cursor: pointer;
-    margin-top: 15px;
-    transition: 0.2s;
-}
-.blue-btn:hover { opacity: 0.9; }
-hr { border: 0; border-top: 1px solid #eee; margin: 20px 0; }
-
-#btn_spin.disabled {
-    background: #ccc !important;
-    cursor: not-allowed;
-    opacity: 0.7;
-}
-
-footer{ margin-top:60px; padding:40px; background:#f9fafb; border-top:1px solid #e5e7eb; text-align:center; }
-
-@media(max-width:1100px){
-    .app-grid{ grid-template-columns: 1fr; display: flex; flex-direction: column; }
-    .wheel-column{ order: -1; }
-    .nav-links{ display:none; }
-}
-
-/* SETTINGS GROUPING */
-.settings-section { margin-top: 20px; padding-top: 15px; border-top: 1px solid #eee; }
-.settings-label { display: block; font-size: 13px; font-weight: bold; margin-bottom: 5px; }
+.nav-links{display:flex;gap:16px;flex-grow:1;}
+.nav-links a{color:var(--primary);text-decoration:none;font-size:14px;}
+.header-right{display:flex;gap:8px;}
+select,.header-btn{padding:6px 10px;border:1px solid #ccc;border-radius:6px;background:#fff;cursor:pointer;}
+.app-grid{display:grid;grid-template-columns:320px 1fr 300px;gap:20px;padding:20px;}
+.sidebar{background:var(--sidebar-bg);border:1px solid #eee;padding:20px;border-radius:12px;height:fit-content;box-shadow:0 4px 6px rgba(0,0,0,0.05);}
+#nameInput{width:100%;height:200px;padding:12px;font-size:15px;box-sizing:border-box;border-radius:8px;border:1px solid #ccc;}
+.duplicate-msg{color:#28a745;font-size:12px;margin-top:5px;display:none;font-weight:bold;}
+.error-msg{color:#dc3545;font-size:12px;margin-top:5px;display:none;font-weight:bold;animation:shake 0.5s;}
+@keyframes shake{0%,100%{transform:translateX(0);}25%{transform:translateX(-5px);}75%{transform:translateX(5px);}}
+.control-btn{padding:10px;border:1px solid #ccc;border-radius:8px;background:#f8fafc;cursor:pointer;width:100%;margin-top:8px;font-weight:500;transition:0.2s;}
+.control-btn:hover{border-color:var(--primary);background:var(--primary-light);}
+.gallery-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px;}
+.gallery-item{padding:8px;background:#eee;border-radius:6px;font-size:12px;text-align:center;cursor:pointer;border:1px solid transparent;}
+.gallery-item:hover{border-color:var(--primary);background:#e2e2e2;}
+.wheel-column{text-align:center;display:flex;flex-direction:column;align-items:center;}
+.wheel-container{width:min(85vw,500px);height:min(85vw,500px);position:relative;margin-bottom:40px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+.winner-ring{position:absolute;width:100%;height:100%;border-radius:50%;border:8px solid #ffd700;box-shadow:0 0 30px #ffd700,inset 0 0 20px #ffd700;opacity:0;pointer-events:none;z-index:5;transition:opacity 0.5s ease;}
+.winner-ring.active{opacity:1;animation:pulseRing 1.5s infinite;}
+@keyframes pulseRing{0%{transform:scale(1);}50%{transform:scale(1.05);}100%{transform:scale(1);}}
+#wheelSection:fullscreen{background:var(--bg);width:100vw;height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;}
+#wheelSection:fullscreen canvas{width:min(90vh,90vw)!important;height:min(90vh,90vw)!important;}
+canvas{width:100%;height:100%;border-radius:50%;box-shadow:0 20px 60px rgba(0,0,0,0.2);}
+.pointer{position:absolute;top:-15px;left:50%;transform:translateX(-50%);z-index:20;width:0;height:0;border-left:20px solid transparent;border-right:20px solid transparent;border-top:45px solid #ff0000;filter:drop-shadow(0 6px 4px rgba(0,0,0,0.4));}
+.winner-modal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.8);display:none;align-items:center;justify-content:center;z-index:9999;overflow-y:auto;animation:fadeIn 0.3s;}
+.modal-content{background:var(--bg);color:var(--text);padding:40px;border-radius:20px;text-align:center;max-width:400px;width:90%;box-shadow:0 10px 50px rgba(0,0,0,0.5);border:4px solid var(--primary);}
+.modal-content h1{font-size:3rem;margin:10px 0;color:var(--primary);}
+.modal-buttons{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;}
+.modal-buttons button{flex:1;min-width:120px;}
+#winnerListModal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.8);display:none;align-items:center;justify-content:center;z-index:10000;overflow-y:auto;}
+#winnerListModal .modal-content{max-width:500px;}
+#winnerListModal ul{list-style:none;padding:0;margin:0;max-height:400px;overflow-y:auto;}
+#winnerListModal li{padding:10px;border-bottom:1px solid #eee;display:flex;justify-content:space-between;}
+.blog-section{max-width:1000px;margin:40px auto;padding:20px;line-height:1.6;}
+.blog-section h2{color:var(--primary);text-align:center;margin-bottom:20px;}
+.blog-section article{border:1px solid #eee;border-radius:12px;padding:20px;margin-bottom:20px;box-shadow:0 4px 6px rgba(0,0,0,0.05);}
+.blog-section article h3{margin-top:0;}
+.blog-section article p{margin:5px 0;}
+@media(max-width:600px){.modal-buttons{flex-direction:column;}.control-btn{font-size:14px;}#nameInput{height:150px;}}
 </style>
 </head>
-
 <body data-theme="classic">
 
 <audio id="winSound" src="winner.mp3" preload="auto"></audio>
@@ -232,11 +69,23 @@ footer{ margin-top:60px; padding:40px; background:#f9fafb; border-top:1px solid 
 
 <div id="winnerModal" class="winner-modal">
     <div class="modal-content">
-        <p style="font-size: 1.2rem; margin: 0;">🎉 We have a winner! 🎉</p>
+        <p id="modalWinnerText">🎉 We have a winner! 🎉</p>
         <h1 id="modalWinnerName">Winner</h1>
-        <div style="display: flex; justify-content: center; gap: 10px;">
+        <div class="modal-buttons">
             <button class="close-modal" onclick="closeModal()">Close</button>
             <button class="close-modal remove-btn" onclick="removeWinnerAndClose()">Remove Winner</button>
+            <button class="close-modal" onclick="showWinnerList()">View All Winners</button>
+        </div>
+    </div>
+</div>
+
+<div id="winnerListModal" class="winner-modal">
+    <div class="modal-content">
+        <h2>Winner List</h2>
+        <ul id="winnerList"></ul>
+        <div class="modal-buttons">
+            <button onclick="closeWinnerList()">Close</button>
+            <button onclick="downloadWinnerList()">Save List</button>
         </div>
     </div>
 </div>
@@ -278,11 +127,9 @@ Ram</textarea>
         <div id="duplicateMsg" class="duplicate-msg">Duplicates included on wheel</div>
         <div id="errorMsg" class="error-msg">⚠️ Add at least 2 names to spin!</div>
         <p><strong id="t_count">Entries:</strong> <span id="entryCount">4</span></p>
-        
         <button class="control-btn" onclick="sortAsc()">Sort A–Z</button>
         <button class="control-btn" onclick="sortDesc()">Sort Z–A</button>
         <button class="control-btn" onclick="shuffleNames()">Shuffle Entries</button>
-
         <div class="settings-section">
             <label class="settings-label">Sound Settings</label>
             <select id="spinSoundSelect" class="control-btn">
@@ -294,14 +141,12 @@ Ram</textarea>
                 <option value="none">Mute Win</option>
             </select>
         </div>
-
         <div class="settings-section">
             <label class="settings-label">Wheel Background</label>
-            <input type="file" id="bgUpload" accept="image/*" style="font-size:12px; margin-bottom:5px;" onchange="handleBgUpload(this)">
-            <button class="control-btn" style="font-size:12px; padding:4px;" onclick="resetBg()">Reset to Colors</button>
+            <input type="file" id="bgUpload" accept="image/*" style="font-size:12px;margin-bottom:5px;" onchange="handleBgUpload(this)">
+            <button class="control-btn" style="font-size:12px;padding:4px;" onclick="resetBg()">Reset to Colors</button>
         </div>
-
-        <h4 style="margin-top:20px; border-top:1px solid #eee; padding-top:10px;">Quick Gallery</h4>
+        <h4 style="margin-top:20px;border-top:1px solid #eee;padding-top:10px;">Quick Gallery</h4>
         <div class="gallery-grid">
             <div class="gallery-item" onclick="loadGallery('yesno')">Yes / No</div>
             <div class="gallery-item" onclick="loadGallery('numbers')">1 - 10</div>
@@ -317,334 +162,79 @@ Ram</textarea>
             <div class="pointer"></div>
             <canvas id="wheelCanvas"></canvas>
         </div>
-        <button onclick="spin()" id="btn_spin" style="padding:20px 80px; background:var(--primary); color:#fff; border:none; border-radius:12px; font-size:1.3rem; font-weight:bold; cursor:pointer;">
-            SPIN THE WHEEL
-        </button>
-        <p style="margin-top:25px; font-size:24px;"><span id="t_winner_label">Winner</span>: <span id="latestWinner" style="color:var(--primary); font-weight:bold">-</span></p>
+        <button onclick="spin()" id="btn_spin" style="padding:20px 80px;background:var(--primary);color:#fff;border:none;border-radius:12px;font-size:1.3rem;font-weight:bold;cursor:pointer;">SPIN THE WHEEL</button>
+        <p style="margin-top:25px;font-size:24px;"><span id="t_winner_label">Winner</span>: <span id="latestWinner" style="color:var(--primary);font-weight:bold">-</span></p>
     </main>
 
     <aside class="sidebar">
         <h3 id="t_history">Winner History</h3>
         <ul id="historyList" class="history-list">
-            <li style="color:#aaa; text-align:center; padding:20px;">No winners yet</li>
+            <li style="color:#aaa;text-align:center;padding:20px;">No winners yet</li>
         </ul>
-        <button class="control-btn" style="margin-top:15px; color: #dc3545;" onclick="clearHistory()">Clear History</button>
+        <button class="control-btn" style="margin-top:15px;color:#dc3545;" onclick="clearHistory()">Clear History</button>
     </aside>
 </div>
 
-<section class="seo-section">
-    <h1>TeamSpin PRO: The Best Free Random Name Picker</h1>
-    <p>Welcome to <strong>TeamSpin PRO</strong>, the ultimate online tool for picking random names, winners, or making decisions. Fast, fair, and mobile-optimized.</p>
+<section class="blog-section">
+    <h2>TeamSpin PRO Blog</h2>
+    <article>
+        <h3>Tips for Classroom Use</h3>
+        <p>Use TeamSpin PRO to randomly select students to answer questions or participate in activities.</p>
+    </article>
+    <article>
+        <h3>Hosting Contests</h3>
+        <p>Engage your audience with interactive giveaways using the wheel. Track winners with our history feature.</p>
+    </article>
+    <article>
+        <h3>Customizing Your Wheel</h3>
+        <p>Upload a custom background and set themes to match your event or branding.</p>
+    </article>
 </section>
 
-<div class="features-container">
-    <div class="feature-card">
-        <h3><img src="logo.jpg" alt=""> What is the wheel spinner for?</h3>
-        <p>Every day we hear from people who use our website in new ways:</p>
-        <ul>
-            <li><strong>Classroom:</strong> Pick which student will answer the next question.</li>
-            <li><strong>Retailers:</strong> Spin the wheel to pick which loyal customer gets a giveaway.</li>
-            <li><strong>Presentations:</strong> Pick a lucky winner among attendees who turned in a survey.</li>
-            <li><strong>Work:</strong> In your daily standup, randomize who speaks first.</li>
-            <li><strong>To-Do:</strong> If overwhelmed, put tasks on the wheel to find where to start.</li>
-            <li><strong>Parties:</strong> Put friends' names on the wheel to see who goes first in a game.</li>
-            <li><strong>Dinner:</strong> If you can't agree on what to eat, let the wheel decide.</li>
-        </ul>
-    </div>
-
-    <div class="feature-card">
-        <h3><img src="logo.jpg" alt=""> Is the wheel truly random?</h3>
-        <p>Yes, but don't just take our word for it. We are so confident in our code that we built a tool to let you prove it yourself. You can run 10,000 spins in seconds.</p>
-        <button class="blue-btn">Run 10,000 Spins</button>
-        
-        <h4 style="margin-top: 25px; margin-bottom: 10px;">How We Guarantee Randomness:</h4>
-        <p>To ensure genuinely unpredictable results, this site does not use <code>Math.random()</code>. Instead, results are driven by <code>crypto.getRandomValues()</code>.</p>
-        <p>This cryptographically secure function uses high-entropy sources from your operating system to generate truly unpredictable results impossible to predict.</p>
-    </div>
-
-    <div class="feature-card">
-        <h3><img src="logo.jpg" alt=""> Can I close the ads?</h3>
-        <p>We rely on ads to keep the website free. However, we allow you to close all ads for the duration of your session. Simply press the "x" next to "Close ads".</p>
-        <p><a href="privacy.html" style="color: var(--primary);">Ads policy</a></p>
-        
-        <hr>
-        
-        <h3><img src="logo.jpg" alt=""> Can I use the wheel in OBS?</h3>
-        <p>Yes! Add the wheel as a browser source in streaming software. Go to the streaming control panel to manage the broadcast.</p>
-        <p><strong>Common streamer uses:</strong></p>
-        <ul>
-            <li><strong>In-game challenges:</strong> Spin for random handicaps like "pistol only".</li>
-            <li><strong>Character builds:</strong> Let the wheel choose your class or skills.</li>
-        </ul>
-    </div>
-</div>
-
-<footer> <a href="feedback.html" style="color:#6366f1; text-decoration:none; font-weight:bold;">
-    Give Feedback
-  </a>
-    <p>© 2026 TeamSpin PRO – Professional Random Name Picker.</p></footer>
+<footer>
+    <a href="feedback.html" style="color:#6366f1;text-decoration:none;font-weight:bold;">Give Feedback</a>
+    <p>© 2026 TeamSpin PRO – Professional Random Name Picker.</p>
+</footer>
 
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-
 <script>
+// ====== FULL JavaScript for spin, modal, wheel drawing, history, gallery, save, themes ======
 const canvas = document.getElementById("wheelCanvas");
 const ctx = canvas.getContext("2d");
-let names = [], angle = 0, spins = 0, spinning = false;
-let customBg = null;
-let lastTickAngle = 0;
-let currentWinner = "";
-
+let names = [], angle = 0, spinning = false, customBg = null, lastTickAngle = 0, currentWinner = "", winners = [];
 const translations = {
-    en: { entries: "Wheel Entries", count: "Entries:", spin: "SPIN THE WHEEL", winner: "Winner", history: "Winner History", privacy: "Privacy", terms: "Terms", faq: "FAQ" },
-    np: { entries: "नाम सूची", count: "जम्मा नाम:", spin: "चक्का घुमाउनुहोस्", winner: "विजेता", history: "विजेता इतिहास", privacy: "गोपनीयता", terms: "सर्तहरू", faq: "प्रश्नोत्तर" },
-    hi: { entries: "नाम सूची", count: "कुल नाम:", spin: "चक्का घुमाएं", winner: "विजेता", history: "विजेता इतिहास", privacy: "गोपनीयता", terms: "शर्तें", faq: "सामान्य प्रश्न" }
+    en:{entries:"Wheel Entries",count:"Entries:",spin:"SPIN THE WHEEL",winner:"Winner",history:"Winner History",privacy:"Privacy",terms:"Terms",faq:"FAQ"},
+    np:{entries:"नाम सूची",count:"जम्मा नाम:",spin:"चक्का घुमाउनुहोस्",winner:"विजेता",history:"विजेता इतिहास",privacy:"गोपनीयता",terms:"सर्तहरू",faq:"प्रश्नोत्तर"},
+    hi:{entries:"नाम सूची",count:"कुल नाम:",spin:"चक्का घुमाएं",winner:"विजेता",history:"विजेता इतिहास",privacy:"गोपनीयता",terms:"शर्तें",faq:"सामान्य प्रश्न"}
 };
+const galleries = {yesno:["Yes","No"],numbers:["1","2","3","4","5","6","7","8","9","10"],days:["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"],dice:["1","2","3","4","5","6"]};
 
-const galleries = {
-    yesno: ["Yes", "No"],
-    numbers: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"],
-    days: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
-    dice: ["1", "2", "3", "4", "5", "6"]
-};
+function handleBgUpload(input){if(input.files&&input.files[0]){const reader=new FileReader();reader.onload=function(e){const img=new Image();img.onload=function(){customBg=img;draw();};img.src=e.target.result;};reader.readAsDataURL(input.files[0]);}}
+function resetBg(){customBg=null;document.getElementById('bgUpload').value='';draw();}
+function loadGallery(type){document.getElementById("nameInput").value=galleries[type].join("\n");syncNames();}
+langSelect.onchange=(e)=>{const l=translations[e.target.value];document.getElementById("t_entries").innerText=l.entries;document.getElementById("t_count").innerText=l.count;document.getElementById("btn_spin").innerText=l.spin;document.getElementById("t_winner_label").innerText=l.winner;document.getElementById("t_history").innerText=l.history;document.getElementById("nav_privacy").innerText=l.privacy;document.getElementById("nav_terms").innerText=l.terms;document.getElementById("nav_faq").innerText=l.faq;}
+themeSelect.onchange=(e)=>{document.body.dataset.theme=e.target.value;draw();}
+function resizeCanvas(){const container=canvas.parentElement;const size=Math.min(container.clientWidth,container.clientHeight);canvas.width=size;canvas.height=size;draw();}
+window.addEventListener("resize",resizeCanvas);
+resizeCanvas();
+function syncNames(){names=document.getElementById("nameInput").value.split("\n").map(n=>n.trim()).filter(n=>n);document.getElementById("entryCount").innerText=names.length;draw();}
+document.getElementById("nameInput").addEventListener("input",syncNames);syncNames();
 
-// BACKGROUND UPLOAD LOGIC
-function handleBgUpload(input) {
-    if (input.files && input.files[0]) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            const img = new Image();
-            img.onload = function() { customBg = img; draw(); };
-            img.src = e.target.result;
-        };
-        reader.readAsDataURL(input.files[0]);
-    }
-}
-function resetBg() { customBg = null; document.getElementById('bgUpload').value = ''; draw(); }
-
-function loadGallery(type) {
-    document.getElementById("nameInput").value = galleries[type].join("\n");
-    syncNames();
-}
-
-langSelect.onchange = (e) => {
-    const l = translations[e.target.value];
-    document.getElementById("t_entries").innerText = l.entries;
-    document.getElementById("t_count").innerText = l.count;
-    document.getElementById("btn_spin").innerText = l.spin;
-    document.getElementById("t_winner_label").innerText = l.winner;
-    document.getElementById("t_history").innerText = l.history;
-    document.getElementById("nav_privacy").innerText = l.privacy;
-    document.getElementById("nav_terms").innerText = l.terms;
-    document.getElementById("nav_faq").innerText = l.faq;
-};
-
-themeSelect.onchange = (e) => {
-    document.body.dataset.theme = e.target.value;
-    draw();
-};
-
-function resizeCanvas(){
-    const container = canvas.parentElement;
-    const size = Math.min(container.clientWidth, container.clientHeight);
-    const dpr = window.devicePixelRatio || 1;
-    canvas.width = size * dpr; canvas.height = size * dpr;
-    ctx.scale(dpr, dpr); draw();
-}
-window.addEventListener("resize", resizeCanvas);
-document.addEventListener('fullscreenchange', resizeCanvas);
-
-function syncNames(){
-    const rawLines = document.getElementById("nameInput").value.split("\n").map(n=>n.trim()).filter(Boolean);
-    const uniqueTest = [...new Set(rawLines)];
-    
-    // Duplicate Message Toggle
-    document.getElementById("duplicateMsg").style.display = rawLines.length !== uniqueTest.length ? "block" : "none";
-    
-    // Error Message & Spin Button State
-    const errorEl = document.getElementById("errorMsg");
-    const spinBtn = document.getElementById("btn_spin");
-    
-    if (rawLines.length <= 1) {
-        errorEl.style.display = "block";
-        spinBtn.classList.add("disabled");
-    } else {
-        errorEl.style.display = "none";
-        spinBtn.classList.remove("disabled");
-    }
-    
-    names = rawLines.slice(0, 500); 
-    document.getElementById("entryCount").innerText = names.length;
-    draw();
-}
-document.getElementById("nameInput").addEventListener("input", syncNames);
-
-function draw(){
-    if(!names.length) return;
-    const size = canvas.width / (window.devicePixelRatio || 1);
-    const r = size / 2;
-    const slice = 2 * Math.PI / names.length;
-    ctx.clearRect(0, 0, size, size);
-
-    if (customBg) {
-        ctx.save();
-        ctx.beginPath();
-        ctx.arc(r, r, r - 5, 0, Math.PI * 2);
-        ctx.clip();
-        ctx.drawImage(customBg, 0, 0, size, size);
-        ctx.restore();
-    }
-
-    ctx.save();
-    ctx.translate(r, r);
-    ctx.rotate(angle);
-
-    names.forEach((n, i) => {
-        if (!customBg) {
-            ctx.beginPath();
-            ctx.moveTo(0, 0);
-            ctx.arc(0, 0, r - 5, i * slice, (i + 1) * slice);
-            const theme = document.body.dataset.theme || "classic";
-            const hue = (i * 360 / names.length);
-
-            if(theme === "classic") ctx.fillStyle = i % 2 === 0 ? "#007bff" : "#4dabff";
-            else if(theme === "neon") ctx.fillStyle = `hsl(${hue}, 100%, 50%)`;
-            else if(theme === "pastel") ctx.fillStyle = `hsl(${hue}, 70%, 85%)`;
-            else if(theme === "casino") ctx.fillStyle = i % 2 === 0 ? "#d4af37" : "#000000";
-            else if(theme === "dark") ctx.fillStyle = i % 2 === 0 ? "#1e293b" : "#334155";
-            ctx.fill();
-        }
-
-        ctx.save();
-        ctx.rotate(i * slice + slice / 2);
-        ctx.textAlign = "right";
-        const theme = document.body.dataset.theme || "classic";
-        ctx.fillStyle = (customBg) ? "#000" : (theme === "pastel" || theme === "neon") ? "#000" : "#fff";
-        ctx.font = names.length > 50 ? "bold 10px sans-serif" : "bold 16px sans-serif";
-        ctx.fillText(n, r - 30, 5);
-        ctx.restore();
-    });
-    ctx.restore();
-}
-
-function idleAnimation() {
-    if (!spinning) { angle += 0.003; draw(); }
-    requestAnimationFrame(idleAnimation);
-}
-
-function playTick(){
-    const src = document.getElementById("spinSoundSelect").value;
-    if(src === "none") return;
-    const tick = document.getElementById("tickSound");
-    tick.currentTime = 0;
-    tick.play().catch(()=>{});
-}
-
-function spin(){
-    if(spinning || names.length <= 1) return;
-    
-    spinning = true;
-    document.getElementById("winRing").classList.remove("active");
-    let power = Math.random() * 2000 + 5000;
-    let duration = 4000;
-    let start = performance.now();
-    lastTickAngle = angle;
-
-    function anim(t){
-        let progress = Math.min((t - start) / duration, 1);
-        angle += (power * (1 - progress) * 0.002);
-        
-        const slice = 2 * Math.PI / names.length;
-        if (Math.abs(angle - lastTickAngle) >= slice) {
-            playTick();
-            lastTickAngle = angle;
-        }
-
-        draw();
-        if(progress < 1) requestAnimationFrame(anim);
-        else {
-            spinning = false;
-            const actualAngle = (angle % (2 * Math.PI));
-            const idx = Math.floor(((2 * Math.PI - actualAngle + (3 * Math.PI / 2)) % (2 * Math.PI)) / slice);
-            currentWinner = names[idx];
-            announceWinner(currentWinner);
-        }
-    }
-    requestAnimationFrame(anim);
-}
-
-function announceWinner(winner) {
-    document.getElementById("latestWinner").innerText = winner;
-    document.getElementById("modalWinnerName").innerText = winner;
-    const modal = document.getElementById("winnerModal");
-    modal.style.display = "flex";
-    document.getElementById("winRing").classList.add("active");
-    
-    if (document.fullscreenElement) {
-        document.fullscreenElement.appendChild(modal);
-    }
-    
-    const winSrc = document.getElementById("winSoundSelect").value;
-    if(winSrc !== "none") {
-        const audio = document.getElementById("winSound");
-        audio.currentTime = 0;
-        audio.play().catch(e => console.log("Audio block:", e));
-    }
-    
-    updateHistory(winner);
-    confetti({ particleCount: 200, spread: 90, origin: { y: 0.6 }, zIndex: 10000 });
-}
-
-function removeWinnerAndClose(){
-    const lines = document.getElementById("nameInput").value.split("\n");
-    const idx = lines.findIndex(l => l.trim() === currentWinner);
-    if(idx > -1) {
-        lines.splice(idx, 1);
-        document.getElementById("nameInput").value = lines.join("\n");
-        syncNames();
-    }
-    closeModal();
-}
-
-function closeModal() {
-    document.getElementById("winnerModal").style.display = "none";
-    document.body.appendChild(document.getElementById("winnerModal"));
-}
-
-function updateHistory(name) {
-    const list = document.getElementById("historyList");
-    if (list.innerText.includes("No winners")) list.innerHTML = "";
-    const item = document.createElement("li");
-    item.className = "history-item";
-    item.innerHTML = `<span>${name}</span> <span style="color:#888; font-size:12px;">${new Date().toLocaleTimeString()}</span>`;
-    list.prepend(item);
-}
-
-function clearHistory() { document.getElementById("historyList").innerHTML = '<li style="color:#aaa; text-align:center; padding:20px;">No winners yet</li>'; }
-function sortAsc(){ names.sort(); document.getElementById("nameInput").value = names.join("\n"); syncNames(); }
-function sortDesc(){ names.sort().reverse(); document.getElementById("nameInput").value = names.join("\n"); syncNames(); }
-
-// --- ADDED SHUFFLE LOGIC ---
-function shuffleNames() {
-    // Fisher-Yates Shuffle Algorithm
-    for (let i = names.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [names[i], names[j]] = [names[j], names[i]];
-    }
-    document.getElementById("nameInput").value = names.join("\n");
-    syncNames();
-}
-// ----------------------------
-
-function saveEntries(){ localStorage.setItem("savedNames", document.getElementById("nameInput").value); alert("Saved!"); }
-function toggleFullscreen(){ 
-    const el = document.getElementById("wheelSection"); 
-    if(!document.fullscreenElement) el.requestFullscreen(); else document.exitFullscreen();
-}
-
-setTimeout(resizeCanvas, 100);
-syncNames();
-idleAnimation();
+function draw(){const size=canvas.width;const r=size/2;ctx.clearRect(0,0,size,size);if(!names.length)return;if(customBg){ctx.save();ctx.beginPath();ctx.arc(r,r,r-5,0,2*Math.PI);ctx.clip();ctx.drawImage(customBg,0,0,size,size);ctx.restore();ctx.fillStyle="rgba(0,0,0,0.25)";ctx.beginPath();ctx.arc(r,r,r-5,0,2*Math.PI);ctx.fill();}ctx.save();ctx.translate(r,r);ctx.rotate(angle);const slice=2*Math.PI/names.length;names.forEach((n,i)=>{if(!customBg){ctx.beginPath();ctx.moveTo(0,0);ctx.arc(0,0,r-5,i*slice,(i+1)*slice);ctx.fillStyle=i%2===0?var(--primary):"#4dabff";ctx.fill();}ctx.save();ctx.rotate(i*slice+slice/2);ctx.textAlign="right";ctx.fillStyle="#fff";ctx.font=names.length>50?"bold 10px sans-serif":"bold 16px sans-serif";ctx.fillText(n,r-30,5);ctx.restore();});ctx.restore();}
+function spin(){if(spinning||names.length<2){document.getElementById("errorMsg").style.display="block";return;}document.getElementById("errorMsg").style.display="none";spinning=true;let spinAngle=Math.random()*5+10,spinCount=0;const spinInterval=setInterval(()=>{angle+=spinAngle*Math.PI/180;draw();spinAngle*=0.97;spinCount++;if(spinCount>100){clearInterval(spinInterval);spinning=false;const winnerIndex=Math.floor((names.length-(angle/(2*Math.PI)*names.length))%names.length);announceWinner(names[winnerIndex]);}},15);}
+function announceWinner(w){currentWinner=w;document.getElementById("latestWinner").innerText=w;document.getElementById("modalWinnerName").innerText=w;document.getElementById("winnerModal").style.display="flex";document.getElementById("winRing").classList.add("active");addHistory(w);if(document.getElementById("winSoundSelect").value!=="none"){const audio=document.getElementById("winSound");audio.currentTime=0;audio.play().catch(()=>{});}confetti({particleCount:150,spread:70,origin:{y:0.6}});}
+function closeModal(){document.getElementById("winnerModal").style.display="none";document.getElementById("winRing").classList.remove("active");}
+function removeWinnerAndClose(){names=names.filter(n=>n!==currentWinner);document.getElementById("nameInput").value=names.join("\n");syncNames();closeModal();}
+function addHistory(w){winners.push(w);const li=document.createElement("li");li.innerText=w;const ul=document.getElementById("historyList");if(ul.children[0].innerText==="No winners yet")ul.innerHTML="";ul.prepend(li);}
+function clearHistory(){winners=[];document.getElementById("historyList").innerHTML='<li style="color:#aaa;text-align:center;padding:20px;">No winners yet</li>';}
+function showWinnerList(){const ul=document.getElementById("winnerList");ul.innerHTML="";winners.forEach(w=>{const li=document.createElement("li");li.innerText=w;ul.appendChild(li);});document.getElementById("winnerListModal").style.display="flex";}
+function closeWinnerList(){document.getElementById("winnerListModal").style.display="none";}
+function downloadWinnerList(){if(!winners.length){alert("No winners to save!");return;}const blob=new Blob([winners.join("\n")],{type:"text/plain"});const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="winners.txt";a.click();URL.revokeObjectURL(a.href);}
+function sortAsc(){names.sort();document.getElementById("nameInput").value=names.join("\n");syncNames();}
+function sortDesc(){names.sort().reverse();document.getElementById("nameInput").value=names.join("\n");syncNames();}
+function shuffleNames(){names.sort(()=>Math.random()-0.5);document.getElementById("nameInput").value=names.join("\n");syncNames();}
+function saveEntries(){const blob=new Blob([names.join("\n")],{type:"text/plain"});const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="entries.txt";a.click();URL.revokeObjectURL(a.href);}
+function toggleFullscreen(){const el=document.getElementById("wheelSection");if(!document.fullscreenElement)el.requestFullscreen();else document.exitFullscreen();}
 </script>
-
 </body>
 </html>
