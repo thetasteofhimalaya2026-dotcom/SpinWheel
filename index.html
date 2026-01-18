@@ -348,15 +348,22 @@ const logic = {
         this.draw();
     },
 
-init() {
-    // Sets starting lifetime spins to 15050 if never used before
-    this.totalSpins = parseInt(localStorage.getItem('ts_lifetime_spins')) || 15050;
-    document.getElementById('valTotalSpins').innerText = this.totalSpins;
-    
-    document.getElementById('mainInput').addEventListener('input', () => this.sync());
-    this.sync();
-    this.changeLang(this.lang);
-},
+const logic = {
+    names: [], angle: 0, isSpinning: false, history: [], totalSpins: 0, lang: 'en',
+    logoImg: null, // Add this line
+
+    init() {
+        // Load the logo first
+        this.logoImg = new Image();
+        this.logoImg.src = 'logo.jpg'; // Ensure this matches your filename
+        this.logoImg.onload = () => this.draw(); 
+
+        this.totalSpins = parseInt(localStorage.getItem('ts_lifetime_spins')) || 15050;
+        document.getElementById('valTotalSpins').innerText = this.totalSpins;
+        document.getElementById('mainInput').addEventListener('input', () => this.sync());
+        this.sync();
+        this.changeLang(this.lang);
+    },
 sync() {
     const val = document.getElementById('mainInput').value;
     const rawNames = val.split('\n').map(n => n.trim()).filter(n => n !== "");
@@ -415,52 +422,71 @@ removeDuplicates() {
     });
 },
 
-    draw() {
-        const canvas = document.getElementById('wheelCanvas');
-        if (!canvas) return;
-        const ctx = canvas.getContext('2d');
-        const len = this.names.length;
-        const center = canvas.width / 2;
-        const radius = center - 10;
+ draw() {
+    const canvas = document.getElementById('wheelCanvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    const len = this.names.length;
+    const center = canvas.width / 2;
+    const radius = center - 10;
+    
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    if (len === 0) {
+        ctx.fillStyle = ui.theme === 'light' ? '#cbd5e1' : '#1e293b';
+        ctx.beginPath(); ctx.arc(center, center, radius, 0, Math.PI * 2); ctx.fill();
+        return;
+    }
+
+    const arc = (Math.PI * 2) / len;
+    const colors = ui.theme === 'light' ? 
+        ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6'] :
+        ['#1d4ed8', '#065f46', '#92400e', '#991b1b', '#5b21b6'];
+
+    this.names.forEach((name, i) => {
+        const ang = this.angle + (i * arc);
+        ctx.beginPath();
+        ctx.fillStyle = colors[i % colors.length];
+        ctx.moveTo(center, center);
+        ctx.arc(center, center, radius, ang, ang + arc);
+        ctx.fill();
         
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.strokeStyle = ui.theme === 'light' ? '#fff' : '#0f172a';
+        ctx.lineWidth = 2;
+        ctx.stroke();
 
-        // Draw placeholder if empty
-        if (len === 0) {
-            ctx.fillStyle = ui.theme === 'light' ? '#cbd5e1' : '#1e293b';
-            ctx.beginPath(); ctx.arc(center, center, radius, 0, Math.PI * 2); ctx.fill();
-            return;
-        }
+        ctx.save();
+        ctx.translate(center, center);
+        ctx.rotate(ang + arc / 2);
+        ctx.textAlign = "right";
+        ctx.fillStyle = "#fff";
+        ctx.font = "bold 30px Inter, sans-serif";
+        ctx.fillText(name.substring(0, 15), radius - 40, 10);
+        ctx.restore();
+    });
 
-        const arc = (Math.PI * 2) / len;
-        const colors = ui.theme === 'light' ? 
-            ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6'] :
-            ['#1d4ed8', '#065f46', '#92400e', '#991b1b', '#5b21b6'];
+    // --- LOGO PLACEMENT IN MIDDLE ---
+    const logoSize = 80; // Small size for logo
+    ctx.save();
+    
+    // Draw white circle background for logo
+    ctx.beginPath();
+    ctx.arc(center, center, logoSize / 2 + 5, 0, Math.PI * 2);
+    ctx.fillStyle = "white";
+    ctx.fill();
+    ctx.strokeStyle = "rgba(0,0,0,0.1)";
+    ctx.stroke();
 
-        this.names.forEach((name, i) => {
-            const ang = this.angle + (i * arc);
-            ctx.beginPath();
-            ctx.fillStyle = colors[i % colors.length];
-            ctx.moveTo(center, center);
-            ctx.arc(center, center, radius, ang, ang + arc);
-            ctx.fill();
-            
-            ctx.strokeStyle = ui.theme === 'light' ? '#fff' : '#0f172a';
-            ctx.lineWidth = 2;
-            ctx.stroke();
+    // Clip to make the logo circular
+    ctx.beginPath();
+    ctx.arc(center, center, logoSize / 2, 0, Math.PI * 2);
+    ctx.clip();
 
-            // Draw Text
-            ctx.save();
-            ctx.translate(center, center);
-            ctx.rotate(ang + arc / 2);
-            ctx.textAlign = "right";
-            ctx.fillStyle = "#fff";
-            ctx.font = "bold 30px Inter, sans-serif";
-            // Support for Nepali/Hindi fonts
-            ctx.fillText(name.substring(0, 15), radius - 30, 10);
-            ctx.restore();
-        });
-
+    if (this.logoImg && this.logoImg.complete) {
+        ctx.drawImage(this.logoImg, center - logoSize/2, center - logoSize/2, logoSize, logoSize);
+    }
+    ctx.restore();
+},
         // Center Pin/Circle
         ctx.beginPath();
         ctx.fillStyle = "white";
@@ -575,5 +601,6 @@ window.onload = () => logic.init();
 </script>
 </body>
 </html>
+
 
 
