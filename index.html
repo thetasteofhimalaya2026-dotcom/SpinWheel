@@ -177,10 +177,11 @@
         <a class="nav-link" onclick="logic.runRandomTest()" style="color:var(--danger)">Run 10,000 Spins</a>
     </nav>
     <div style="display:flex; gap:12px; align-items:center;">
-        <select id="langSwitcher" onchange="logic.changeLang(this.value)" class="btn-ghost" style="padding:8px 15px; border-radius:8px; font-weight:bold;">
-            <option value="en">English</option>
-            <option value="np">नेपाली (Nepali)</option>
-        </select>
+      <select id="langSwitcher" onchange="logic.changeLang(this.value)" class="btn-ghost" style="padding:8px 15px; border-radius:8px; font-weight:bold;">
+    <option value="en">English</option>
+    <option value="np">नेपाली (Nepali)</option>
+    <option value="hi">हिन्दी (Hindi)</option>
+</select>
         <button class="btn-ghost" style="width:45px; height:45px; border-radius:50%;" onclick="ui.toggleTheme()">🌓</button>
     </div>
 </header>
@@ -315,7 +316,7 @@
         totalSpins: 0,
         lang: 'en',
 
-   translations: {
+ translations: {
     en: {
         title: "Classroom & Office Names",
         sub: "One name per line. Best for teachers and HR raffle events.",
@@ -351,7 +352,26 @@
                 <h2 style="text-align:center;">धेरै सोधिने प्रश्नहरू (FAQ)</h2>
                 <div class="faq-item"><span class="faq-q">के यो साँच्चै अनियमित छ?</span><p class="faq-a">हो, हामी प्रत्येक स्पिनको लागि सुरक्षित क्रिप्टो एल्गोरिदम प्रयोग गर्छौं।</p></div>
             </div>`
+    },
+    hi: {
+        title: "कक्षा और कार्यालय के नाम",
+        sub: "प्रति पंक्ति एक नाम। शिक्षकों और रैफल कार्यक्रमों के लिए उत्तम।",
+        spin: "स्पिन करने के लिए व्हील पर क्लिक करें!",
+        status: "नाम सूची मान्य है।",
+        winner: "विजेता है: ",
+        legal: "TeamSpin PRO आपकी गोपनीयता का सम्मान करता है। कोई डेटा हमारे सर्वर पर संग्रहीत नहीं किया जाता। <a href='privacy-policy.html' style='color:var(--primary);'>पूर्ण नीति पढ़ें</a>।",
+        seoHTML: `
+            <section class="seo-grid">
+                <div class="seo-card"><h2>🎓 शिक्षक उपकरण</h2><p>शिक्षक निष्पक्ष रूप से छात्रों का चयन करने के लिए TeamSpin PRO का उपयोग करते हैं।</p></div>
+                <div class="seo-card"><h2>🏢 कार्यालय रैफल</h2><p>कर्मचारी रैफल और कार्यालय उपहार वितरण के लिए आदर्श।</p></div>
+                <div class="seo-card"><h2>🎲 निष्पक्ष लोजिक</h2><p>हमारी व्हील क्रिप्टो-लेवल रैंडमनेस का उपयोग करके निष्पक्ष परिणाम देती है।</p></div>
+            </section>
+            <div class="faq-wrapper">
+                <h2 style="text-align:center;">अक्सर पूछे जाने वाले प्रश्न (FAQ)</h2>
+                <div class="faq-item"><span class="faq-q">क्या यह वास्तव में यादृच्छिक है?</span><p class="faq-a">हाँ, हम प्रत्येक स्पिन के लिए सुरक्षित क्रिप्टो एल्गोरिदम का उपयोग करते हैं।</p></div>
+            </div>`
     }
+}
 },
 
 changeLang(val) {
@@ -475,34 +495,50 @@ changeLang(val) {
             requestAnimationFrame(animate);
         },
 
-        finishSpin() {
-            this.isSpinning = false;
-            this.totalSpins++;
-            document.getElementById('valTotalSpins').innerText = this.totalSpins;
+      finishSpin() {
+    this.isSpinning = false;
+    this.totalSpins++;
+    document.getElementById('valTotalSpins').innerText = this.totalSpins;
 
-            const arc = (Math.PI * 2) / this.names.length;
-            const normalized = (this.angle + (3 * Math.PI / 2)) % (Math.PI * 2);
-            const idx = this.names.length - 1 - Math.floor(normalized / arc);
-            const winner = this.names[idx];
+    const arc = (Math.PI * 2) / this.names.length;
+    const normalized = (this.angle + (3 * Math.PI / 2)) % (Math.PI * 2);
+    const idx = this.names.length - 1 - Math.floor(normalized / arc);
+    const winner = this.names[idx];
 
-            if(document.getElementById('cfgConfetti').checked) {
-                confetti({ particleCount: 200, spread: 80, origin: { y: 0.6 }, colors: ['#2563eb', '#10b981', '#fbbf24'] });
-            }
-            
-            if(document.getElementById('cfgSound').checked) document.getElementById('sndWin').play();
+    // Confetti
+    if(document.getElementById('cfgConfetti').checked) {
+        confetti({ particleCount: 200, spread: 80, origin: { y: 0.6 }, colors: ['#2563eb', '#10b981', '#fbbf24'] });
+    }
 
-            setTimeout(() => {
-                alert(this.translations[this.lang].winner + winner);
-                this.addToHistory(winner);
-                
-                if(document.getElementById('cfgRemove').checked) {
-                    this.names.splice(idx, 1);
-                    document.getElementById('mainInput').value = this.names.join('\n');
-                    this.sync();
-                }
-            }, 300);
-        },
+    // Sound
+    if(document.getElementById('cfgSound').checked) document.getElementById('sndWin').play();
 
+    // --- Minimal Winner Popup with SEO Rich Sentence ---
+    setTimeout(() => {
+        const t = this.translations[this.lang];
+
+        Swal.fire({
+            title: `<span style="color:#2563eb; font-weight:bold;">${winner}</span>`,
+            html: `<p style="color:#64748b; font-size:14px; margin-top:8px;">
+                    Winner selected randomly and fairly using secure crypto-level randomness. Perfect for classrooms, office raffles, and events.
+                   </p>`,
+            icon: 'success',
+            showCloseButton: true,
+            confirmButtonText: 'Spin Again 🔄',
+            confirmButtonColor: '#2563eb',
+            background: ui.theme === 'light' ? '#ffffff' : '#0f172a',
+            color: ui.theme === 'light' ? '#0f172a' : '#f1f5f9',
+        });
+
+        this.addToHistory(winner);
+
+        if(document.getElementById('cfgRemove').checked) {
+            this.names.splice(idx, 1);
+            document.getElementById('mainInput').value = this.names.join('\n');
+            this.sync();
+        }
+    }, 300);
+},
         addToHistory(name) {
             const time = new Date().toLocaleTimeString();
             this.history.unshift({name, time});
@@ -580,5 +616,9 @@ changeLang(val) {
     </div>
     <div class="copyright">&copy; 2026 TeamSpin PRO.</div>
 </footer>
+    
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 </body>
 </html>
+
