@@ -4,17 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>TeamSpin PRO | Professional Random Name Picker & Raffle Tool</title>
-    <!-- Browser Tab Icon (Favicon) -->
-<link rel="icon" type="image/jpeg" sizes="32x32" href="logo.jpg">
-<link rel="icon" type="image/jpeg" sizes="16x16" href="logo.jpg">
-<link rel="shortcut icon" href="logo.jpg" type="image/x-icon">
+    <link rel="icon" type="image/jpeg" sizes="32x32" href="logo.jpg">
     <meta name="description" content="Professional wheel of names for teachers and offices. Features 3D rendering, CSV import, and winner history.">
     <meta name="keywords" content="wheel of names, teacher tool, random picker, नेपाली नाम छान्ने, TeamSpin PRO, classroom spinner, raffle tool">
     
     <style>
-        /* ========================================
-           CSS DESIGN SYSTEM 
-           ======================================== */
         :root {
             --primary: #2563eb;
             --primary-dark: #1e40af;
@@ -80,21 +74,21 @@
             box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05);
         }
 
-        /* --- WHEEL CORE (SHAPE FIX) --- */
+        /* --- WHEEL CORE --- */
         .wheel-stage { 
             display: flex; flex-direction: column; align-items: center; justify-content: flex-start; 
         }
-       .canvas-wrapper {
-    position: relative;
-    width: 90vw;
-    max-width: 600px;
-    aspect-ratio: 1 / 1;
-    cursor: pointer;
-    transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
-    border-radius: 50%;
-    margin: 0 auto;
-}
+        .canvas-wrapper {
+            position: relative;
+            width: 90vw;
+            max-width: 600px;
+            aspect-ratio: 1 / 1;
+            cursor: pointer;
+            transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            border-radius: 50%;
+            margin: 0 auto;
+        }
         .canvas-wrapper:hover { transform: scale(1.02); }
         #wheelCanvas {
             width: 100% !important;
@@ -117,7 +111,6 @@
         .name-editor:focus { border-color: var(--primary); outline: none; box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1); }
 
         /* --- BUTTONS --- */
-
         .btn {
             padding: 14px 20px; border-radius: 12px; font-weight: 700;
             cursor: pointer; border: none; transition: 0.3s;
@@ -141,18 +134,6 @@
         }
         .seo-card:hover { transform: translateY(-10px); box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); }
         .seo-card h2 { color: var(--primary); margin-top: 0; font-size: 1.6rem; }
-
-        /* --- IMPACT STATS --- */
-        .impact-section {
-            background: var(--bg-panel); border-top: 1px solid var(--border);
-            padding: 80px 20px; text-align: center;
-        }
-        .impact-number { font-size: 5rem; font-weight: 900; color: var(--primary); margin: 20px 0; letter-spacing: -2px; }
-
-        /* --- FAQ SECTION --- */
-        .faq-container { max-width: 900px; margin: 60px auto; padding: 0 20px; }
-        .faq-item { background: var(--bg-panel); border: 1px solid var(--border); border-radius: 15px; margin-bottom: 15px; padding: 20px; }
-        .faq-q { font-weight: 800; color: var(--primary); margin-bottom: 10px; display: block; }
 
         /* --- HISTORY LIST --- */
         .history-list { max-height: 200px; overflow-y: auto; list-style: none; padding: 0; margin: 0; }
@@ -178,17 +159,16 @@
     </div>
     <nav class="nav-links">
         <a href="#features" class="nav-link">Features</a>
-        <a href="#about" class="nav-link">About Teachers Tool</a>
+        <a href="#about" class="nav-link">About</a>
         <a href="#faq" class="nav-link">FAQ</a>
-        <a class="nav-link" onclick="logic.runRandomTest()" style="color:var(--danger)">Run 10,000 Spins</a>
     </nav>
     <div style="display:flex; gap:12px; align-items:center;">
-      <select id="langSwitcher" onchange="logic.changeLang(this.value)" class="btn-ghost" style="padding:8px 15px; border-radius:8px; font-weight:bold;">
-    <option value="en">English</option>
-    <option value="np">नेपाली (Nepali)</option>
-    <option value="hi">हिन्दी (Hindi)</option>
-</select>
-        <button class="btn-ghost" style="width:45px; height:45px; border-radius:50%;" onclick="ui.toggleTheme()">🌓</button>
+        <select id="langSwitcher" onchange="logic.changeLang(this.value)" class="btn-ghost" style="padding:8px 15px; border-radius:8px; font-weight:bold; cursor:pointer;">
+            <option value="en">English</option>
+            <option value="np">नेपाली (Nepali)</option>
+            <option value="hi">हिन्दी (Hindi)</option>
+        </select>
+        <button class="btn-ghost" style="width:45px; height:45px; border-radius:50%; cursor:pointer;" onclick="ui.toggleTheme()">🌓</button>
     </div>
 </header>
 
@@ -197,7 +177,7 @@
         <h3 id="lblInputTitle">Classroom & Office Names</h3>
         <p id="lblInputSub" style="font-size:12px; color:var(--text-muted); margin-bottom:15px;">One name per line. Best for teachers and HR raffle events.</p>
         
-        <textarea id="mainInput" class="name-editor" placeholder="Enter names here...">Student Alex&#10;Marketing Team&#10;Principal Sarah&#10;Maya Devi&#10;Officer Rahul&#10;Teacher Sam&#10;mess</textarea>
+        <textarea id="mainInput" class="name-editor" placeholder="Enter names here...">Student Alex&#10;Marketing Team&#10;Principal Sarah&#10;Maya Devi&#10;Officer Rahul&#10;Teacher Sam</textarea>
         
         <div style="margin: 15px 0; display:flex; align-items:center; gap:8px; color:var(--success); font-weight:600; font-size:13px;">
             <span>✔</span> <span id="lblStatus">Name list is valid.</span>
@@ -217,25 +197,18 @@
             <canvas id="wheelCanvas" width="900" height="900"></canvas>
         </div>
         <h1 id="lblClickToSpin" style="margin-top:40px; font-weight:900; font-size:2.5rem; text-align:center;">Click the Wheel to Spin!</h1>
-        <p style="color:var(--text-muted); text-align:center;">True random results powered by <code>crypto.getRandomValues()</code></p>
+        <button id="btnFullScreen" class="btn btn-blue" style="width:160px; border-radius:30px;">⛶ Fullscreen</button>
     </section>
-<button id="btnFullScreen" class="btn btn-blue" style="
-width:140px;
-padding:10px;
-font-size:13px;
-border-radius:30px;
-margin-top:15px;">
-⛶ Fullscreen
-</button>
+
     <aside class="side-panel">
         <h3>Live Statistics</h3>
         <div style="background:var(--accent); padding:20px; border-radius:15px; border:1px solid var(--border);">
             <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
-                <span>Names Loaded:</span>
+                <span>Names:</span>
                 <strong id="valCount" style="color:var(--primary);">0</strong>
             </div>
             <div style="display:flex; justify-content:space-between;">
-                <span>Total Spins:</span>
+                <span>Spins:</span>
                 <strong id="valTotalSpins">0</strong>
             </div>
         </div>
@@ -243,75 +216,37 @@ margin-top:15px;">
         <h3 style="margin-top:30px;">Options</h3>
         <div style="display:flex; flex-direction:column; gap:12px;">
             <label style="display:flex; align-items:center; gap:12px; cursor:pointer; font-size:14px;">
-                <input type="checkbox" id="cfgRemove" style="width:18px; height:18px;"> Remove winner after spin
+                <input type="checkbox" id="cfgRemove" style="width:18px; height:18px;"> Remove winner
             </label>
             <label style="display:flex; align-items:center; gap:12px; cursor:pointer; font-size:14px;">
-                <input type="checkbox" id="cfgSound" checked style="width:18px; height:18px;"> Enable Sound Effects
-            </label>
-            <label style="display:flex; align-items:center; gap:12px; cursor:pointer; font-size:14px;">
-                <input type="checkbox" id="cfgConfetti" checked style="width:18px; height:18px;"> Celebration Effects
+                <input type="checkbox" id="cfgSound" checked style="width:18px; height:18px;"> Sound Effects
             </label>
         </div>
         
-        <button class="btn btn-blue" style="margin-top:25px;" onclick="logic.exportNames()">📤 EXPORT LIST</button>
-
         <h3 style="margin-top:30px; display:flex; justify-content:space-between;">
             History <span style="font-size:12px; color:var(--text-muted); cursor:pointer;" onclick="logic.clearHistory()">Clear</span>
         </h3>
         <div style="background:var(--accent); border-radius:15px; padding:10px; min-height:100px;">
             <ul id="historyList" class="history-list"></ul>
         </div>
+        <button class="btn btn-blue" style="margin-top:20px;" onclick="logic.exportNames()">📤 EXPORT LIST</button>
     </aside>
 </main>
 
-<section id="features" class="seo-grid">
-    <div class="seo-card">
-        <h2>The Ultimate Teacher's Assistant</h2>
-        <p>Teachers around the world use <strong>TeamSpin PRO</strong> to ensure a fair classroom environment. Eliminate bias when calling on students for answers, assigning group projects, or distributing classroom rewards.</p>
-    </div>
-    <div class="seo-card">
-        <h2>Corporate Office Raffle & Meetings</h2>
-        <p>Planning an office giveaway or an HR raffle? TeamSpin PRO handles large lists with ease. Simply import your employee list via CSV and spin to pick a winner in front of the whole team.</p>
-    </div>
-    <div class="seo-card">
-        <h2>Is the wheel truly random?</h2>
-        <p>Our code uses <code>crypto.getRandomValues()</code>, a high-security function that uses hardware timings and keyboard delays to generate truly unpredictable results.</p>
-    </div>
-</section>
+<div id="dynamic-seo"></div>
 
-<div class="impact-section" id="about">
-    <h3>TeamSpin PRO Global Impact</h3>
-    <div class="impact-number">13,511</div>
-    <p>Total Lifetime Spins recorded across our global community.</p>
-</div>
-
-<section id="faq" class="faq-container">
-    <h2 style="text-align:center; margin-bottom:40px;">Frequently Asked Questions</h2>
-    <div class="faq-item">
-        <span class="faq-q">Can I close the ads?</span>
-        <p>We rely on ads to keep the website free. However, you can close them by pressing the 'x' next to the ad to clear your view during sessions.</p>
-    </div>
-    <div class="faq-item">
-        <span class="faq-q">Can I use this in OBS or Streamlabs?</span>
-        <p>Yes! Simply add this URL as a "Browser Source" in your streaming software to use it for giveaways and live viewer challenges.</p>
-    </div>
-</section>
-
-<div class="feedback-container" style="max-width:800px; margin: 40px auto; padding: 40px; background:var(--bg-panel); border-radius:30px; border:1px solid var(--border);">
-    <h3 style="margin-top:0;">Professional Feedback Area</h3>
-    <p style="color:var(--text-muted);">We are constantly improving TeamSpin PRO for teachers and office managers. Tell us what features you need next!</p>
-    <textarea placeholder="Share your suggestions or report a bug..." style="width:100%; height:120px; border-radius:15px; border:1px solid var(--border); padding:15px; margin:15px 0; font-family:inherit;"></textarea>
-    <button class="btn btn-blue" style="width:220px;">SUBMIT FEEDBACK</button>
-</div>
+<footer style="background:var(--bg-panel); padding:60px 20px; text-align:center; border-top:1px solid var(--border); margin-top:50px;">
+    <p id="lblLegalText" style="max-width:700px; margin:0 auto 20px; font-size:13px; color:var(--text-muted);"></p>
+    <div style="font-size:12px; color:var(--text-muted);">&copy; 2026 TeamSpin PRO. Built for Fairness.</div>
+</footer>
 
 <audio id="sndSpin"><source src="https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3"></audio>
 <audio id="sndWin"><source src="https://assets.mixkit.co/active_storage/sfx/1435/1435-preview.mp3"></audio>
 
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script>
 
-    /* --- UI ENGINE --- */
+<script>
     const ui = {
         theme: 'light',
         toggleTheme() {
@@ -321,79 +256,50 @@ margin-top:15px;">
         }
     };
 
-    /* --- LOGIC ENGINE --- */
-   /* --- LOGIC ENGINE --- */
     const logic = {
-        names: [],
-        angle: 0,
-        isSpinning: false,
-        history: [],
-        totalSpins: 0,
-        lang: 'en',
-
+        names: [], angle: 0, isSpinning: false, history: [], totalSpins: 0, lang: 'en',
         translations: {
             en: {
                 title: "Classroom & Office Names",
                 sub: "One name per line. Best for teachers and HR raffle events.",
                 spin: "Click the Wheel to Spin!",
-                status: "Name list is valid.",
+                status: "✔ Name list is valid.",
                 winner: "The winner is: ",
-                legal: "TeamSpin PRO respects your privacy. No data is stored on our servers. Read our <a href='privacy-policy.html' style='color:var(--primary);'>Full Policy</a>.",
+                legal: "TeamSpin PRO respects your privacy. No data is stored on our servers. <a href='#'>Privacy Policy</a>.",
                 seoHTML: `
-                    <section class="seo-grid">
+                    <section class="seo-grid" id="features">
                         <div class="seo-card"><h2>🎓 Teacher Tool</h2><p>Used by educators to pick students fairly. Eliminate bias in your classroom today.</p></div>
-                        <div class="seo-card"><h2>🏢 HR Raffle</h2><p>Perfect for corporate giveaways and office raffles.</p></div>
-                        <div class="seo-card"><h2>🎲 Fair Logic</h2><p>Powered by hardware-level randomness using the Web Crypto API.</p></div>
-                    </section>
-                    <div class="faq-wrapper" style="max-width:900px; margin: 40px auto; padding: 20px; background:var(--accent); border-radius:20px;">
-                        <h2 style="text-align:center;">Frequently Asked Questions</h2>
-                        <div class="faq-item" style="margin-bottom:15px; padding:15px; background:var(--bg-panel); border-radius:10px; border:1px solid var(--border);">
-                            <span class="faq-q" style="font-weight:800; color:var(--primary);">Is it truly random?</span>
-                            <p class="faq-a">Yes, we use secure crypto algorithms for every spin.</p>
-                        </div>
-                    </div>`
+                        <div class="seo-card"><h2>🏢 HR Raffle</h2><p>Perfect for corporate giveaways and office raffles. Handles thousands of names.</p></div>
+                        <div class="seo-card"><h2>🎲 Fair Logic</h2><p>Powered by secure hardware-level randomness using the Web Crypto API.</p></div>
+                    </section>`
             },
             np: {
                 title: "कक्षा र कार्यालयका नामहरू",
                 sub: "प्रति पङ्क्ति एक नाम। शिक्षक र राफल कार्यक्रमका लागि उत्तम।",
                 spin: "घुमाउनका लागि व्हीलमा क्लिक गर्नुहोस्!",
-                status: "नाम सूची मान्य छ।",
+                status: "✔ नाम सूची मान्य छ।",
                 winner: "विजेता हुनुहुन्छ: ",
-                legal: "TeamSpin PRO तपाईंको गोपनीयताको सम्मान गर्दछ। कुनै पनि डाटा हाम्रो सर्भरमा राखिँदैन। <a href='privacy-policy.html' style='color:var(--primary);'>पूर्ण नीति पढ्नुहोस्</a>।",
+                legal: "TeamSpin PRO गोपनीयताको सम्मान गर्दछ। कुनै डाटा सर्भरमा राखिँदैन। <a href='#'>गोपनीयता नीति</a>।",
                 seoHTML: `
                     <section class="seo-grid">
                         <div class="seo-card"><h2>🎓 शिक्षकको सहयोगी</h2><p>शिक्षकहरूले निष्पक्ष कक्षाकोठा सुनिश्चित गर्न यो प्रयोग गर्छन्।</p></div>
                         <div class="seo-card"><h2>🏢 कर्पोरेट राफल</h2><p>कार्यालयमा उपहार वितरण र राफल कार्यक्रमको लागि उत्तम।</p></div>
                         <div class="seo-card"><h2>🎲 निष्पक्ष लजिक</h2><p>हाम्रो व्हीलले सुरक्षित क्रिप्टो लजिक प्रयोग गर्दछ।</p></div>
-                    </section>
-                    <div class="faq-wrapper" style="max-width:900px; margin: 40px auto; padding: 20px; background:var(--accent); border-radius:20px;">
-                        <h2 style="text-align:center;">धेरै सोधिने प्रश्नहरू (FAQ)</h2>
-                        <div class="faq-item" style="margin-bottom:15px; padding:15px; background:var(--bg-panel); border-radius:10px; border:1px solid var(--border);">
-                            <span class="faq-q" style="font-weight:800; color:var(--primary);">के यो साँच्चै अनियमित छ?</span>
-                            <p class="faq-a">हो, हामी प्रत्येक स्पिनको लागि सुरक्षित क्रिप्टो एल्गोरिदम प्रयोग गर्छौं।</p>
-                        </div>
-                    </div>`
+                    </section>`
             },
             hi: {
                 title: "कक्षा और कार्यालय के नाम",
                 sub: "प्रति पंक्ति एक नाम। शिक्षकों और रैफल कार्यक्रमों के लिए उत्तम।",
                 spin: "स्पिन करने के लिए व्हील पर क्लिक करें!",
-                status: "नाम सूची मान्य है।",
+                status: "✔ नाम सूची मान्य है।",
                 winner: "विजेता है: ",
-                legal: "TeamSpin PRO आपकी गोपनीयता का सम्मान करता है। कोई डेटा हमारे सर्वर पर संग्रहीत नहीं किया जाता। <a href='privacy-policy.html' style='color:var(--primary);'>पूर्ण नीति पढ़ें</a>।",
+                legal: "TeamSpin PRO गोपनीयता का सम्मान करता है। कोई डेटा सर्वर पर नहीं जाता। <a href='#'>नीति पढ़ें</a>।",
                 seoHTML: `
                     <section class="seo-grid">
-                        <div class="seo-card"><h2>🎓 शिक्षक उपकरण</h2><p>शिक्षक निष्पक्ष रूप से छात्रों का चयन करने के लिए TeamSpin PRO का उपयोग करते हैं।</p></div>
+                        <div class="seo-card"><h2>🎓 शिक्षक उपकरण</h2><p>शिक्षक निष्पक्ष रूप से छात्रों का चयन करने के लिए इसका उपयोग करते हैं।</p></div>
                         <div class="seo-card"><h2>🏢 कार्यालय रैफल</h2><p>कर्मचारी रैफल और कार्यालय उपहार वितरण के लिए आदर्श।</p></div>
-                        <div class="seo-card"><h2>🎲 निष्पक्ष लोजिक</h2><p>हमारी व्हील क्रिप्टो-लेवल रैंडमनेस का उपयोग करके निष्पक्ष परिणाम देती है।</p></div>
-                    </section>
-                    <div class="faq-wrapper" style="max-width:900px; margin: 40px auto; padding: 20px; background:var(--accent); border-radius:20px;">
-                        <h2 style="text-align:center;">अक्सर पूछे जाने वाले प्रश्न (FAQ)</h2>
-                        <div class="faq-item" style="margin-bottom:15px; padding:15px; background:var(--bg-panel); border-radius:10px; border:1px solid var(--border);">
-                            <span class="faq-q" style="font-weight:800; color:var(--primary);">क्या यह वास्तव में यादृच्छिक है?</span>
-                            <p class="faq-a">हाँ, हम प्रत्येक स्पिन के लिए सुरक्षित क्रिप्टो एल्गोरिदम का उपयोग करते हैं।</p>
-                        </div>
-                    </div>`
+                        <div class="seo-card"><h2>🎲 निष्पक्ष परिणाम</h2><p>सुरक्षित क्रिप्टो-रैंडम एल्गोरिदम द्वारा संचालित।</p></div>
+                    </section>`
             }
         },
 
@@ -411,8 +317,13 @@ margin-top:15px;">
 
         init() {
             document.getElementById('mainInput').addEventListener('input', () => this.sync());
+            document.getElementById('btnFullScreen').onclick = () => {
+                const elem = document.querySelector('.wheel-stage');
+                if (!document.fullscreenElement) elem.requestFullscreen();
+                else document.exitFullscreen();
+            };
             this.sync();
-            this.draw();
+            this.changeLang('en');
         },
 
         sync() {
@@ -425,63 +336,47 @@ margin-top:15px;">
         draw() {
             const canvas = document.getElementById('wheelCanvas');
             const size = canvas.parentElement.offsetWidth;
-            canvas.width = size;
-            canvas.height = size;
+            canvas.width = size; canvas.height = size;
             const ctx = canvas.getContext('2d');
             const len = this.names.length;
-            ctx.clearRect(0, 0, size, size);
+            ctx.clearRect(0,0,size,size);
 
             if (len === 0) {
                 ctx.fillStyle = ui.theme === 'light' ? '#cbd5e1' : '#1e293b';
-                ctx.beginPath(); ctx.arc(size/2, size/2, size/2 - 10, 0, Math.PI * 2); ctx.fill();
+                ctx.beginPath(); ctx.arc(size/2, size/2, size/2-10, 0, Math.PI*2); ctx.fill();
                 return;
             }
 
             const arc = (Math.PI * 2) / len;
             const colors = ui.theme === 'light' ? 
-                ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899'] :
-                ['#1d4ed8', '#065f46', '#92400e', '#991b1b', '#5b21b6', '#9d174d'];
+                ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6'] :
+                ['#1d4ed8', '#065f46', '#92400e', '#991b1b', '#5b21b6'];
 
             this.names.forEach((name, i) => {
-                const currentAngle = this.angle + (i * arc);
-                ctx.beginPath();
-                ctx.fillStyle = colors[i % colors.length];
-                ctx.moveTo(size/2, size/2);
-                ctx.arc(size/2, size/2, size/2 - 10, currentAngle, currentAngle + arc);
-                ctx.fill();
-                ctx.strokeStyle = ui.theme === 'light' ? '#ffffff' : '#0f172a';
-                ctx.lineWidth = 3;
-                ctx.stroke();
+                const ang = this.angle + (i * arc);
+                ctx.beginPath(); ctx.fillStyle = colors[i % colors.length];
+                ctx.moveTo(size/2, size/2); ctx.arc(size/2, size/2, size/2-10, ang, ang+arc);
+                ctx.fill(); ctx.strokeStyle = ui.theme === 'light' ? '#fff' : '#0f172a';
+                ctx.lineWidth = 2; ctx.stroke();
 
-                ctx.save();
-                ctx.translate(size/2, size/2);
-                ctx.rotate(currentAngle + arc / 2);
-                ctx.textAlign = "right";
-                ctx.fillStyle = "#ffffff";
-                ctx.font = `bold ${Math.floor(size/20)}px Inter, sans-serif`;
-                ctx.shadowBlur = 4;
-                ctx.shadowColor = "rgba(0,0,0,0.3)";
-                ctx.fillText(name.substring(0, 18), size/2 - 20, 10);
-                ctx.restore();
+                ctx.save(); ctx.translate(size/2, size/2); ctx.rotate(ang + arc/2);
+                ctx.textAlign="right"; ctx.fillStyle="#fff"; ctx.font=`bold ${size/22}px Inter`;
+                ctx.fillText(name.substring(0,15), size/2-30, 10); ctx.restore();
             });
-
-            ctx.beginPath(); ctx.fillStyle = "white"; ctx.arc(size/2, size/2, size/15, 0, Math.PI * 2); ctx.fill();
+            ctx.beginPath(); ctx.fillStyle = "white"; ctx.arc(size/2, size/2, size/15, 0, Math.PI*2); ctx.fill();
         },
 
         spin() {
             if (this.isSpinning || this.names.length < 2) return;
             this.isSpinning = true;
-            if(document.getElementById('cfgSound').checked) {
-                const s = document.getElementById('sndSpin');
-                s.currentTime = 0; s.play();
-            }
-            const duration = 5000;
-            const start = performance.now();
+            if (document.getElementById('cfgSound').checked) document.getElementById('sndSpin').play();
+            
             const startAngle = this.angle;
             const array = new Uint32Array(1);
             window.crypto.getRandomValues(array);
-            const randomFactor = array[0] / (0xFFFFFFFF + 1);
-            const totalRotation = (Math.PI * 2 * 12) + (randomFactor * Math.PI * 2);
+            const totalRotation = (Math.PI * 2 * 12) + ((array[0] / 0xFFFFFFFF) * Math.PI * 2);
+            const duration = 5000;
+            const start = performance.now();
 
             const animate = (time) => {
                 const elapsed = time - start;
@@ -490,12 +385,12 @@ margin-top:15px;">
                 this.angle = startAngle + (totalRotation * ease);
                 this.draw();
                 if (progress < 1) requestAnimationFrame(animate);
-                else this.finishSpin();
+                else this.finish();
             };
             requestAnimationFrame(animate);
         },
 
-        finishSpin() {
+        finish() {
             this.isSpinning = false;
             this.totalSpins++;
             document.getElementById('valTotalSpins').innerText = this.totalSpins;
@@ -504,19 +399,17 @@ margin-top:15px;">
             const idx = this.names.length - 1 - Math.floor(normalized / arc);
             const winner = this.names[idx];
 
-            if(document.getElementById('cfgConfetti').checked) confetti({ particleCount: 200, spread: 80, origin: { y: 0.6 } });
-            if(document.getElementById('cfgSound').checked) document.getElementById('sndWin').play();
+            confetti({ particleCount: 200, spread: 80, origin: { y: 0.6 } });
+            if (document.getElementById('cfgSound').checked) document.getElementById('sndWin').play();
 
             Swal.fire({
-                title: `<span style="color:#2563eb; font-weight:bold;">${winner}</span>`,
-                html: `<p style="color:#64748b; font-size:14px; margin-top:8px;">Winner selected fairly via crypto-randomness.</p>`,
+                title: `${this.translations[this.lang].winner} <span style="color:#2563eb">${winner}</span>`,
                 icon: 'success',
-                confirmButtonText: 'Spin Again 🔄',
-                confirmButtonColor: '#2563eb'
+                confirmButtonText: 'Great!'
             });
 
             this.addToHistory(winner);
-            if(document.getElementById('cfgRemove').checked) {
+            if (document.getElementById('cfgRemove').checked) {
                 this.names.splice(idx, 1);
                 document.getElementById('mainInput').value = this.names.join('\n');
                 this.sync();
@@ -526,8 +419,8 @@ margin-top:15px;">
         addToHistory(name) {
             const time = new Date().toLocaleTimeString();
             this.history.unshift({name, time});
-            document.getElementById('historyList').innerHTML = this.history.slice(0, 10).map(h => `
-                <li class="history-item"><strong>${h.name}</strong> <span style="color:var(--text-muted)">${h.time}</span></li>
+            document.getElementById('historyList').innerHTML = this.history.slice(0, 8).map(h => `
+                <li class="history-item"><strong>${h.name}</strong> <small>${h.time}</small></li>
             `).join('');
         },
 
@@ -537,9 +430,7 @@ margin-top:15px;">
             this.sync();
         },
 
-        reset() {
-            if(confirm("Clear the list?")) { document.getElementById('mainInput').value = ""; this.sync(); }
-        },
+        reset() { if(confirm("Clear everything?")) { document.getElementById('mainInput').value=""; this.sync(); } },
 
         clearHistory() { this.history = []; document.getElementById('historyList').innerHTML = ""; },
 
@@ -551,46 +442,12 @@ margin-top:15px;">
 
         exportNames() {
             const blob = new Blob([this.names.join('\n')], {type: 'text/plain'});
-            const a = document.createElement('a');
-            a.href = URL.createObjectURL(blob);
-            a.download = "TeamSpin_PRO_List.txt";
-            a.click();
+            const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
+            a.download = "TeamSpin_List.txt"; a.click();
         }
     };
 
-    // Fullscreen Toggle
-    document.getElementById('btnFullScreen').addEventListener('click', (e) => {
-        const elem = document.querySelector('.wheel-stage');
-        if (!document.fullscreenElement) elem.requestFullscreen();
-        else document.exitFullscreen();
-    });
-
-    // Page Load Init
-    window.addEventListener('load', () => {
-        logic.init();
-        logic.changeLang('en');
-    });
+    window.onload = () => logic.init();
 </script>
-    <!-- Dynamic SEO & Legal Section -->
-<div id="dynamic-seo"></div>
-
-<footer class="site-footer" style="background:var(--bg-panel); padding:40px 20px; text-align:center; border-top:1px solid var(--border); margin-top:30px;">
-    <div class="footer-links" style="margin-bottom:15px;">
-        <a href="privacy-policy.html" style="color:var(--primary); text-decoration:none; font-weight:600;">Privacy Policy</a>
-        <span style="margin: 0 10px; color:var(--text-muted);">|</span>
-        <a href="terms.html" style="color:var(--primary); text-decoration:none; font-weight:600;">Terms of Service</a>
-    </div>
-    <div class="legal-snippet" style="max-width:600px; margin: 0 auto 15px; font-size:13px; color:var(--text-muted);">
-        <p id="lblLegalText"></p>
-    </div>
-    <div class="copyright" style="font-size:12px; color:var(--text-muted);">&copy; 2026 TeamSpin PRO.</div>
-</footer>
-
 </body>
 </html>
-
-
-
-
-
-
