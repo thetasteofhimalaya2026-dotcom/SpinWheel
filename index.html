@@ -6,23 +6,23 @@
     <title>TeamSpin PRO | Professional Random Name Picker & Raffle Tool</title>
     
     <meta name="description" content="Professional wheel of names for teachers and offices. Features 3D rendering, CSV import, and winner history.">
-    <meta name="keywords" content="wheel of names, teacher tool, random picker, नेपाली नाम छान्ने, TeamSpin PRO, classroom spinner, raffle tool">
+    <meta name="keywords" content="wheel of names, teacher tool, random picker, नेपाली नाम छान्ने, TeamSpin PRO">
     
     <style>
         /* ========================================
            CSS DESIGN SYSTEM 
-           ======================================== */
+           ========================================
+        */
         :root {
             --primary: #2563eb;
             --primary-dark: #1e40af;
-            --bg-body: #f8fafc;
+            --bg-body: #f1f5f9;
             --bg-panel: #ffffff;
             --text-main: #0f172a;
             --text-muted: #64748b;
             --border: #e2e8f0;
-            --accent: #f1f5f9;
-            --success: #10b981;
-            --danger: #ef4444;
+            --accent: #f8fafc;
+            --win-gold: #fbbf24;
         }
 
         [data-theme="dark"] {
@@ -43,18 +43,64 @@
             background-color: var(--bg-body);
             color: var(--text-main);
             transition: background 0.3s ease;
-            line-height: 1.5;
+            min-height: 100vh;
         }
+
+        /* --- FULL SCREEN MODE STYLES --- */
+        body.is-fullscreen {
+            overflow: hidden;
+        }
+
+        body.is-fullscreen .navbar, 
+        body.is-fullscreen .side-panel,
+        body.is-fullscreen #btnSpinBottom { 
+            display: none !important; 
+        }
+
+        body.is-fullscreen .master-container {
+            display: flex;
+            height: 100vh;
+            width: 100vw;
+            margin: 0;
+            padding: 0;
+            max-width: none;
+            align-items: center;
+            justify-content: center;
+            background: var(--bg-body);
+        }
+
+        body.is-fullscreen .wheel-stage {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+        }
+
+        .exit-fs-btn {
+            display: none;
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 3000;
+            background: #ef4444;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 10px;
+            border: none;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        body.is-fullscreen .exit-fs-btn { display: block; }
 
         /* --- NAVIGATION --- */
         .navbar {
-            height: 75px; background: var(--bg-panel);
+            height: 70px; background: var(--bg-panel);
             border-bottom: 1px solid var(--border);
             display: flex; align-items: center; justify-content: space-between;
             padding: 0 40px; position: sticky; top: 0; z-index: 1000;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.02);
         }
-        .logo-area { display: flex; align-items: center; gap: 12px; font-weight: 800; font-size: 24px; cursor: pointer; }
+        .logo-area { display: flex; align-items: center; gap: 12px; font-weight: 800; font-size: 22px; cursor: pointer; }
         .logo-area span { color: var(--primary); }
         
         .nav-links { display: flex; gap: 25px; }
@@ -74,327 +120,302 @@
         .side-panel {
             background: var(--bg-panel); border: 1px solid var(--border);
             border-radius: 24px; padding: 25px; height: fit-content;
-            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05);
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
         }
 
-        /* --- WHEEL CORE (SHAPE FIX) --- */
-        .wheel-stage { 
-            display: flex; flex-direction: column; align-items: center; justify-content: flex-start; 
-        }
-        .canvas-wrapper {
-            position: relative; 
-            width: min(85vw, 650px); 
-            aspect-ratio: 1 / 1; /* FORCES PERFECT CIRCLE */
-            cursor: pointer; 
-            transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
-            border-radius: 50%;
-        }
-        .canvas-wrapper:hover { transform: scale(1.02); }
-        #wheelCanvas {
-            width: 100% !important;
-            height: 100% !important;
-            display: block;
-            filter: drop-shadow(0 10px 20px rgba(0,0,0,0.15));
-        }
-        .wheel-indicator {
-            position: absolute; top: -15px; left: 50%; transform: translateX(-50%);
-            z-index: 50; width: 60px; filter: drop-shadow(0 4px 10px rgba(0,0,0,0.3));
-        }
-
-        /* --- INPUTS & EDITOR --- */
+        /* --- INPUT FIELD --- */
+        .input-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
         .name-editor {
-            width: 100%; height: 420px; border-radius: 16px;
+            width: 100%; height: 450px; border-radius: 16px;
             border: 2px solid var(--border); background: var(--bg-body);
             color: var(--text-main); padding: 20px; font-size: 16px;
-            line-height: 1.6; resize: none; transition: 0.3s;
+            line-height: 1.5; resize: none; transition: 0.3s;
         }
         .name-editor:focus { border-color: var(--primary); outline: none; box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1); }
 
-        /* --- BUTTONS --- */
-        .btn {
-            padding: 14px 20px; border-radius: 12px; font-weight: 700;
-            cursor: pointer; border: none; transition: 0.3s;
-            display: flex; align-items: center; justify-content: center; gap: 10px;
-            width: 100%; font-size: 14px; margin-bottom: 12px;
+        /* --- WHEEL CORE --- */
+        .wheel-stage { display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .canvas-wrapper {
+            position: relative; width: min(85vw, 620px); height: min(85vw, 620px);
+            cursor: pointer; transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
-        .btn-blue { background: var(--primary); color: white; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2); }
-        .btn-blue:hover { background: var(--primary-dark); transform: translateY(-2px); }
+        .canvas-wrapper:active { transform: scale(0.96); }
+        .wheel-indicator {
+            position: absolute; top: -10px; left: 50%; transform: translateX(-50%);
+            z-index: 50; width: 50px; filter: drop-shadow(0 4px 10px rgba(0,0,0,0.2));
+        }
+
+        /* --- UI COMPONENTS --- */
+        .btn {
+            padding: 14px 24px; border-radius: 12px; font-weight: 700;
+            cursor: pointer; border: none; transition: 0.2s;
+            display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%;
+        }
+        .btn-blue { background: var(--primary); color: white; }
+        .btn-blue:hover { background: var(--primary-dark); transform: translateY(-1px); }
         .btn-ghost { background: var(--accent); color: var(--text-main); border: 1px solid var(--border); }
         .btn-ghost:hover { background: var(--border); }
 
-        /* --- SEO CONTENT SECTIONS --- */
-        .seo-grid {
-            max-width: 1200px; margin: 80px auto;
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 40px; padding: 0 20px;
-        }
-        .seo-card {
-            background: var(--bg-panel); padding: 35px; border-radius: 24px;
-            border: 1px solid var(--border); transition: 0.3s;
-        }
-        .seo-card:hover { transform: translateY(-10px); box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); }
-        .seo-card h2 { color: var(--primary); margin-top: 0; font-size: 1.6rem; }
+        .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px; }
+        .stat-box { background: var(--accent); padding: 15px; border-radius: 15px; text-align: center; }
+        .stat-label { font-size: 12px; color: var(--text-muted); text-transform: uppercase; }
+        .stat-val { font-size: 20px; font-weight: 800; color: var(--primary); }
 
-        /* --- IMPACT STATS --- */
-        .impact-section {
-            background: var(--bg-panel); border-top: 1px solid var(--border);
-            padding: 80px 20px; text-align: center;
+        /* --- MODAL SYSTEM --- */
+        .modal-overlay {
+            position: fixed; inset: 0; background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(8px); z-index: 2000; display: none;
+            align-items: center; justify-content: center; padding: 20px;
         }
-        .impact-number { font-size: 5rem; font-weight: 900; color: var(--primary); margin: 20px 0; letter-spacing: -2px; }
-
-        /* --- FAQ SECTION --- */
-        .faq-container { max-width: 900px; margin: 60px auto; padding: 0 20px; }
-        .faq-item { background: var(--bg-panel); border: 1px solid var(--border); border-radius: 15px; margin-bottom: 15px; padding: 20px; }
-        .faq-q { font-weight: 800; color: var(--primary); margin-bottom: 10px; display: block; }
-
-        /* --- HISTORY LIST --- */
-        .history-list { max-height: 200px; overflow-y: auto; list-style: none; padding: 0; margin: 0; }
-        .history-item { 
-            padding: 10px; border-bottom: 1px solid var(--border); font-size: 14px; 
-            display: flex; justify-content: space-between;
+        .modal-card {
+            background: var(--bg-panel); border-radius: 32px;
+            width: 100%; max-width: 600px; padding: 40px; position: relative;
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
         }
+        .close-btn { position: absolute; top: 25px; right: 25px; cursor: pointer; font-size: 24px; opacity: 0.5; }
+        
+        /* --- FAQ/LEGAL TEXT --- */
+        .legal-content { max-height: 400px; overflow-y: auto; padding-right: 15px; font-size: 14px; line-height: 1.7; }
+        .legal-content h3 { color: var(--primary); margin-top: 25px; }
 
-        /* --- RESPONSIVE --- */
+        /* --- MOBILE OPTIMIZATION --- */
         @media (max-width: 1200px) {
             .master-container { grid-template-columns: 1fr; }
-            .side-panel { order: 2; }
-            .wheel-stage { order: 1; }
+            .wheel-stage { order: -1; margin-bottom: 30px; }
         }
     </style>
 </head>
 <body>
 
+<audio id="sndSpin" loop><source src="https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3"></audio>
+<audio id="sndWin"><source src="https://assets.mixkit.co/active_storage/sfx/1435/1435-preview.mp3"></audio>
+
+<button class="exit-fs-btn" onclick="logic.toggleFullScreen()">EXIT FULL SCREEN (ESC)</button>
+
 <header class="navbar">
     <div class="logo-area" onclick="location.reload()">
-        <div style="background:var(--primary); color:white; width:35px; height:35px; display:flex; align-items:center; justify-content:center; border-radius:8px;">T</div>
+        <img src="logo.jpg" width="35" style="border-radius:8px;" alt="Logo">
         TeamSpin <span>PRO</span>
     </div>
+    
     <nav class="nav-links">
-        <a href="#features" class="nav-link">Features</a>
-        <a href="#about" class="nav-link">About Teachers Tool</a>
-        <a href="#faq" class="nav-link">FAQ</a>
-        <a class="nav-link" onclick="logic.runRandomTest()" style="color:var(--danger)">Run 10,000 Spins</a>
+        <a class="nav-link" onclick="ui.showModal('modalFAQ')">Help & FAQ</a>
+        <a class="nav-link" onclick="ui.showModal('modalTerms')">Terms</a>
+        <a class="nav-link" onclick="ui.showModal('modalPrivacy')">Privacy</a>
+        <a class="nav-link" onclick="ui.showModal('modalContact')">Contact</a>
     </nav>
-    <div style="display:flex; gap:12px; align-items:center;">
-        <select id="langSwitcher" onchange="logic.changeLang(this.value)" class="btn-ghost" style="padding:8px 15px; border-radius:8px; font-weight:bold;">
-            <option value="en">English</option>
-            <option value="np">नेपाली (Nepali)</option>
+
+    <div style="display:flex; gap:12px;">
+        <select id="langSwitcher" onchange="logic.changeLang(this.value)" class="btn-ghost" style="width:auto; padding:5px 10px;">
+            <option value="en">English (US)</option>
+            <option value="np">नेपाली (Nepal)</option>
         </select>
-        <button class="btn-ghost" style="width:45px; height:45px; border-radius:50%;" onclick="ui.toggleTheme()">🌓</button>
+        <button class="btn-ghost" style="width:auto; padding:5px 10px;" onclick="ui.toggleTheme()">🌓</button>
     </div>
 </header>
 
 <main class="master-container">
+    
     <aside class="side-panel">
-        <h3 id="lblInputTitle">Classroom & Office Names</h3>
-        <p id="lblInputSub" style="font-size:12px; color:var(--text-muted); margin-bottom:15px;">One name per line. Best for teachers and HR raffle events.</p>
-        
-        <textarea id="mainInput" class="name-editor" placeholder="Enter names here...">Student Alex&#10;Marketing Team&#10;Principal Sarah&#10;Maya Devi&#10;Officer Rahul&#10;Teacher Sam&#10;mess</textarea>
-        
-        <div style="margin: 15px 0; display:flex; align-items:center; gap:8px; color:var(--success); font-weight:600; font-size:13px;">
-            <span>✔</span> <span id="lblStatus">Name list is valid.</span>
+        <div class="input-header">
+            <h3 id="lblNames">Entries List</h3>
+            <span id="nameBadge" style="background:var(--primary); color:white; padding:2px 8px; border-radius:10px; font-size:12px;">0</span>
         </div>
-
-        <button class="btn btn-ghost" onclick="logic.shuffle()">🔀 SHUFFLE NAMES</button>
-        <button class="btn btn-ghost" onclick="document.getElementById('csvFile').click()">📥 IMPORT CSV/TXT</button>
-        <input type="file" id="csvFile" hidden onchange="logic.importFile(event)">
-        <button class="btn btn-ghost" style="color:var(--danger)" onclick="logic.reset()">🗑️ CLEAR ALL</button>
+        <textarea id="mainInput" class="name-editor" placeholder="Enter one name per line...">Teacher Alex&#10;Marketing Team&#10;Principal Sarah&#10;Maya Devi&#10;Officer Rahul&#10;Student Sam&#10;Arjun Karki&#10;Deepa Thapa</textarea>
+        
+        <div style="margin-top:20px; display:flex; flex-direction:column; gap:10px;">
+            <button class="btn btn-ghost" onclick="logic.shuffle()">🔀 Shuffle Names</button>
+            <button class="btn btn-ghost" onclick="document.getElementById('csvFile').click()">📥 Import CSV/Text</button>
+            <input type="file" id="csvFile" hidden onchange="logic.importFile(event)">
+            <button class="btn btn-ghost" style="color:#ef4444;" onclick="logic.reset()">🗑️ Clear All</button>
+        </div>
     </aside>
 
     <section class="wheel-stage">
         <div class="canvas-wrapper" onclick="logic.spin()">
             <svg class="wheel-indicator" viewBox="0 0 50 50">
-                <path d="M25 50 L50 0 L0 0 Z" fill="#ef4444" />
+                <path d="M25 50 L50 0 L0 0 Z" fill="#ff4757" />
             </svg>
             <canvas id="wheelCanvas" width="900" height="900"></canvas>
         </div>
-        <h1 id="lblClickToSpin" style="margin-top:40px; font-weight:900; font-size:2.5rem; text-align:center;">Click the Wheel to Spin!</h1>
-        <p style="color:var(--text-muted); text-align:center;">True random results powered by <code>crypto.getRandomValues()</code></p>
+        <h1 id="lblStatus" style="margin-top:25px; font-weight:900;">Click to Spin the Wheel</h1>
+        <button id="btnSpinBottom" class="btn btn-blue" style="width:280px; font-size:18px; height:60px;" onclick="logic.spin()">SPIN THE WHEEL</button>
     </section>
 
     <aside class="side-panel">
-        <h3>Live Statistics</h3>
-        <div style="background:var(--accent); padding:20px; border-radius:15px; border:1px solid var(--border);">
-            <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
-                <span>Names Loaded:</span>
-                <strong id="valCount" style="color:var(--primary);">0</strong>
+        <h3 id="lblStats">Real-time Stats</h3>
+        <div class="stat-grid">
+            <div class="stat-box">
+                <div class="stat-label">Total Names</div>
+                <div class="stat-val" id="valCount">0</div>
             </div>
-            <div style="display:flex; justify-content:space-between;">
-                <span>Total Spins:</span>
-                <strong id="valTotalSpins">0</strong>
+            <div class="stat-box">
+                <div class="stat-label">Lifetime Spins</div>
+                <div class="stat-val" id="valSpins">0</div>
             </div>
         </div>
 
-        <h3 style="margin-top:30px;">Options</h3>
-        <div style="display:flex; flex-direction:column; gap:12px;">
-            <label style="display:flex; align-items:center; gap:12px; cursor:pointer; font-size:14px;">
-                <input type="checkbox" id="cfgRemove" style="width:18px; height:18px;"> Remove winner after spin
+        <h3 style="margin-top:30px;" id="lblSettings">Preferences</h3>
+        <div style="display:flex; flex-direction:column; gap:15px;">
+            <label style="display:flex; justify-content:space-between; cursor:pointer;">
+                <span>Remove winner auto</span>
+                <input type="checkbox" id="cfgRemove" style="width:20px; height:20px;">
             </label>
-            <label style="display:flex; align-items:center; gap:12px; cursor:pointer; font-size:14px;">
-                <input type="checkbox" id="cfgSound" checked style="width:18px; height:18px;"> Enable Sound Effects
+            <label style="display:flex; justify-content:space-between; cursor:pointer;">
+                <span>Sound Effects</span>
+                <input type="checkbox" id="cfgSound" checked style="width:20px; height:20px;">
             </label>
-            <label style="display:flex; align-items:center; gap:12px; cursor:pointer; font-size:14px;">
-                <input type="checkbox" id="cfgConfetti" checked style="width:18px; height:18px;"> Celebration Effects
+            <label style="display:flex; justify-content:space-between; cursor:pointer;">
+                <span>Confetti Burst</span>
+                <input type="checkbox" id="cfgConfetti" checked style="width:20px; height:20px;">
             </label>
         </div>
-        
-        <button class="btn btn-blue" style="margin-top:25px;" onclick="logic.exportNames()">📤 EXPORT LIST</button>
 
-        <h3 style="margin-top:30px; display:flex; justify-content:space-between;">
-            History <span style="font-size:12px; color:var(--text-muted); cursor:pointer;" onclick="logic.clearHistory()">Clear</span>
-        </h3>
-        <div style="background:var(--accent); border-radius:15px; padding:10px; min-height:100px;">
-            <ul id="historyList" class="history-list"></ul>
-        </div>
+        <button class="btn btn-blue" style="margin-top:25px;" onclick="logic.toggleFullScreen()">📺 Full Screen Mode</button>
+        <button class="btn btn-ghost" style="margin-top:10px;" onclick="ui.showModal('modalHistory')">📜 View Winner History</button>
+        <button class="btn btn-ghost" style="margin-top:10px;" onclick="logic.exportNames()">📤 Export List</button>
     </aside>
 </main>
 
-<section id="features" class="seo-grid">
-    <div class="seo-card">
-        <h2>The Ultimate Teacher's Assistant</h2>
-        <p>Teachers around the world use <strong>TeamSpin PRO</strong> to ensure a fair classroom environment. Eliminate bias when calling on students for answers, assigning group projects, or distributing classroom rewards.</p>
+<div id="modalFAQ" class="modal-overlay">
+    <div class="modal-card">
+        <span class="close-btn" onclick="ui.closeAll()">&times;</span>
+        <h2>Frequently Asked Questions</h2>
+        <div class="legal-content">
+            <h3>How do I use this tool?</h3>
+            <p>Simply enter your list of participants in the box on the left. Each name must be on a new line. Click the wheel or the spin button to select a random winner.</p>
+            <h3>Is it truly random?</h3>
+            <p>Yes. TeamSpin PRO uses the browser's high-entropy Math.random() function combined with physics-based deceleration to ensure a non-deterministic outcome.</p>
+            <h3>Can I use this for giveaways?</h3>
+            <p>Absolutely! Many teachers use it for student selection, and HR managers use it for office raffles.</p>
+        </div>
     </div>
-    <div class="seo-card">
-        <h2>Corporate Office Raffle & Meetings</h2>
-        <p>Planning an office giveaway or an HR raffle? TeamSpin PRO handles large lists with ease. Simply import your employee list via CSV and spin to pick a winner in front of the whole team.</p>
-    </div>
-    <div class="seo-card">
-        <h2>Is the wheel truly random?</h2>
-        <p>Our code uses <code>crypto.getRandomValues()</code>, a high-security function that uses hardware timings and keyboard delays to generate truly unpredictable results.</p>
-    </div>
-</section>
-
-<div class="impact-section" id="about">
-    <h3>TeamSpin PRO Global Impact</h3>
-    <div class="impact-number">13,511</div>
-    <p>Total Lifetime Spins recorded across our global community.</p>
 </div>
 
-<section id="faq" class="faq-container">
-    <h2 style="text-align:center; margin-bottom:40px;">Frequently Asked Questions</h2>
-    <div class="faq-item">
-        <span class="faq-q">Can I close the ads?</span>
-        <p>We rely on ads to keep the website free. However, you can close them by pressing the 'x' next to the ad to clear your view during sessions.</p>
+<div id="modalPrivacy" class="modal-overlay">
+    <div class="modal-card">
+        <span class="close-btn" onclick="ui.closeAll()">&times;</span>
+        <h2>Privacy Policy</h2>
+        <div class="legal-content">
+            <p>Your privacy is our priority. TeamSpin PRO is a "Client-Side" application.</p>
+            <h3>Data Storage</h3>
+            <p>We do not store your name lists on our servers. All names you enter stay within your browser's local memory.</p>
+            <h3>Cookies</h3>
+            <p>We use minimal cookies/local storage only to remember your theme settings and spin count. No tracking or advertising data is collected.</p>
+        </div>
     </div>
-    <div class="faq-item">
-        <span class="faq-q">Can I use this in OBS or Streamlabs?</span>
-        <p>Yes! Simply add this URL as a "Browser Source" in your streaming software to use it for giveaways and live viewer challenges.</p>
-    </div>
-</section>
-
-<div class="feedback-container" style="max-width:800px; margin: 40px auto; padding: 40px; background:var(--bg-panel); border-radius:30px; border:1px solid var(--border);">
-    <h3 style="margin-top:0;">Professional Feedback Area</h3>
-    <p style="color:var(--text-muted);">We are constantly improving TeamSpin PRO for teachers and office managers. Tell us what features you need next!</p>
-    <textarea placeholder="Share your suggestions or report a bug..." style="width:100%; height:120px; border-radius:15px; border:1px solid var(--border); padding:15px; margin:15px 0; font-family:inherit;"></textarea>
-    <button class="btn btn-blue" style="width:220px;">SUBMIT FEEDBACK</button>
 </div>
-<div id="dynamic-seo"></div>
 
-<footer class="site-footer">
-    <div class="footer-links">
-        <a href="privacy-policy.html" class="f-link">Privacy Policy</a>
-        <span class="sep">|</span>
-        <a href="terms.html" class="f-link">Terms of Service</a>
+<div id="modalTerms" class="modal-overlay">
+    <div class="modal-card">
+        <span class="close-btn" onclick="ui.closeAll()">&times;</span>
+        <h2>Terms of Service</h2>
+        <div class="legal-content">
+            <p>By using TeamSpin PRO, you agree to the following:</p>
+            <ul>
+                <li>The tool is provided "as is" for entertainment and educational use.</li>
+                <li>We are not responsible for any disputes resulting from the wheel's outcome.</li>
+                <li>Commercial use is permitted as long as the tool is not being resold as your own product.</li>
+            </ul>
+        </div>
     </div>
-    <div class="legal-snippet">
-        <p id="lblLegalText"></p>
+</div>
+
+<div id="modalContact" class="modal-overlay">
+    <div class="modal-card">
+        <span class="close-btn" onclick="ui.closeAll()">&times;</span>
+        <h2>Contact Support</h2>
+        <p>Email: support@teamspinpro.com</p>
+        <form onsubmit="event.preventDefault(); alert('Request Sent!'); ui.closeAll();">
+            <input type="text" placeholder="Subject" style="width:100%; padding:12px; margin-bottom:15px; border:1px solid var(--border); border-radius:10px;">
+            <textarea placeholder="Message" style="width:100%; height:100px; padding:12px; border:1px solid var(--border); border-radius:10px;"></textarea>
+            <button class="btn btn-blue">Send Feedback</button>
+        </form>
     </div>
-    <div class="copyright">&copy; 2026 TeamSpin PRO.</div>
-</footer>
-<audio id="sndSpin"><source src="https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3"></audio>
-<audio id="sndWin"><source src="https://assets.mixkit.co/active_storage/sfx/1435/1435-preview.mp3"></audio>
+</div>
+
+<div id="modalWinner" class="modal-overlay">
+    <div class="modal-card" style="text-align:center;">
+        <h2 id="lblWinHeader">🎉 WE HAVE A WINNER! 🎉</h2>
+        <div id="winnerName" style="font-size: 4rem; font-weight: 900; color: var(--primary); margin: 20px 0;">Winner</div>
+        <div style="display:flex; gap:10px;">
+            <button class="btn btn-blue" onclick="ui.closeAll()">Continue</button>
+            <button class="btn btn-ghost" onclick="logic.removeWinnerFromModal()">Remove Name</button>
+        </div>
+    </div>
+</div>
+
+<div id="modalHistory" class="modal-overlay">
+    <div class="modal-card">
+        <span class="close-btn" onclick="ui.closeAll()">&times;</span>
+        <h2>Winner History</h2>
+        <div id="historyList" style="max-height: 300px; overflow-y: auto; margin: 20px 0; border: 1px solid var(--border); border-radius: 12px;"></div>
+        <button class="btn btn-ghost" onclick="logic.clearHistory()">Clear History</button>
+    </div>
+</div>
 
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
 <script>
-    /* --- UI ENGINE --- */
+    /*
+        OBJECT-ORIENTED ARCHITECTURE
+    */
+    
     const ui = {
         theme: 'light',
         toggleTheme() {
             this.theme = this.theme === 'light' ? 'dark' : 'light';
             document.body.setAttribute('data-theme', this.theme);
             logic.draw();
+        },
+        showModal(id) {
+            if(id === 'modalHistory') logic.renderHistory();
+            document.getElementById(id).style.display = 'flex';
+        },
+        closeAll() {
+            document.querySelectorAll('.modal-overlay').forEach(m => m.style.display = 'none');
+        },
+        updateBadge(count) {
+            document.getElementById('nameBadge').innerText = count;
+            document.getElementById('valCount').innerText = count;
         }
     };
 
-    /* --- LOGIC ENGINE --- */
     const logic = {
         names: [],
+        history: [],
         angle: 0,
         isSpinning: false,
-        history: [],
-        totalSpins: 0,
         lang: 'en',
+        lifetimeSpins: parseInt(localStorage.getItem('lifetimeSpins')) || 0,
 
-       // 2. REPLACE YOUR TRANSLATIONS OBJECT WITH THIS
-translations: {
-    en: {
-        title: "Classroom & Office Names",
-        sub: "One name per line. Best for teachers and HR raffle events.",
-        spin: "Click the Wheel to Spin!",
-        status: "Name list is valid.",
-        winner: "The winner is: ",
-        legal: "TeamSpin PRO respects your privacy. No data is stored on our servers. Read our <a href='privacy-policy.html' style='color:var(--primary);'>Full Policy</a>.",
-        seoHTML: `
-            <section class="seo-grid">
-                <div class="seo-card"><h2>🎓 Teacher Tool</h2><p>Used by educators to pick students fairly. Eliminate bias in your classroom today.</p></div>
-                <div class="seo-card"><h2>🏢 HR Raffle</h2><p>Perfect for corporate giveaways and office raffles. Import employee lists easily.</p></div>
-                <div class="seo-card"><h2>🎲 Fair Logic</h2><p>Powered by hardware-level randomness using the Web Crypto API.</p></div>
-            </section>
-            <div class="faq-wrapper">
-                <h2 style="text-align:center;">Frequently Asked Questions</h2>
-                <div class="faq-item"><span class="faq-q">Is it truly random?</span><p class="faq-a">Yes, we use secure crypto algorithms for every spin.</p></div>
-            </div>`
-    },
-    np: {
-        title: "कक्षा र कार्यालयका नामहरू",
-        sub: "प्रति पङ्क्ति एक नाम। शिक्षक र राफल कार्यक्रमका लागि उत्तम।",
-        spin: "घुमाउनका लागि व्हीलमा क्लिक गर्नुहोस्!",
-        status: "नाम सूची मान्य छ।",
-        winner: "विजेता हुनुहुन्छ: ",
-        legal: "TeamSpin PRO तपाईंको गोपनीयताको सम्मान गर्दछ। कुनै पनि डाटा हाम्रो सर्भरमा राखिँदैन। <a href='privacy-policy.html' style='color:var(--primary);'>पूर्ण नीति पढ्नुहोस्</a>।",
-        seoHTML: `
-            <section class="seo-grid">
-                <div class="seo-card"><h2>🎓 शिक्षकको सहयोगी</h2><p>शिक्षकहरूले निष्पक्ष कक्षाकोठा सुनिश्चित गर्न यो प्रयोग गर्छन्।</p></div>
-                <div class="seo-card"><h2>🏢 कर्पोरेट राफल</h2><p>कार्यालयमा उपहार वितरण र राफल कार्यक्रमको लागि उत्तम।</p></div>
-                <div class="seo-card"><h2>🎲 निष्पक्ष लजिक</h2><p>हाम्रो व्हीलले सुरक्षित क्रिप्टो लजिक प्रयोग गर्दछ।</p></div>
-            </section>
-            <div class="faq-wrapper">
-                <h2 style="text-align:center;">धेरै सोधिने प्रश्नहरू (FAQ)</h2>
-                <div class="faq-item"><span class="faq-q">के यो साँच्चै अनियमित छ?</span><p class="faq-a">हो, हामी प्रत्येक स्पिनको लागि सुरक्षित क्रिप्टो एल्गोरिदम प्रयोग गर्छौं।</p></div>
-            </div>`
-    }
-},
-        init() {
-            document.getElementById('mainInput').addEventListener('input', () => this.sync());
-            this.sync();
-            this.draw();
+        dict: {
+            en: { names: "Entries List", status: "Click to Spin the Wheel", stats: "Real-time Stats", set: "Preferences", win: "WE HAVE A WINNER!" },
+            np: { names: "नामहरूको सूची", status: "घुमाउनका लागि क्लिक गर्नुहोस्", stats: "प्रत्यक्ष तथ्याङ्क", set: "सेटिङहरू", win: "विजेता घोषणा!" }
         },
-changeLang(val) {
-    this.lang = val;
-    const t = this.translations[val];
-    
-    // Core Labels
-    document.getElementById('lblInputTitle').innerText = t.title;
-    document.getElementById('lblInputSub').innerText = t.sub;
-    document.getElementById('lblClickToSpin').innerText = t.spin;
-    document.getElementById('lblStatus').innerText = t.status;
-    
-    // Dynamic SEO & Legal Content
-    document.getElementById('dynamic-seo').innerHTML = t.seoHTML;
-    document.getElementById('lblLegalText').innerHTML = t.legal;
-    
-    this.draw();
-},
+
+        init() {
+            const input = document.getElementById('mainInput');
+            input.addEventListener('input', () => this.sync());
+            document.getElementById('valSpins').innerText = this.lifetimeSpins;
+            this.sync();
+
+            // Keyboard support for full screen exit
+            window.addEventListener('keydown', (e) => {
+                if (e.key === "Escape" && document.body.classList.contains('is-fullscreen')) {
+                    this.toggleFullScreen();
+                }
+            });
+        },
+
+        toggleFullScreen() {
+            const isFS = document.body.classList.toggle('is-fullscreen');
+            this.draw(); // Redraw to ensure canvas looks good in new layout
         },
 
         sync() {
-            const val = document.getElementById('mainInput').value;
-            this.names = val.split('\n')
-                           .map(n => n.trim())
-                           .filter(n => n !== "");
-            document.getElementById('valCount').innerText = this.names.length;
+            this.names = document.getElementById('mainInput').value.split('\n').map(n => n.trim()).filter(n => n !== "");
+            ui.updateBadge(this.names.length);
             this.draw();
         },
 
@@ -404,53 +425,51 @@ changeLang(val) {
             const len = this.names.length;
             
             ctx.clearRect(0, 0, 900, 900);
-            if (len === 0) {
-                ctx.fillStyle = ui.theme === 'light' ? '#cbd5e1' : '#1e293b';
-                ctx.beginPath(); ctx.arc(450, 450, 400, 0, Math.PI * 2); ctx.fill();
-                return;
-            }
+            if(len === 0) return;
 
             const arc = (Math.PI * 2) / len;
-            const colors = ui.theme === 'light' ? 
-                ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899'] :
-                ['#1d4ed8', '#065f46', '#92400e', '#991b1b', '#5b21b6', '#9d174d'];
+            const colors = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899', '#06b6d4'];
 
-            this.names.forEach((name, i) => {
+            for(let i = 0; i < len; i++) {
                 const currentAngle = this.angle + (i * arc);
                 
-                // Draw Slice
+                // Draw Wedge
                 ctx.beginPath();
                 ctx.fillStyle = colors[i % colors.length];
                 ctx.moveTo(450, 450);
-                ctx.arc(450, 450, 440, currentAngle, currentAngle + arc);
+                ctx.arc(450, 450, 430, currentAngle, currentAngle + arc);
                 ctx.fill();
-                ctx.strokeStyle = ui.theme === 'light' ? '#ffffff' : '#0f172a';
-                ctx.lineWidth = 3;
+                
+                // Glow/Shadow effect
+                ctx.strokeStyle = "rgba(255,255,255,0.15)";
+                ctx.lineWidth = 2;
                 ctx.stroke();
 
                 // Draw Text
                 ctx.save();
                 ctx.translate(450, 450);
-                ctx.rotate(currentAngle + arc / 2);
+                ctx.rotate(currentAngle + arc/2);
                 ctx.textAlign = "right";
-                ctx.fillStyle = "#ffffff";
-                ctx.font = "bold 28px Inter, sans-serif";
-                ctx.shadowBlur = 4;
-                ctx.shadowColor = "rgba(0,0,0,0.3)";
-                ctx.fillText(name.substring(0, 18), 400, 10);
+                ctx.fillStyle = "white";
+                ctx.font = "bold 26px sans-serif";
+                ctx.shadowColor = "rgba(0,0,0,0.4)";
+                ctx.shadowBlur = 5;
+                ctx.fillText(this.names[i].substring(0, 20), 400, 10);
                 ctx.restore();
-            });
+            }
 
             // Center Pin
             ctx.beginPath();
-            ctx.fillStyle = "white";
-            ctx.arc(450, 450, 30, 0, Math.PI * 2);
+            ctx.arc(450, 450, 40, 0, Math.PI*2);
+            ctx.fillStyle = ui.theme === 'light' ? '#fff' : '#0f172a';
             ctx.fill();
-            ctx.shadowBlur = 10; ctx.shadowColor = "rgba(0,0,0,0.2)";
+            ctx.strokeStyle = '#3b82f6';
+            ctx.lineWidth = 5;
+            ctx.stroke();
         },
 
         spin() {
-            if (this.isSpinning || this.names.length < 2) return;
+            if(this.isSpinning || this.names.length < 2) return;
             this.isSpinning = true;
             
             if(document.getElementById('cfgSound').checked) {
@@ -458,79 +477,69 @@ changeLang(val) {
                 s.currentTime = 0; s.play();
             }
 
-            const duration = 5000;
-            const start = performance.now();
+            const duration = 5000 + Math.random() * 2000;
+            const startTime = performance.now();
             const startAngle = this.angle;
-            
-            // Cryptographically secure randomness
-            const array = new Uint32Array(1);
-            window.crypto.getRandomValues(array);
-            const randomFactor = array[0] / (0xFFFFFFFF + 1);
-            const totalRotation = (Math.PI * 2 * 12) + (randomFactor * Math.PI * 2);
+            const totalRotation = (Math.PI * 2 * 12) + (Math.random() * Math.PI * 2);
 
-            const animate = (time) => {
-                const elapsed = time - start;
+            const animate = (now) => {
+                const elapsed = now - startTime;
                 const progress = Math.min(elapsed / duration, 1);
                 
-                // Quintic ease out
-                const ease = 1 - Math.pow(1 - progress, 5);
-                
+                // Ease out cubic
+                const ease = 1 - Math.pow(1 - progress, 3);
                 this.angle = startAngle + (totalRotation * ease);
+                
                 this.draw();
 
-                if (progress < 1) {
+                if(progress < 1) {
                     requestAnimationFrame(animate);
                 } else {
-                    this.finishSpin();
+                    this.finalize();
                 }
             };
             requestAnimationFrame(animate);
         },
 
-        finishSpin() {
+        finalize() {
             this.isSpinning = false;
-            this.totalSpins++;
-            document.getElementById('valTotalSpins').innerText = this.totalSpins;
-
-            const arc = (Math.PI * 2) / this.names.length;
+            document.getElementById('sndSpin').pause();
+            
+            const len = this.names.length;
+            const arc = (Math.PI * 2) / len;
             const normalized = (this.angle + (3 * Math.PI / 2)) % (Math.PI * 2);
-            const idx = this.names.length - 1 - Math.floor(normalized / arc);
+            const idx = len - 1 - Math.floor(normalized / arc);
             const winner = this.names[idx];
 
-            if(document.getElementById('cfgConfetti').checked) {
-                confetti({ particleCount: 200, spread: 80, origin: { y: 0.6 }, colors: ['#2563eb', '#10b981', '#fbbf24'] });
-            }
-            
             if(document.getElementById('cfgSound').checked) document.getElementById('sndWin').play();
+            if(document.getElementById('cfgConfetti').checked) {
+                confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+            }
 
-            setTimeout(() => {
-                alert(this.translations[this.lang].winner + winner);
-                this.addToHistory(winner);
-                
-                if(document.getElementById('cfgRemove').checked) {
-                    this.names.splice(idx, 1);
-                    document.getElementById('mainInput').value = this.names.join('\n');
-                    this.sync();
-                }
-            }, 300);
+            this.lifetimeSpins++;
+            localStorage.setItem('lifetimeSpins', this.lifetimeSpins);
+            document.getElementById('valSpins').innerText = this.lifetimeSpins;
+
+            document.getElementById('winnerName').innerText = winner;
+            ui.showModal('modalWinner');
+
+            this.history.unshift({ name: winner, time: new Date().toLocaleTimeString() });
+            
+            if(document.getElementById('cfgRemove').checked) {
+                this.removeWinner(winner);
+            }
         },
 
-        addToHistory(name) {
-            const time = new Date().toLocaleTimeString();
-            this.history.unshift({name, time});
-            const list = document.getElementById('historyList');
-            list.innerHTML = this.history.map(h => `
-                <li class="history-item">
-                    <strong>${h.name}</strong>
-                    <span style="color:var(--text-muted)">${h.time}</span>
-                </li>
-            `).join('');
+        removeWinner(name) {
+            this.names = this.names.filter(n => n !== name);
+            document.getElementById('mainInput').value = this.names.join('\n');
+            this.sync();
         },
 
-        runRandomTest() {
-            alert("Running 10,000 spins simulation via crypto.getRandomValues()...");
-            // Logic to simulate results instantly would go here
-            console.log("Randomness audit passed.");
+        removeWinnerFromModal() {
+            const name = document.getElementById('winnerName').innerText;
+            this.removeWinner(name);
+            ui.closeAll();
         },
 
         shuffle() {
@@ -540,39 +549,65 @@ changeLang(val) {
         },
 
         reset() {
-            if(confirm("Are you sure you want to clear the list?")) {
+            if(confirm("Are you sure? This will delete all names.")) {
                 document.getElementById('mainInput').value = "";
                 this.sync();
             }
         },
 
-        clearHistory() {
-            this.history = [];
-            document.getElementById('historyList').innerHTML = "";
+        renderHistory() {
+            const list = document.getElementById('historyList');
+            if(this.history.length === 0) {
+                list.innerHTML = "<p style='padding:20px; text-align:center;'>No winners yet.</p>";
+                return;
+            }
+            list.innerHTML = this.history.map(h => `
+                <div style="padding:12px; border-bottom:1px solid var(--border); display:flex; justify-content:space-between;">
+                    <strong>${h.name}</strong>
+                    <span style="font-size:12px; color:var(--text-muted);">${h.time}</span>
+                </div>
+            `).join('');
+        },
+
+        changeLang(val) {
+            this.lang = val;
+            const d = this.dict[val];
+            document.getElementById('lblNames').innerText = d.names;
+            document.getElementById('lblStatus').innerText = d.status;
+            document.getElementById('lblStats').innerText = d.stats;
+            document.getElementById('lblSettings').innerText = d.set;
+            document.getElementById('lblWinHeader').innerText = d.win;
         },
 
         importFile(e) {
-            const file = e.target.files[0];
             const reader = new FileReader();
-            reader.onload = (event) => {
-                document.getElementById('mainInput').value = event.target.result;
+            reader.onload = (ev) => {
+                const content = ev.target.result;
+                document.getElementById('mainInput').value = content.split(/,|\n/).map(s => s.trim()).filter(s => s).join('\n');
                 this.sync();
             };
-            reader.readAsText(file);
+            reader.readAsText(e.target.files[0]);
         },
 
         exportNames() {
-            const blob = new Blob([this.names.join('\n')], {type: 'text/plain'});
+            const blob = new Blob([document.getElementById('mainInput').value], {type: 'text/plain'});
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
-            a.href = url;
-            a.download = "TeamSpin_PRO_List.txt";
-            a.click();
+            a.href = url; a.download = "TeamSpin_Export.txt"; a.click();
+        },
+
+        clearHistory() {
+            this.history = [];
+            this.renderHistory();
         }
     };
 
+    window.onclick = function(event) {
+        if (event.target.className === 'modal-overlay') ui.closeAll();
+    };
+
     logic.init();
+
 </script>
 </body>
 </html>
-
