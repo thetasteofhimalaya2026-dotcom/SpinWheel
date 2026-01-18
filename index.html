@@ -345,21 +345,63 @@ const logic = {
         this.draw();
     },
 
-    init() {
-        this.totalSpins = parseInt(localStorage.getItem('ts_lifetime_spins')) || 0;
+  init() {
+this.totalSpins = parseInt(localStorage.getItem('ts_lifetime_spins')) || 15050;
         document.getElementById('valTotalSpins').innerText = this.totalSpins;
         document.getElementById('mainInput').addEventListener('input', () => this.sync());
-        
-        // Ensure initial sync and draw
         this.sync();
         this.changeLang(this.lang);
     },
 
+    // PASTE THE NEW CODE STARTING HERE:
     sync() {
         const val = document.getElementById('mainInput').value;
-        this.names = val.split('\n').map(n => n.trim()).filter(n => n !== "");
+        const rawNames = val.split('\n').map(n => n.trim()).filter(n => n !== "");
+        
+        const seen = new Set();
+        const duplicates = rawNames.filter(name => {
+            const lower = name.toLowerCase();
+            if (seen.has(lower)) return true;
+            seen.add(lower);
+            return false;
+        });
+
+        const statusEl = document.getElementById('lblStatus');
+        const iconEl = document.getElementById('statusIcon');
+        
+        if (duplicates.length > 0) {
+            const uniqueDupes = [...new Set(duplicates)];
+            if(iconEl) iconEl.innerText = "⚠️";
+            if(statusEl) {
+                statusEl.style.color = "var(--danger)";
+                statusEl.innerText = (this.lang === 'np' ? "दोहोरिएका नामहरू: " : "Duplicates: ") + uniqueDupes.join(', ');
+            }
+        } else {
+            if(iconEl) iconEl.innerText = "✔";
+            if(statusEl) {
+                statusEl.style.color = "var(--success)";
+                statusEl.innerText = this.translations[this.lang].status;
+            }
+        }
+
+        this.names = rawNames;
         document.getElementById('valCount').innerText = this.names.length;
         this.draw();
+    },
+
+    removeDuplicates() {
+        const unique = [...new Set(this.names)];
+        document.getElementById('mainInput').value = unique.join('\n');
+        this.sync();
+        
+        Swal.fire({
+            toast: true,
+            position: 'top-end',
+            icon: 'success',
+            title: this.lang === 'np' ? 'डुप्लिकेटहरू हटाइयो' : 'Duplicates removed',
+            showConfirmButton: false,
+            timer: 2000
+        });
     },
 
     draw() {
@@ -452,10 +494,9 @@ const logic = {
         const idx = Math.floor((normalizedAngle < 0 ? normalizedAngle + Math.PI * 2 : normalizedAngle) / arc) % this.names.length;
         const winner = this.names[idx];
 
-        this.totalSpins++;
-        localStorage.setItem('ts_lifetime_spins', this.totalSpins);
-        document.getElementById('valTotalSpins').innerText = this.totalSpins;
-
+       this.totalSpins++;
+localStorage.setItem('ts_lifetime_spins', this.totalSpins);
+document.getElementById('valTotalSpins').innerText = this.totalSpins;
         confetti({ particleCount: 200, spread: 90, origin: { y: 0.6 } });
         if (document.getElementById('cfgSound').checked) document.getElementById('sndWin').play();
 
@@ -509,6 +550,7 @@ window.onload = () => logic.init();
 </script>
 </body>
 </html>
+
 
 
 
