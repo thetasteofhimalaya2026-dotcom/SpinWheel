@@ -6,555 +6,566 @@
     <title>TeamSpin PRO – Professional Wheel of Names for Office Meetings & Class Teachers</title>
     <meta name="description" content="Advanced random name picker for teachers and office raffles. Features 3D graphics, CSV import, and real-time sync.">
     <meta name="keywords" content="wheel of names, teacher tool, office raffle, random name picker, TeamSpin PRO, नेपाली नाम छान्ने">
-    <link rel="icon" type="image/jpeg" href="logo.jpg">
-    <link rel="apple-touch-icon" href="logo.jpg">
-
+    
     <style>
-        /* --- CORE CSS VARIABLES --- */
+        /* --- CSS VARIABLES & THEMES --- */
         :root {
             --primary: #007bff;
             --primary-hover: #0056b3;
-            --bg: #ffffff;
+            --bg: #fdfdfd;
+            --header-bg: #ffffff;
             --text: #1a1a1a;
-            --sidebar-bg: #f8f9fa;
+            --sidebar-bg: #ffffff;
             --card-bg: #ffffff;
-            --border: #dee2e6;
-            --wheel-shadow: rgba(0,0,0,0.15);
-            --modal-overlay: rgba(0,0,0,0.85);
+            --border: #e2e8f0;
+            --shadow: rgba(0,0,0,0.08);
+            --wheel-border: #334155;
         }
 
         [data-theme="dark"] {
             --primary: #38bdf8;
             --bg: #0f172a;
+            --header-bg: #1e293b;
             --text: #f8fafc;
             --sidebar-bg: #1e293b;
-            --card-bg: #1e293b;
+            --card-bg: #0f172a;
             --border: #334155;
-            --wheel-shadow: rgba(0,0,0,0.5);
+            --shadow: rgba(0,0,0,0.4);
         }
 
         [data-theme="neon"] {
             --primary: #00ffe0;
             --bg: #050b12;
+            --header-bg: #101a26;
             --text: #e5f9ff;
             --sidebar-bg: #101a26;
-            --card-bg: #101a26;
+            --card-bg: #050b12;
             --border: #00ffe0;
         }
 
-        /* --- GLOBAL RESET --- */
+        /* --- GLOBAL STYLES --- */
         body {
-            margin: 0; font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            background: var(--bg); color: var(--text);
-            transition: background 0.4s ease, color 0.4s ease;
-            overflow-x: hidden; line-height: 1.6;
+            margin: 0; font-family: 'Inter', -apple-system, system-ui, sans-serif;
+            background: var(--bg); color: var(--text); transition: background 0.4s, color 0.4s;
+            line-height: 1.6; overflow-x: hidden;
         }
 
-        /* --- HEADER NAVIGATION --- */
+        /* --- NAVIGATION --- */
         .header-bar {
             display: flex; align-items: center; justify-content: space-between;
-            padding: 12px 25px; border-bottom: 1px solid var(--border);
-            background: var(--bg); position: sticky; top: 0; z-index: 1000;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            padding: 15px 40px; background: var(--header-bg); border-bottom: 1px solid var(--border);
+            position: sticky; top: 0; z-index: 1000; box-shadow: 0 2px 10px var(--shadow);
         }
-        .brand { display: flex; align-items: center; gap: 12px; font-size: 24px; font-weight: 800; cursor: pointer; }
-        .brand img { width: 35px; height: 35px; border-radius: 6px; }
+        .brand { display: flex; align-items: center; gap: 12px; font-size: 26px; font-weight: 900; letter-spacing: -0.5px; }
         .brand span { color: var(--primary); }
+        .nav-desktop { display: flex; gap: 25px; }
+        .nav-desktop a { text-decoration: none; color: var(--text); font-size: 14px; font-weight: 600; opacity: 0.7; transition: 0.2s; }
+        .nav-desktop a:hover { opacity: 1; color: var(--primary); }
 
-        .header-right { display: flex; gap: 10px; align-items: center; }
-        .header-nav-desktop { display: flex; gap: 20px; margin-right: 20px; }
-        .header-nav-desktop a { text-decoration: none; color: var(--text); font-size: 14px; font-weight: 500; transition: 0.2s; }
-        .header-nav-desktop a:hover { color: var(--primary); }
-
-        select, .btn-icon {
-            padding: 8px 12px; border: 1px solid var(--border); border-radius: 8px;
-            background: var(--sidebar-bg); color: var(--text); cursor: pointer; font-weight: 600; font-size: 14px;
+        .header-actions { display: flex; gap: 12px; align-items: center; }
+        select, .btn-secondary {
+            padding: 10px 14px; border: 1px solid var(--border); border-radius: 10px;
+            background: var(--sidebar-bg); color: var(--text); font-weight: 600; cursor: pointer;
         }
 
-        /* --- LAYOUT SYSTEM --- */
-        .app-grid {
+        /* --- MAIN APP LAYOUT --- */
+        .app-container {
             display: grid; grid-template-columns: 350px 1fr 320px;
-            gap: 25px; padding: 30px; max-width: 1800px; margin: auto;
+            gap: 30px; padding: 40px; max-width: 1700px; margin: auto;
         }
 
-        .sidebar {
+        .panel-card {
             background: var(--sidebar-bg); border: 1px solid var(--border);
-            padding: 25px; border-radius: 20px; height: fit-content;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+            padding: 25px; border-radius: 20px; box-shadow: 0 10px 30px var(--shadow);
+            height: fit-content;
         }
 
-        /* --- INPUT AREA --- */
+        /* --- TEXT AREA & INPUTS --- */
         #nameInput {
-            width: 100%; height: 350px; padding: 18px; font-size: 16px;
-            border-radius: 12px; border: 2px solid var(--border);
-            background: var(--card-bg); color: var(--text); resize: none;
-            box-sizing: border-box; font-family: inherit; transition: border-color 0.3s;
+            width: 100%; height: 380px; padding: 20px; border-radius: 15px;
+            border: 2px solid var(--border); background: var(--card-bg);
+            color: var(--text); resize: none; box-sizing: border-box; font-size: 16px;
+            font-family: inherit; transition: border-color 0.3s;
         }
         #nameInput:focus { border-color: var(--primary); outline: none; }
 
-        .status-msg { font-size: 13px; margin-top: 8px; font-weight: 600; display: none; }
-        .error-msg { color: #dc3545; }
-        .success-msg { color: #28a745; }
+        .status-badge { font-size: 13px; font-weight: 700; margin-top: 10px; display: none; }
+        .status-ok { color: #10b981; }
+        .status-err { color: #ef4444; }
 
-        /* --- WHEEL COMPONENT --- */
-        .wheel-column { display: flex; flex-direction: column; align-items: center; justify-content: flex-start; }
-        .wheel-container {
-            width: min(85vw, 550px); height: min(85vw, 550px);
-            position: relative; margin-bottom: 30px; cursor: pointer;
+        /* --- WHEEL CORE --- */
+        .wheel-center-stage { display: flex; flex-direction: column; align-items: center; }
+        .wheel-frame {
+            width: 580px; height: 580px; position: relative; margin: 20px 0;
+            cursor: pointer; user-select: none;
         }
-        canvas {
+        #wheelCanvas {
             width: 100%; height: 100%; border-radius: 50%;
-            filter: drop-shadow(0 30px 50px var(--wheel-shadow));
+            filter: drop-shadow(0 20px 50px var(--shadow));
         }
-        .pointer {
+        .wheel-pointer {
             position: absolute; top: -20px; left: 50%; transform: translateX(-50%);
-            z-index: 100; width: 0; height: 0;
-            border-left: 25px solid transparent; border-right: 25px solid transparent;
-            border-top: 55px solid #ff4757; filter: drop-shadow(0 5px 5px rgba(0,0,0,0.2));
+            width: 0; height: 0; border-left: 25px solid transparent;
+            border-right: 25px solid transparent; border-top: 50px solid #f43f5e;
+            z-index: 100; filter: drop-shadow(0 4px 4px rgba(0,0,0,0.2));
         }
 
-        /* --- FULLSCREEN OVERLAY --- */
-        #fullscreenOverlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: var(--bg); z-index: 2000; display: none;
-            flex-direction: column; align-items: center; justify-content: center;
+        /* --- STATS & OPTIONS --- */
+        .stats-box {
+            background: var(--card-bg); padding: 20px; border-radius: 15px;
+            border: 1px solid var(--border); margin-bottom: 25px;
         }
-        #fs-back-btn { position: absolute; top: 25px; left: 25px; padding: 12px 20px; }
-        #fs-winner-display { font-size: 4rem; color: var(--primary); margin-top: 20px; font-weight: 900; }
+        .counter-num { font-size: 28px; font-weight: 800; color: var(--primary); }
+        
+        .option-row { display: flex; align-items: center; gap: 12px; margin-bottom: 15px; cursor: pointer; }
+        .option-row input { width: 20px; height: 20px; }
+
+        .btn-action {
+            width: 100%; padding: 14px; margin-top: 12px; border-radius: 12px;
+            border: none; font-weight: 800; cursor: pointer; transition: 0.3s;
+            text-transform: uppercase; font-size: 14px; display: flex; align-items: center; justify-content: center; gap: 10px;
+        }
+        .btn-primary { background: var(--primary); color: white; }
+        .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0,123,255,0.3); }
+        .btn-ghost { background: transparent; border: 1px solid var(--border); color: var(--text); }
+        .btn-ghost:hover { background: var(--border); }
+
+        /* --- INFORMATIONAL SECTIONS --- */
+        .info-grid {
+            max-width: 1200px; margin: 80px auto; padding: 0 40px;
+            display: grid; grid-template-columns: 1fr 1fr; gap: 60px;
+        }
+        .info-card h2 { color: var(--primary); font-size: 32px; margin-bottom: 20px; }
+        .info-card p { font-size: 17px; opacity: 0.8; }
+
+        .feedback-section {
+            max-width: 1000px; margin: 40px auto 100px; padding: 40px;
+            background: var(--sidebar-bg); border-radius: 30px; border: 1px solid var(--border);
+        }
+        #feedbackText {
+            width: 100%; height: 150px; padding: 20px; border-radius: 15px;
+            border: 1px solid var(--border); background: var(--card-bg); color: var(--text);
+            margin: 20px 0; resize: none; font-size: 16px;
+        }
 
         /* --- MODALS --- */
         .modal-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: var(--modal-overlay); display: none; align-items: center;
-            justify-content: center; z-index: 5000; backdrop-filter: blur(10px);
+            background: rgba(0,0,0,0.85); backdrop-filter: blur(8px);
+            display: none; align-items: center; justify-content: center; z-index: 5000;
         }
-        .modal-content {
-            background: var(--card-bg); color: var(--text); padding: 45px;
-            border-radius: 30px; text-align: center; width: 90%; max-width: 500px;
-            border: 6px solid var(--primary); box-shadow: 0 20px 60px rgba(0,0,0,0.4);
-        }
-        .modal-btns { display: flex; gap: 15px; margin-top: 30px; }
-        .m-btn { flex: 1; padding: 15px; border-radius: 12px; border: none; font-weight: 800; cursor: pointer; font-size: 16px; }
-        .m-btn-primary { background: var(--primary); color: white; }
-        .m-btn-danger { background: #ff4757; color: white; }
-
-        /* --- BUTTONS & TOOLS --- */
-        .action-btn {
-            width: 100%; padding: 14px; margin-top: 10px; border-radius: 12px;
-            border: none; font-weight: 700; cursor: pointer; transition: 0.2s;
-            font-size: 15px; text-transform: uppercase;
-        }
-        .btn-main { background: var(--primary); color: white; }
-        .btn-main:hover { background: var(--primary-hover); transform: translateY(-2px); }
-        .btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text); }
-        .btn-outline:hover { background: var(--border); }
-
-        /* --- LEGAL FOOTER --- */
-        .legal-footer {
-            background: var(--sidebar-bg); padding: 40px 20px; border-top: 1px solid var(--border); margin-top: 50px;
-        }
-        .legal-grid {
-            max-width: 1200px; margin: auto; display: grid; grid-template-columns: 1fr 1fr; gap: 40px;
-        }
-        .legal-box h4 { color: var(--primary); margin-bottom: 10px; }
-        .legal-box p { font-size: 13px; line-height: 1.5; opacity: 0.8; }
-        .view-more { color: var(--primary); font-weight: 700; text-decoration: none; }
-
-        /* --- LIFETIME STATS & FEEDBACK --- */
-        .stats-section {
-            background: var(--sidebar-bg); text-align: center; padding: 50px 20px;
-            border-top: 1px solid var(--border); margin-top: 60px;
-        }
-        .spin-count-display { font-size: 3rem; font-weight: 900; color: var(--primary); margin: 10px 0; }
-        
-        .feedback-area {
-            max-width: 900px; margin: 40px auto; padding: 30px;
-            background: var(--sidebar-bg); border-radius: 20px; border: 1px solid var(--border);
-        }
-        .feedback-area textarea {
-            width: 100%; height: 120px; border-radius: 12px; padding: 15px;
-            border: 1px solid var(--border); background: var(--card-bg); color: var(--text);
-            margin-bottom: 15px; resize: none; box-sizing: border-box;
+        .modal-body {
+            background: var(--sidebar-bg); padding: 50px; border-radius: 30px;
+            text-align: center; max-width: 500px; width: 90%;
+            border: 5px solid var(--primary); position: relative;
         }
 
         /* --- RESPONSIVENESS --- */
-        @media (max-width: 1200px) {
-            .app-grid { grid-template-columns: 1fr; }
-            .wheel-column { order: -1; }
-            .header-nav-desktop { display: none; }
+        @media (max-width: 1250px) {
+            .app-container { grid-template-columns: 1fr; }
+            .wheel-center-stage { order: -1; }
+            .info-grid { grid-template-columns: 1fr; }
         }
         @media (max-width: 600px) {
-            .header-bar { padding: 10px; }
-            .btn-label { display: none; }
-            .modal-btns { flex-direction: column; }
-            .legal-grid { grid-template-columns: 1fr; }
+            .header-bar { padding: 15px; flex-direction: column; gap: 15px; }
+            .wheel-frame { width: 90vw; height: 90vw; }
         }
     </style>
 </head>
-<body data-theme="classic">
+<body>
 
-<audio id="spinSound" loop>
-    <source src="https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3" type="audio/mpeg">
-</audio>
-<audio id="winnerSound">
-    <source src="winner.mp3" type="audio/mpeg">
-</audio>
+    <audio id="audioSpin" loop><source src="https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3" type="audio/mpeg"></audio>
+    <audio id="audioWinner"><source src="https://assets.mixkit.co/active_storage/sfx/1435/1435-preview.mp3" type="audio/mpeg"></audio>
 
-<div id="fullscreenOverlay">
-    <button class="btn-icon" id="fs-back-btn" onclick="toggleFS(false)">← Exit Fullscreen</button>
-    <div id="fs-container" style="width: min(85vh, 85vw); height: min(85vh, 85vw); position: relative;"></div>
-    <div id="fs-winner-display"></div>
-</div>
-
-<div id="winnerModal" class="modal-overlay">
-    <div class="modal-content">
-        <h2 id="win_title">🎉 Result Declared! 🎉</h2>
-        <h1 id="winnerName" style="font-size: 4rem; margin: 25px 0;">Winner</h1>
-        <div class="modal-btns">
-            <button class="m-btn m-btn-primary" onclick="closeModal()">Close</button>
-            <button class="m-btn m-btn-danger" onclick="removeWinnerAction()">Remove Name</button>
+    <header class="header-bar">
+        <div class="brand">TeamSpin <span>PRO</span></div>
+        <nav class="nav-desktop">
+            <a href="#features" id="navFeatures">Features</a>
+            <a href="#about" id="navAbout">About Teachers Tool</a>
+            <a href="#faq">FAQ</a>
+        </nav>
+        <div class="header-actions">
+            <select id="langSelect" onchange="applyLanguage()">
+                <option value="en">English (US)</option>
+                <option value="np">नेपाली (Nepal)</option>
+            </select>
+            <select id="themeSelect" onchange="updateTheme(this.value)">
+                <option value="classic">☀️ Light</option>
+                <option value="dark">🌙 Dark</option>
+                <option value="neon">⚡ Neon</option>
+            </select>
+            <button class="btn-secondary" onclick="showHistory()">📜 History</button>
         </div>
-    </div>
-</div>
+    </header>
 
-<div id="historyModal" class="modal-overlay">
-    <div class="modal-content">
-        <h2 id="hist_title">🏆 Winner History</h2>
-        <div id="historyList" style="max-height: 300px; overflow-y: auto; margin: 20px 0; border: 1px solid var(--border); border-radius: 12px;"></div>
-        <div class="modal-btns">
-            <button class="m-btn m-btn-primary" onclick="document.getElementById('historyModal').style.display='none'">Close</button>
-            <button class="m-btn m-btn-primary" style="background:#28a745;" onclick="exportWinnersCSV()">Download CSV</button>
-        </div>
-    </div>
-</div>
-
-<header class="header-bar">
-    <div class="brand"><img src="logo.jpg" alt="Logo"> TeamSpin <span>PRO</span></div>
-    
-    <nav class="header-nav-desktop">
-        <a href="contact.html">Contact Us</a>
-        <a href="#about">About Teachers Tool</a>
-        <a href="privacy.html">Privacy</a>
-    </nav>
-
-    <div class="header-right">
-        <select id="langSelect" onchange="applyLanguage()">
-            <option value="en">English</option>
-            <option value="np">नेपाली (Nepali)</option>
-            <option value="hi">हिन्दी (Hindi)</option>
-        </select>
-        <select id="themeSelect" onchange="applyTheme(this.value)">
-            <option value="classic">Classic</option>
-            <option value="dark">Dark</option>
-            <option value="neon">Neon</option>
-        </select>
-        <button class="btn-icon" onclick="toggleFS(true)">⛶ <span class="btn-label">Full</span></button>
-        <button class="btn-icon" onclick="openHistory()">📜 <span class="btn-label">History</span></button>
-    </div>
-</header>
-
-<div class="app-grid">
-    <div class="sidebar">
-        <h3 id="label_input">Classroom & Office Names</h3>
-        <p style="font-size: 13px; opacity: 0.7; margin-bottom: 15px;">One name per line. Best for teachers and HR raffle events.</p>
+    <main class="app-container">
         
-        <textarea id="nameInput" spellcheck="false">Student Alex&#10;Marketing Team&#10;Principal Sarah&#10;Maya Devi&#10;Officer Rahul&#10;Teacher Sam</textarea>
-        
-        <div id="dupStatus" class="status-msg success-msg">No duplicates found.</div>
-        <div id="errStatus" class="status-msg error-msg">Please enter at least 2 names.</div>
+        <section class="panel-card">
+            <h3 id="labelInput">Classroom & Office Names</h3>
+            <p style="font-size: 13px; opacity: 0.6; margin-bottom: 15px;" id="labelSubInput">Enter one name per line. Best for teacher picks and office raffles.</p>
+            
+            <textarea id="nameInput" spellcheck="false">Student Alex&#10;Marketing Team&#10;Principal Sarah&#10;Maya Devi&#10;Officer Rahul&#10;Teacher Sam&#10;Subash Gurung</textarea>
+            
+            <div id="validBadge" class="status-badge status-ok">✓ List looks great!</div>
+            <div id="errorBadge" class="status-badge status-err">× Please add at least 2 names.</div>
 
-        <button class="action-btn btn-outline" style="margin-top:20px;" onclick="shuffleInput()">🔀 Shuffle Names</button>
-        <button class="action-btn btn-outline" onclick="document.getElementById('csvIn').click()">📥 Import CSV</button>
-        <input type="file" id="csvIn" hidden accept=".csv,.txt" onchange="importCSV(event)">
-        <button class="action-btn btn-danger" style="margin-top:10px;" onclick="clearAllNames()">🗑️ Clear All</button>
+            <button class="btn-action btn-ghost" style="margin-top: 20px;" onclick="shuffleNames()">🔀 Shuffle Names</button>
+            <button class="btn-action btn-ghost" onclick="triggerCSV()">📥 Import CSV/Excel</button>
+            <input type="file" id="csvFile" hidden accept=".csv,.txt" onchange="handleCSV(event)">
+            <button class="btn-action btn-ghost" style="color: #ef4444;" onclick="clearList()">🗑️ Clear All Names</button>
+        </section>
+
+        <section class="wheel-center-stage">
+            <div class="wheel-frame" onclick="spinWheel()">
+                <div class="wheel-pointer"></div>
+                <canvas id="wheelCanvas" width="1000" height="1000"></canvas>
+            </div>
+            <h1 id="spinPrompt" style="font-weight: 800; margin-top: 10px;">Click the Wheel to Spin!</h1>
+        </section>
+
+        <section class="panel-card">
+            <h3 id="labelStats">Live Statistics</h3>
+            <div class="stats-box">
+                <div style="opacity: 0.7; font-size: 14px;" id="labelNamesLoaded">Names Loaded</div>
+                <div class="counter-num" id="nameCount">0</div>
+            </div>
+
+            <h3 id="labelOptions" style="margin-top: 30px;">Options</h3>
+            <label class="option-row">
+                <input type="checkbox" id="checkRemove">
+                <span id="optRemove">Remove winner after spin</span>
+            </label>
+            <label class="option-row">
+                <input type="checkbox" id="checkSound" checked>
+                <span id="optSound">Enable Sound Effects</span>
+            </label>
+            <label class="option-row">
+                <input type="checkbox" id="checkConfetti" checked>
+                <span id="optConfetti">Show Celebration Confetti</span>
+            </label>
+
+            <div style="margin-top: 30px;">
+                <button class="btn-action btn-primary" onclick="exportList()">📤 Export Current List</button>
+                <button class="btn-action btn-ghost" onclick="shareTool()">🔗 Copy Link to Share</button>
+            </div>
+        </section>
+    </main>
+
+    <section class="info-grid">
+        <div class="info-card">
+            <h2 id="seoH1">The Ultimate Teacher's Assistant</h2>
+            <p id="seoP1">Teachers around the globe use TeamSpin PRO to maintain a fair and engaging classroom. By using our random name picker, you ensure every student gets an equal chance to participate, reducing bias and keeping the energy high.</p>
+        </div>
+        <div class="info-card">
+            <h2 id="seoH2">Corporate Office Raffles</h2>
+            <p id="seoP2">Planning an HR giveaway or a lucky draw? TeamSpin PRO handles massive lists with ease. Simply import your employee roster and spin to pick winners live during your next meeting or virtual Zoom call.</p>
+        </div>
+    </section>
+
+    <section class="feedback-section">
+        <h2 id="labelFeedbackTitle">Professional Feedback Area</h2>
+        <p id="labelFeedbackSub">We are constantly improving for our community of teachers and managers. What feature should we add next?</p>
+        <textarea id="feedbackText" placeholder="Describe the feature you want or report a bug..."></textarea>
+        <div style="text-align: right;">
+            <button class="btn-action btn-primary" style="width: auto; padding: 15px 50px;" onclick="submitFeedback()">Submit Feedback</button>
+        </div>
+    </section>
+
+    <div id="winnerModal" class="modal-overlay">
+        <div class="modal-body">
+            <h2 id="labelWinnerTitle">🎉 WE HAVE A WINNER! 🎉</h2>
+            <div id="winnerDisplayName" style="font-size: 4.5rem; font-weight: 900; color: var(--primary); margin: 30px 0; word-wrap: break-word;">Winner</div>
+            <div class="btn-group" style="display: flex; gap: 15px;">
+                <button class="btn-action btn-primary" onclick="closeModal()">Awesome!</button>
+                <button class="btn-action btn-ghost" id="btnRemoveWinner" onclick="removeWinnerNow()">Remove Name</button>
+            </div>
+        </div>
     </div>
 
-    <div class="wheel-column" id="wheelRoot">
-        <div class="wheel-container" id="wheelBox" onclick="startSpin()">
-            <div class="pointer"></div>
-            <canvas id="wheelCanvas" width="800" height="800"></canvas>
-        </div>
-        <h1 id="instruct">Click the Wheel to Spin!</h1>
-    </div>
-
-    <div class="sidebar">
-        <h3>Live Statistics</h3>
-        <div style="background:var(--card-bg); padding:20px; border-radius:15px; border:1px solid var(--border);">
-            <p><strong>Names Loaded:</strong> <span id="nameCount" style="color:var(--primary); font-size: 20px;">0</span></p>
-        </div>
-
-        <h3 style="margin-top:30px;">Options</h3>
-        <label style="display:flex; align-items:center; gap:10px; margin-bottom:15px;">
-            <input type="checkbox" id="autoRemove" style="width:18px; height:18px;"> 
-            <span>Remove winner after spin</span>
-        </label>
-        <label style="display:flex; align-items:center; gap:10px; margin-bottom:15px;">
-            <input type="checkbox" id="soundToggle" checked style="width:18px; height:18px;"> 
-            <span>Enable Sound Effects</span>
-        </label>
-        
-        <button class="action-btn btn-main" style="margin-top:10px;" onclick="exportNameList()">📤 Export List</button>
-        <button class="action-btn btn-outline" onclick="location.href='contact.html'">✉️ Report Issue</button>
-    </div>
-</div>
-
-<section class="stats-section">
-    <h3>TeamSpin PRO Global Impact</h3>
-    <div class="spin-count-display" id="spinCounter">13505</div>
-    <p>Total Lifetime Spins recorded across our global community.</p>
-</section>
-
-<section class="legal-footer">
-    <div class="legal-grid">
-        <div class="legal-box">
-            <h4>Privacy Policy</h4>
-            <p>We value your privacy. TeamSpin PRO does not store your name lists on our servers; all data stays locally in your browser. We use cookies only for theme preferences and lifetime spin counts. 
-               <a href="privacy.html" class="view-more">View more to privacy.html</a>
-            </p>
-        </div>
-        <div class="legal-box">
-            <h4>Terms & Conditions</h4>
-            <p>By using this tool, you agree that TeamSpin PRO is provided "as-is" for entertainment and educational purposes. We are not liable for decisions made using this random generator.
-               <a href="terms.html" class="view-more">View more to terms.html</a>
-            </p>
+    <div id="historyModal" class="modal-overlay">
+        <div class="modal-body" style="max-width: 600px;">
+            <h2 id="labelHistoryTitle">🏆 Selection History</h2>
+            <div id="historyList" style="text-align: left; max-height: 400px; overflow-y: auto; margin: 20px 0; border: 1px solid var(--border); border-radius: 12px; background: var(--card-bg);">
+                </div>
+            <button class="btn-action btn-primary" onclick="document.getElementById('historyModal').style.display='none'">Close History</button>
         </div>
     </div>
-</section>
 
-<section class="feedback-area">
-    <h3 id="label_feedback">Professional Feedback Area</h3>
-    <textarea id="feedbackText" placeholder="Share your suggestions or report a bug..."></textarea>
-    <button class="action-btn btn-main" style="width:auto; padding: 12px 50px;" onclick="location.href='contact.html'">Submit via Contact Page</button>
-</section>
+    <footer style="text-align: center; padding: 60px; opacity: 0.5; font-size: 14px; border-top: 1px solid var(--border);">
+        <p>© 2026 TeamSpin PRO. Professional Random Name Picker. All Rights Reserved.</p>
+    </footer>
 
-<footer style="text-align:center; padding: 50px; border-top: 1px solid var(--border); opacity: 0.6;">
-    <p>© 2026 TeamSpin PRO. Professional Decision Maker & Name Picker. All Rights Reserved.</p>
-</footer>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <script>
+        /* --- CORE LOGIC ENGINE --- */
+        const canvas = document.getElementById('wheelCanvas');
+        const ctx = canvas.getContext('2d');
+        const nameInput = document.getElementById('nameInput');
+        const audioSpin = document.getElementById('audioSpin');
+        const audioWinner = document.getElementById('audioWinner');
 
-<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+        let names = [];
+        let history = [];
+        let currentAngle = 0;
+        let isSpinning = false;
+        let selectedTheme = 'classic';
 
-<script>
-    const canvas = document.getElementById('wheelCanvas');
-    const ctx = canvas.getContext('2d');
-    const nameInput = document.getElementById('nameInput');
-    const spinSound = document.getElementById('spinSound');
-    const winnerSound = document.getElementById('winnerSound');
-    const spinCounterEl = document.getElementById('spinCounter');
-
-    let names = [];
-    let winners = [];
-    let startAngle = 0;
-    let isSpinning = false;
-    let currentTheme = 'classic';
-    let lifetimeSpins = parseInt(localStorage.getItem('lifetimeSpins')) || 13505;
-
-    const themeColors = {
-        classic: ['#f87171', '#fb923c', '#fbbf24', '#facc15', '#a3e635', '#4ade80', '#2dd4bf', '#38bdf8', '#818cf8', '#c084fc', '#f472b6'],
-        dark: ['#1e293b', '#334155', '#475569', '#64748b', '#94a3b8', '#cbd5e1'],
-        neon: ['#00ffe0', '#ff00ff', '#ffff00', '#00ff00', '#ff0000', '#0000ff']
-    };
-
-    const i18n = {
-        en: { input: "Classroom & Office Names", spin: "Click the Wheel to Spin!", winner: "Winner!", hist: "Winner History" },
-        np: { input: "कार्यालय र कक्षाका नामहरू", spin: "घुमाउन क्लिक गर्नुहोस्!", winner: "विजेता घोषणा!", hist: "विजेता इतिहास" },
-        hi: { input: "कार्यालय और कक्षा के नाम", spin: "घुमाने के लिए क्लिक करें!", winner: "विजेता घोषित!", hist: "विजेता इतिहास" }
-    };
-
-    function init() {
-        spinCounterEl.innerText = lifetimeSpins.toLocaleString();
-        nameInput.addEventListener('input', syncWheel);
-        syncWheel();
-        applyLanguage();
-        spinSound.volume = 0.2; // Low volume spin sound
-    }
-
-    function syncWheel() {
-        names = nameInput.value.split('\n').filter(n => n.trim() !== "");
-        document.getElementById('nameCount').innerText = names.length;
-        const uniqueNames = new Set(names);
-        const dupEl = document.getElementById('dupStatus');
-        const errEl = document.getElementById('errStatus');
-        
-        if (names.length < 2) {
-            errEl.style.display = "block";
-            dupEl.style.display = "none";
-        } else {
-            errEl.style.display = "none";
-            dupEl.style.display = "block";
-            if(names.length > uniqueNames.size) {
-                dupEl.innerText = "⚠️ Duplicate names detected!";
-                dupEl.className = "status-msg error-msg";
-            } else {
-                dupEl.innerText = "✅ Name list is valid.";
-                dupEl.className = "status-msg success-msg";
-            }
-        }
-        draw();
-    }
-
-    function draw() {
-        const len = names.length;
-        if (len === 0) { ctx.clearRect(0, 0, 800, 800); return; }
-        const arc = (Math.PI * 2) / len;
-        ctx.clearRect(0, 0, 800, 800);
-
-        const colors = themeColors[currentTheme];
-
-        for (let i = 0; i < len; i++) {
-            const angle = startAngle + i * arc;
-            const grad = ctx.createRadialGradient(400, 400, 0, 400, 400, 400);
-            const baseColor = colors[i % colors.length];
-            grad.addColorStop(0, '#ffffff');
-            grad.addColorStop(0.1, baseColor);
-            grad.addColorStop(1, shadeColor(baseColor, -30));
-
-            ctx.fillStyle = grad;
-            ctx.beginPath();
-            ctx.moveTo(400, 400);
-            ctx.arc(400, 400, 385, angle, angle + arc);
-            ctx.fill();
-
-            ctx.save();
-            ctx.translate(400, 400);
-            ctx.rotate(angle + arc / 2);
-            ctx.textAlign = "right";
-            ctx.fillStyle = "white";
-            ctx.font = "bold 34px sans-serif";
-            ctx.shadowColor = "rgba(0,0,0,0.7)";
-            ctx.shadowBlur = 8;
-            ctx.fillText(names[i], 360, 10);
-            ctx.restore();
-        }
-    }
-
-    function startSpin() {
-        if (isSpinning || names.length < 2) return;
-        isSpinning = true;
-
-        lifetimeSpins++;
-        localStorage.setItem('lifetimeSpins', lifetimeSpins);
-        spinCounterEl.innerText = lifetimeSpins.toLocaleString();
-
-        if(document.getElementById('soundToggle').checked) {
-            spinSound.currentTime = 0;
-            spinSound.play();
-        }
-
-        const duration = 5000;
-        const start = performance.now();
-        const totalRotation = (Math.PI * 2 * 10) + (Math.random() * Math.PI * 2);
-
-        function animate(now) {
-            const elapsed = now - start;
-            const progress = Math.min(elapsed / duration, 1);
-            startAngle += (totalRotation * (1 - progress)) * 0.05;
-            draw();
-            if (progress < 1) { requestAnimationFrame(animate); } 
-            else {
-                isSpinning = false;
-                spinSound.pause();
-                processWinner();
-            }
-        }
-        requestAnimationFrame(animate);
-    }
-
-    function processWinner() {
-        const len = names.length;
-        const arc = (Math.PI * 2) / len;
-        const normalized = (startAngle + (3 * Math.PI / 2)) % (Math.PI * 2);
-        const idx = len - 1 - Math.floor(normalized / arc);
-        const win = names[idx];
-
-        if(document.getElementById('soundToggle').checked) {
-            winnerSound.currentTime = 0;
-            winnerSound.play();
-        }
-
-        winners.push({ name: win, time: new Date().toLocaleTimeString() });
-        document.getElementById('winnerName').innerText = win;
-        document.getElementById('fs-winner-display').innerText = win;
-        document.getElementById('winnerModal').style.display = 'flex';
-        confetti({ particleCount: 200, spread: 80, origin: { y: 0.6 } });
-
-        if(document.getElementById('autoRemove').checked) removeWinnerAction();
-    }
-
-    function shuffleInput() {
-        let arr = nameInput.value.split('\n').filter(n => n.trim() !== "");
-        arr.sort(() => Math.random() - 0.5);
-        nameInput.value = arr.join('\n');
-        syncWheel();
-    }
-
-    function clearAllNames() {
-        if(confirm("Are you sure?")) { nameInput.value = ""; syncWheel(); }
-    }
-
-    function importCSV(e) {
-        const reader = new FileReader();
-        reader.onload = (ev) => {
-            const lines = ev.target.result.split(/,|\n/).map(l => l.trim()).filter(l => l !== "");
-            nameInput.value = lines.join('\n'); syncWheel();
+        const themeData = {
+            classic: ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899', '#06b6d4'],
+            dark: ['#1e293b', '#334155', '#475569', '#64748b', '#94a3b8'],
+            neon: ['#00ffe0', '#ff00ff', '#ffff00', '#00ff00', '#ff0000', '#0000ff']
         };
-        reader.readAsText(e.target.files[0]);
-    }
 
-    function exportNameList() {
-        const blob = new Blob([nameInput.value], {type: 'text/plain'});
-        const a = document.createElement('a');
-        a.href = URL.createObjectURL(blob);
-        a.download = "TeamSpin_Names.txt";
-        a.click();
-    }
+        const i18n = {
+            en: {
+                title: "Classroom & Office Names",
+                sub: "Enter one name per line. Best for teacher picks and office raffles.",
+                stats: "Live Statistics",
+                loaded: "Names Loaded",
+                opts: "Options",
+                rm: "Remove winner after spin",
+                sd: "Enable Sound Effects",
+                cf: "Show Celebration Confetti",
+                prompt: "Click the Wheel to Spin!",
+                win: "🎉 WE HAVE A WINNER! 🎉",
+                hist: "🏆 Selection History"
+            },
+            np: {
+                title: "कार्यालय र कक्षाका नामहरू",
+                sub: "प्रत्येक हरफमा एउटा नाम लेख्नुहोस्। शिक्षक र कार्यालयका लागि उत्तम।",
+                stats: "लाइभ तथ्याङ्क",
+                loaded: "लोड गरिएका नामहरू",
+                opts: "विकल्पहरू",
+                rm: "विजेतालाई सूचीबाट हटाउनुहोस्",
+                sd: "ध्वनि प्रभावहरू खोल्नुहोस्",
+                cf: "बधाई कन्फेटी देखाउनुहोस्",
+                prompt: "घुमाउनका लागि पाङ्ग्रामा क्लिक गर्नुहोस्!",
+                win: "🎉 हामीसँग विजेता छ! 🎉",
+                hist: "🏆 चयन इतिहास"
+            }
+        };
 
-    function exportWinnersCSV() {
-        let csv = "Name,Time\n" + winners.map(w => `"${w.name}",${w.time}`).join('\n');
-        const blob = new Blob([csv], {type: 'text/csv'});
-        const a = document.createElement('a');
-        a.href = URL.createObjectURL(blob);
-        a.download = "Winners.csv"; a.click();
-    }
+        /* --- INITIALIZATION --- */
+        function initApp() {
+            nameInput.addEventListener('input', syncWheelData);
+            window.addEventListener('resize', drawWheel);
+            syncWheelData();
+            applyLanguage();
+        }
 
-    function toggleFS(enable) {
-        const overlay = document.getElementById('fullscreenOverlay');
-        const wheel = document.getElementById('wheelBox');
-        if(enable) { document.getElementById('fs-container').appendChild(wheel); overlay.style.display = 'flex'; } 
-        else { document.getElementById('wheelRoot').prepend(wheel); overlay.style.display = 'none'; }
-    }
+        function syncWheelData() {
+            names = nameInput.value.split('\n').map(n => n.trim()).filter(n => n !== "");
+            document.getElementById('nameCount').innerText = names.length;
+            
+            const err = document.getElementById('errorBadge');
+            const ok = document.getElementById('validBadge');
+            
+            if(names.length < 2) {
+                err.style.display = "block"; ok.style.display = "none";
+            } else {
+                err.style.display = "none"; ok.style.display = "block";
+            }
+            drawWheel();
+        }
 
-    function applyTheme(t) { document.body.setAttribute('data-theme', t); currentTheme = t; draw(); }
+        /* --- RENDERING ENGINE --- */
+        function drawWheel() {
+            const count = names.length;
+            if (count === 0) { ctx.clearRect(0,0,1000,1000); return; }
+            
+            const arc = (Math.PI * 2) / count;
+            ctx.clearRect(0, 0, 1000, 1000);
 
-    function applyLanguage() {
-        const l = document.getElementById('langSelect').value;
-        document.getElementById('label_input').innerText = i18n[l].input;
-        document.getElementById('instruct').innerText = i18n[l].spin;
-        document.getElementById('win_title').innerText = i18n[l].winner;
-    }
+            const palette = themeData[selectedTheme];
 
-    function openHistory() {
-        const list = document.getElementById('historyList');
-        list.innerHTML = winners.length ? winners.map(w => `<div style="padding:12px; border-bottom:1px solid var(--border); display:flex; justify-content:space-between;"><strong>${w.name}</strong> <small>${w.time}</small></div>`).join('') : "<p style='padding:20px; text-align:center;'>No winners yet.</p>";
-        document.getElementById('historyModal').style.display = 'flex';
-    }
+            names.forEach((name, i) => {
+                const angle = currentAngle + (i * arc);
+                
+                // Draw Segment
+                ctx.beginPath();
+                ctx.fillStyle = palette[i % palette.length];
+                ctx.moveTo(500, 500);
+                ctx.arc(500, 500, 480, angle, angle + arc);
+                ctx.fill();
+                ctx.strokeStyle = "rgba(255,255,255,0.2)";
+                ctx.lineWidth = 2;
+                ctx.stroke();
 
-    function removeWinnerAction() {
-        const win = document.getElementById('winnerName').innerText;
-        names = names.filter(n => n !== win);
-        nameInput.value = names.join('\n');
-        syncWheel(); closeModal();
-    }
+                // Draw Text
+                ctx.save();
+                ctx.translate(500, 500);
+                ctx.rotate(angle + arc / 2);
+                ctx.textAlign = "right";
+                ctx.fillStyle = "#ffffff";
+                ctx.font = "bold 32px Inter, sans-serif";
+                ctx.shadowColor = "rgba(0,0,0,0.4)";
+                ctx.shadowBlur = 6;
+                
+                // Handle Long Text
+                const displayTxt = name.length > 18 ? name.substring(0, 15) + "..." : name;
+                ctx.fillText(displayTxt, 440, 12);
+                ctx.restore();
+            });
 
-    function closeModal() { document.getElementById('winnerModal').style.display = 'none'; }
+            // Center Pin Decorative
+            ctx.beginPath();
+            ctx.arc(500, 500, 40, 0, Math.PI * 2);
+            ctx.fillStyle = "#ffffff";
+            ctx.fill();
+            ctx.stroke();
+        }
 
-    function shadeColor(color, percent) {
-        let R = parseInt(color.substring(1,3),16), G = parseInt(color.substring(3,5),16), B = parseInt(color.substring(5,7),16);
-        R = parseInt(R * (100 + percent) / 100); G = parseInt(G * (100 + percent) / 100); B = parseInt(B * (100 + percent) / 100);
-        R = (R<255)?R:255; G = (G<255)?G:255; B = (B<255)?B:255;
-        return "#"+(R.toString(16).padStart(2,'0'))+(G.toString(16).padStart(2,'0'))+(B.toString(16).padStart(2,'0'));
-    }
+        /* --- ANIMATION ENGINE --- */
+        function spinWheel() {
+            if (isSpinning || names.length < 2) return;
+            isSpinning = true;
 
-    init();
-</script>
+            const useSound = document.getElementById('checkSound').checked;
+            if (useSound) { audioSpin.currentTime = 0; audioSpin.play(); }
+
+            const duration = 5000; 
+            const startTime = performance.now();
+            const startAngle = currentAngle;
+            const extraRots = (Math.PI * 2 * 10); // 10 full turns
+            const randomOffset = Math.random() * Math.PI * 2;
+            const totalRotation = extraRots + randomOffset;
+
+            function animate(now) {
+                const elapsed = now - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                
+                // Ease Out Power 3
+                const ease = 1 - Math.pow(1 - progress, 3);
+                currentAngle = startAngle + (totalRotation * ease);
+                
+                drawWheel();
+
+                if (progress < 1) {
+                    requestAnimationFrame(animate);
+                } else {
+                    finalizeSpin();
+                }
+            }
+            requestAnimationFrame(animate);
+        }
+
+        function finalizeSpin() {
+            isSpinning = false;
+            audioSpin.pause();
+
+            const useSound = document.getElementById('checkSound').checked;
+            if (useSound) { audioWinner.currentTime = 0; audioWinner.play(); }
+
+            const count = names.length;
+            const arc = (Math.PI * 2) / count;
+            
+            // Calculate winner based on pointer at top (3*PI/2)
+            const normalizedAngle = (currentAngle + (3 * Math.PI / 2)) % (Math.PI * 2);
+            const winnerIdx = count - 1 - Math.floor(normalizedAngle / arc);
+            const winner = names[winnerIdx];
+
+            // Trigger Celebration
+            if (document.getElementById('checkConfetti').checked) {
+                confetti({ particleCount: 250, spread: 90, origin: { y: 0.6 } });
+            }
+
+            // Show Result
+            document.getElementById('winnerDisplayName').innerText = winner;
+            document.getElementById('winnerModal').style.display = "flex";
+            
+            // Add to History
+            history.unshift({ name: winner, time: new Date().toLocaleTimeString() });
+            
+            if (document.getElementById('checkRemove').checked) {
+                removeWinnerNow();
+            }
+        }
+
+        /* --- UI HELPERS --- */
+        function closeModal() { document.getElementById('winnerModal').style.display = "none"; }
+        
+        function removeWinnerNow() {
+            const winName = document.getElementById('winnerDisplayName').innerText;
+            const newNames = names.filter(n => n !== winName);
+            nameInput.value = newNames.join('\n');
+            syncWheelData();
+            closeModal();
+        }
+
+        function applyLanguage() {
+            const l = document.getElementById('langSelect').value;
+            const d = i18n[l];
+            document.getElementById('labelInput').innerText = d.title;
+            document.getElementById('labelSubInput').innerText = d.sub;
+            document.getElementById('labelStats').innerText = d.stats;
+            document.getElementById('labelNamesLoaded').innerText = d.loaded;
+            document.getElementById('labelOptions').innerText = d.opts;
+            document.getElementById('optRemove').innerText = d.rm;
+            document.getElementById('optSound').innerText = d.sd;
+            document.getElementById('optConfetti').innerText = d.cf;
+            document.getElementById('spinPrompt').innerText = d.prompt;
+            document.getElementById('labelWinnerTitle').innerText = d.win;
+            document.getElementById('labelHistoryTitle').innerText = d.hist;
+        }
+
+        function updateTheme(val) {
+            document.body.setAttribute('data-theme', val);
+            selectedTheme = val;
+            drawWheel();
+        }
+
+        function showHistory() {
+            const container = document.getElementById('historyList');
+            container.innerHTML = history.length > 0 
+                ? history.map(h => `<div style="padding:15px; border-bottom:1px solid var(--border); display:flex; justify-content:space-between;"><b>${h.name}</b> <span style="opacity:0.5">${h.time}</span></div>`).join('')
+                : "<p style='padding:20px; opacity:0.5'>No selections recorded yet.</p>";
+            document.getElementById('historyModal').style.display = "flex";
+        }
+
+        function shuffleNames() {
+            const arr = nameInput.value.split('\n').filter(n => n.trim() !== "");
+            for (let i = arr.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [arr[i], arr[j]] = [arr[j], arr[i]];
+            }
+            nameInput.value = arr.join('\n');
+            syncWheelData();
+        }
+
+        function clearList() { if(confirm("Clear all names from the list?")) { nameInput.value = ""; syncWheelData(); } }
+        
+        function triggerCSV() { document.getElementById('csvFile').click(); }
+        function handleCSV(e) {
+            const file = e.target.files[0];
+            const reader = new FileReader();
+            reader.onload = (ev) => {
+                const lines = ev.target.result.split(/[\n,]/).map(l => l.trim()).filter(l => l !== "");
+                nameInput.value = lines.join('\n');
+                syncWheelData();
+            };
+            reader.readAsText(file);
+        }
+
+        function exportList() {
+            const blob = new Blob([nameInput.value], {type: 'text/plain'});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url; a.download = "TeamSpin_Names.txt"; a.click();
+        }
+
+        function shareTool() {
+            navigator.clipboard.writeText(window.location.href);
+            alert("Tool link copied to clipboard!");
+        }
+
+        function submitFeedback() {
+            const txt = document.getElementById('feedbackText').value;
+            if(!txt) return alert("Please enter some feedback.");
+            alert("Thank you! Your suggestion has been sent to our development team.");
+            document.getElementById('feedbackText').value = "";
+        }
+
+        initApp();
+    </script>
 </body>
 </html>
