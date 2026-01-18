@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>TeamSpin PRO – Professional Wheel of Names for Office Meetings & Class Teachers</title>
-    <meta name="description" content="TeamSpin PRO is the most advanced free online Wheel of Names. Perfect for teachers for student selection and office managers for raffle giveaways. Features CSV import, real-time sync, and multi-language support.">
-    <meta name="keywords" content="wheel of names, random name picker, teacher name picker, office raffle wheel, random winner generator, TeamSpin PRO, नेपाली नाम छान्ने, नाम चुनने वाला पहिया">
+    <meta name="description" content="Advanced random name picker for teachers and office raffles. Features 3D graphics, CSV import, and real-time sync.">
+    <meta name="keywords" content="wheel of names, teacher tool, office raffle, random name picker, TeamSpin PRO, नेपाली नाम छान्ने">
     <link rel="icon" type="image/jpeg" href="logo.jpg">
     <link rel="apple-touch-icon" href="logo.jpg">
 
@@ -19,7 +19,7 @@
             --sidebar-bg: #f8f9fa;
             --card-bg: #ffffff;
             --border: #dee2e6;
-            --wheel-shadow: rgba(0,0,0,0.2);
+            --wheel-shadow: rgba(0,0,0,0.15);
             --modal-overlay: rgba(0,0,0,0.85);
         }
 
@@ -149,6 +149,17 @@
         .btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text); }
         .btn-outline:hover { background: var(--border); }
 
+        /* --- LEGAL FOOTER --- */
+        .legal-footer {
+            background: var(--sidebar-bg); padding: 40px 20px; border-top: 1px solid var(--border); margin-top: 50px;
+        }
+        .legal-grid {
+            max-width: 1200px; margin: auto; display: grid; grid-template-columns: 1fr 1fr; gap: 40px;
+        }
+        .legal-box h4 { color: var(--primary); margin-bottom: 10px; }
+        .legal-box p { font-size: 13px; line-height: 1.5; opacity: 0.8; }
+        .view-more { color: var(--primary); font-weight: 700; text-decoration: none; }
+
         /* --- LIFETIME STATS & FEEDBACK --- */
         .stats-section {
             background: var(--sidebar-bg); text-align: center; padding: 50px 20px;
@@ -166,10 +177,6 @@
             margin-bottom: 15px; resize: none; box-sizing: border-box;
         }
 
-        /* --- SEO CONTENT --- */
-        .seo-content { max-width: 1200px; margin: 60px auto; padding: 0 25px; display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
-        .seo-card h2 { color: var(--primary); font-size: 28px; }
-
         /* --- RESPONSIVENESS --- */
         @media (max-width: 1200px) {
             .app-grid { grid-template-columns: 1fr; }
@@ -180,16 +187,22 @@
             .header-bar { padding: 10px; }
             .btn-label { display: none; }
             .modal-btns { flex-direction: column; }
-            .seo-content { grid-template-columns: 1fr; }
+            .legal-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 <body data-theme="classic">
 
+<audio id="spinSound" loop>
+    <source src="https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3" type="audio/mpeg">
+</audio>
+<audio id="winnerSound">
+    <source src="winner.mp3" type="audio/mpeg">
+</audio>
+
 <div id="fullscreenOverlay">
     <button class="btn-icon" id="fs-back-btn" onclick="toggleFS(false)">← Exit Fullscreen</button>
-    <div id="fs-container" style="width: min(85vh, 85vw); height: min(85vh, 85vw); position: relative;">
-        </div>
+    <div id="fs-container" style="width: min(85vh, 85vw); height: min(85vh, 85vw); position: relative;"></div>
     <div id="fs-winner-display"></div>
 </div>
 
@@ -207,8 +220,7 @@
 <div id="historyModal" class="modal-overlay">
     <div class="modal-content">
         <h2 id="hist_title">🏆 Winner History</h2>
-        <div id="historyList" style="max-height: 300px; overflow-y: auto; margin: 20px 0; border: 1px solid var(--border); border-radius: 12px;">
-            </div>
+        <div id="historyList" style="max-height: 300px; overflow-y: auto; margin: 20px 0; border: 1px solid var(--border); border-radius: 12px;"></div>
         <div class="modal-btns">
             <button class="m-btn m-btn-primary" onclick="document.getElementById('historyModal').style.display='none'">Close</button>
             <button class="m-btn m-btn-primary" style="background:#28a745;" onclick="exportWinnersCSV()">Download CSV</button>
@@ -220,9 +232,9 @@
     <div class="brand"><img src="logo.jpg" alt="Logo"> TeamSpin <span>PRO</span></div>
     
     <nav class="header-nav-desktop">
-        <a href="#features">Features</a>
+        <a href="contact.html">Contact Us</a>
         <a href="#about">About Teachers Tool</a>
-        <a href="#faq">FAQ</a>
+        <a href="privacy.html">Privacy</a>
     </nav>
 
     <div class="header-right">
@@ -282,19 +294,9 @@
         </label>
         
         <button class="action-btn btn-main" style="margin-top:10px;" onclick="exportNameList()">📤 Export List</button>
+        <button class="action-btn btn-outline" onclick="location.href='contact.html'">✉️ Report Issue</button>
     </div>
 </div>
-
-<section class="seo-content">
-    <div class="seo-card">
-        <h2 id="seo_h_1">The Ultimate Teacher's Assistant</h2>
-        <p>Teachers around the world use <strong>TeamSpin PRO</strong> to ensure a fair classroom environment. By using our random name picker, you can eliminate bias when calling on students for answers, assigning group projects, or distributing classroom rewards.</p>
-    </div>
-    <div class="seo-card">
-        <h2 id="seo_h_2">Corporate Office Raffle & Meetings</h2>
-        <p>Planning an office giveaway or an HR raffle? TeamSpin PRO handles large lists with ease. Simply import your employee list via CSV and spin to pick a winner in front of the whole team during your next Zoom or physical meeting.</p>
-    </div>
-</section>
 
 <section class="stats-section">
     <h3>TeamSpin PRO Global Impact</h3>
@@ -302,27 +304,41 @@
     <p>Total Lifetime Spins recorded across our global community.</p>
 </section>
 
+<section class="legal-footer">
+    <div class="legal-grid">
+        <div class="legal-box">
+            <h4>Privacy Policy</h4>
+            <p>We value your privacy. TeamSpin PRO does not store your name lists on our servers; all data stays locally in your browser. We use cookies only for theme preferences and lifetime spin counts. 
+               <a href="privacy.html" class="view-more">View more to privacy.html</a>
+            </p>
+        </div>
+        <div class="legal-box">
+            <h4>Terms & Conditions</h4>
+            <p>By using this tool, you agree that TeamSpin PRO is provided "as-is" for entertainment and educational purposes. We are not liable for decisions made using this random generator.
+               <a href="terms.html" class="view-more">View more to terms.html</a>
+            </p>
+        </div>
+    </div>
+</section>
+
 <section class="feedback-area">
     <h3 id="label_feedback">Professional Feedback Area</h3>
-    <p>We are constantly improving TeamSpin PRO for teachers and office managers. Tell us what features you need next!</p>
     <textarea id="feedbackText" placeholder="Share your suggestions or report a bug..."></textarea>
-    <button class="action-btn btn-main" style="width:auto; padding: 12px 50px;" onclick="alert('Thank you for your feedback!')">Submit Feedback</button>
+    <button class="action-btn btn-main" style="width:auto; padding: 12px 50px;" onclick="location.href='contact.html'">Submit via Contact Page</button>
 </section>
 
 <footer style="text-align:center; padding: 50px; border-top: 1px solid var(--border); opacity: 0.6;">
     <p>© 2026 TeamSpin PRO. Professional Decision Maker & Name Picker. All Rights Reserved.</p>
 </footer>
 
-<audio id="tickSound" src="https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3"></audio>
-
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
 <script>
-    // --- CORE LOGIC CONSTANTS ---
     const canvas = document.getElementById('wheelCanvas');
     const ctx = canvas.getContext('2d');
     const nameInput = document.getElementById('nameInput');
-    const tickSound = document.getElementById('tickSound');
+    const spinSound = document.getElementById('spinSound');
+    const winnerSound = document.getElementById('winnerSound');
     const spinCounterEl = document.getElementById('spinCounter');
 
     let names = [];
@@ -344,21 +360,17 @@
         hi: { input: "कार्यालय और कक्षा के नाम", spin: "घुमाने के लिए क्लिक करें!", winner: "विजेता घोषित!", hist: "विजेता इतिहास" }
     };
 
-    // --- INITIALIZATION ---
     function init() {
         spinCounterEl.innerText = lifetimeSpins.toLocaleString();
-        
-        // Real-Time Sync Listener
         nameInput.addEventListener('input', syncWheel);
         syncWheel();
         applyLanguage();
+        spinSound.volume = 0.2; // Low volume spin sound
     }
 
     function syncWheel() {
         names = nameInput.value.split('\n').filter(n => n.trim() !== "");
         document.getElementById('nameCount').innerText = names.length;
-        
-        // Duplicate Check Logic
         const uniqueNames = new Set(names);
         const dupEl = document.getElementById('dupStatus');
         const errEl = document.getElementById('errStatus');
@@ -390,13 +402,11 @@
 
         for (let i = 0; i < len; i++) {
             const angle = startAngle + i * arc;
-            
-            // --- 3D RADIAL GRADIENT RENDERING ---
             const grad = ctx.createRadialGradient(400, 400, 0, 400, 400, 400);
             const baseColor = colors[i % colors.length];
-            grad.addColorStop(0, '#ffffff'); // Center shine
+            grad.addColorStop(0, '#ffffff');
             grad.addColorStop(0.1, baseColor);
-            grad.addColorStop(1, shadeColor(baseColor, -30)); // Edge shadow
+            grad.addColorStop(1, shadeColor(baseColor, -30));
 
             ctx.fillStyle = grad;
             ctx.beginPath();
@@ -404,7 +414,6 @@
             ctx.arc(400, 400, 385, angle, angle + arc);
             ctx.fill();
 
-            // Text Contrast with Outlines
             ctx.save();
             ctx.translate(400, 400);
             ctx.rotate(angle + arc / 2);
@@ -422,10 +431,14 @@
         if (isSpinning || names.length < 2) return;
         isSpinning = true;
 
-        // Lifetime Spin Persistence
         lifetimeSpins++;
         localStorage.setItem('lifetimeSpins', lifetimeSpins);
         spinCounterEl.innerText = lifetimeSpins.toLocaleString();
+
+        if(document.getElementById('soundToggle').checked) {
+            spinSound.currentTime = 0;
+            spinSound.play();
+        }
 
         const duration = 5000;
         const start = performance.now();
@@ -434,18 +447,12 @@
         function animate(now) {
             const elapsed = now - start;
             const progress = Math.min(elapsed / duration, 1);
-            
-            // Cubic Easing
-            const ease = 1 - Math.pow(1 - progress, 3);
             startAngle += (totalRotation * (1 - progress)) * 0.05;
-            
             draw();
-
-            if (progress < 1) {
-                if(document.getElementById('soundToggle').checked) tickSound.play();
-                requestAnimationFrame(animate);
-            } else {
+            if (progress < 1) { requestAnimationFrame(animate); } 
+            else {
                 isSpinning = false;
+                spinSound.pause();
                 processWinner();
             }
         }
@@ -459,18 +466,20 @@
         const idx = len - 1 - Math.floor(normalized / arc);
         const win = names[idx];
 
+        if(document.getElementById('soundToggle').checked) {
+            winnerSound.currentTime = 0;
+            winnerSound.play();
+        }
+
         winners.push({ name: win, time: new Date().toLocaleTimeString() });
-        
         document.getElementById('winnerName').innerText = win;
         document.getElementById('fs-winner-display').innerText = win;
         document.getElementById('winnerModal').style.display = 'flex';
-        
         confetti({ particleCount: 200, spread: 80, origin: { y: 0.6 } });
 
         if(document.getElementById('autoRemove').checked) removeWinnerAction();
     }
 
-    // --- TOOL FUNCTIONS ---
     function shuffleInput() {
         let arr = nameInput.value.split('\n').filter(n => n.trim() !== "");
         arr.sort(() => Math.random() - 0.5);
@@ -479,22 +488,16 @@
     }
 
     function clearAllNames() {
-        if(confirm("Are you sure you want to clear the entire list?")) {
-            nameInput.value = "";
-            syncWheel();
-        }
+        if(confirm("Are you sure?")) { nameInput.value = ""; syncWheel(); }
     }
 
     function importCSV(e) {
-        const file = e.target.files[0];
         const reader = new FileReader();
         reader.onload = (ev) => {
-            const content = ev.target.result;
-            const lines = content.split(/,|\n/).map(l => l.trim()).filter(l => l !== "");
-            nameInput.value = lines.join('\n');
-            syncWheel();
+            const lines = ev.target.result.split(/,|\n/).map(l => l.trim()).filter(l => l !== "");
+            nameInput.value = lines.join('\n'); syncWheel();
         };
-        reader.readAsText(file);
+        reader.readAsText(e.target.files[0]);
     }
 
     function exportNameList() {
@@ -506,48 +509,32 @@
     }
 
     function exportWinnersCSV() {
-        if(!winners.length) return alert("History is empty.");
         let csv = "Name,Time\n" + winners.map(w => `"${w.name}",${w.time}`).join('\n');
         const blob = new Blob([csv], {type: 'text/csv'});
         const a = document.createElement('a');
         a.href = URL.createObjectURL(blob);
-        a.download = "TeamSpin_Winners.csv";
-        a.click();
+        a.download = "Winners.csv"; a.click();
     }
 
     function toggleFS(enable) {
         const overlay = document.getElementById('fullscreenOverlay');
         const wheel = document.getElementById('wheelBox');
-        if(enable) {
-            document.getElementById('fs-container').appendChild(wheel);
-            overlay.style.display = 'flex';
-        } else {
-            document.getElementById('wheelRoot').prepend(wheel);
-            overlay.style.display = 'none';
-        }
+        if(enable) { document.getElementById('fs-container').appendChild(wheel); overlay.style.display = 'flex'; } 
+        else { document.getElementById('wheelRoot').prepend(wheel); overlay.style.display = 'none'; }
     }
 
-    function applyTheme(t) {
-        document.body.setAttribute('data-theme', t);
-        currentTheme = t;
-        draw();
-    }
+    function applyTheme(t) { document.body.setAttribute('data-theme', t); currentTheme = t; draw(); }
 
     function applyLanguage() {
         const l = document.getElementById('langSelect').value;
         document.getElementById('label_input').innerText = i18n[l].input;
         document.getElementById('instruct').innerText = i18n[l].spin;
         document.getElementById('win_title').innerText = i18n[l].winner;
-        document.getElementById('hist_title').innerText = i18n[l].hist;
     }
 
     function openHistory() {
         const list = document.getElementById('historyList');
-        list.innerHTML = winners.length ? winners.map(w => 
-            `<div style="padding:12px; border-bottom:1px solid var(--border); display:flex; justify-content:space-between;">
-                <strong>${w.name}</strong> <small>${w.time}</small>
-            </div>`
-        ).join('') : "<p style='padding:20px; text-align:center;'>No winners yet.</p>";
+        list.innerHTML = winners.length ? winners.map(w => `<div style="padding:12px; border-bottom:1px solid var(--border); display:flex; justify-content:space-between;"><strong>${w.name}</strong> <small>${w.time}</small></div>`).join('') : "<p style='padding:20px; text-align:center;'>No winners yet.</p>";
         document.getElementById('historyModal').style.display = 'flex';
     }
 
@@ -555,24 +542,16 @@
         const win = document.getElementById('winnerName').innerText;
         names = names.filter(n => n !== win);
         nameInput.value = names.join('\n');
-        syncWheel();
-        closeModal();
+        syncWheel(); closeModal();
     }
 
     function closeModal() { document.getElementById('winnerModal').style.display = 'none'; }
 
     function shadeColor(color, percent) {
-        let R = parseInt(color.substring(1,3),16);
-        let G = parseInt(color.substring(3,5),16);
-        let B = parseInt(color.substring(5,7),16);
-        R = parseInt(R * (100 + percent) / 100);
-        G = parseInt(G * (100 + percent) / 100);
-        B = parseInt(B * (100 + percent) / 100);
+        let R = parseInt(color.substring(1,3),16), G = parseInt(color.substring(3,5),16), B = parseInt(color.substring(5,7),16);
+        R = parseInt(R * (100 + percent) / 100); G = parseInt(G * (100 + percent) / 100); B = parseInt(B * (100 + percent) / 100);
         R = (R<255)?R:255; G = (G<255)?G:255; B = (B<255)?B:255;
-        let RR = ((R.toString(16).length==1)?"0"+R.toString(16):R.toString(16));
-        let GG = ((G.toString(16).length==1)?"0"+G.toString(16):G.toString(16));
-        let BB = ((B.toString(16).length==1)?"0"+B.toString(16):B.toString(16));
-        return "#"+RR+GG+BB;
+        return "#"+(R.toString(16).padStart(2,'0'))+(G.toString(16).padStart(2,'0'))+(B.toString(16).padStart(2,'0'));
     }
 
     init();
