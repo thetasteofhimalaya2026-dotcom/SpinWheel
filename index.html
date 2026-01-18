@@ -164,6 +164,8 @@
 <button class="btn btn-ghost" style="border: 1px solid var(--primary); color: var(--primary);" onclick="logic.removeDuplicates()">✨ REMOVE DUPLICATES</button>
         <button class="btn btn-ghost" onclick="document.getElementById('csvFile').click()">📥 IMPORT CSV/TXT</button>
         <input type="file" id="csvFile" hidden onchange="logic.importFile(event)">
+        <button class="btn btn-ghost" onclick="document.getElementById('logoUpload').click()">🖼️ CUSTOM LOGO</button>
+<input type="file" id="logoUpload" hidden accept="image/*">
         <button class="btn btn-ghost" style="color:var(--danger)" onclick="logic.reset()">🗑️ CLEAR ALL</button>
     </aside>
 
@@ -187,7 +189,7 @@
             </div>
            <div style="display:flex; justify-content:space-between;">
     <span>Lifetime Spins:</span>
-    <strong id="valTotalSpins" style="color:var(--primary);">0</strong>
+    <strong id="valTotalSpins" style="color:var(--primary);">16520</strong>
 </div>
         </div>
 
@@ -288,7 +290,14 @@ const ui = {
 };
 
 const logic = {
-    names: [], angle: 0, isSpinning: false, history: [], totalSpins: 0, lang: 'en',
+    names: [], 
+    angle: 0, 
+    isSpinning: false, 
+    history: [], 
+    totalSpins: 0, 
+    lang: 'en',
+    logoImg: null,
+
     translations: {
         en: {
             title: "Classroom & Office Names",
@@ -322,12 +331,36 @@ const logic = {
         }
     },
 
+init() {
+    this.logoImg = new Image();
+    
+    // Load custom logo or default
+    const savedLogo = localStorage.getItem('ts_custom_logo');
+    this.logoImg.src = savedLogo || 'logo.jpg'; 
+
+    this.logoImg.onload = () => this.draw();
+    
+    // Cleanup: Attach listeners only if elements exist
+    const logoInput = document.getElementById('logoUpload');
+    if(logoInput) logoInput.addEventListener('change', (e) => this.handleLogoUpload(e));
+
+    this.totalSpins = parseInt(localStorage.getItem('ts_lifetime_spins')) || 15050;
+    document.getElementById('valTotalSpins').innerText = this.totalSpins;
+    
+    document.getElementById('mainInput').addEventListener('input', () => this.sync());
+    
+    const fsBtn = document.getElementById('btnFullScreen');
+    if(fsBtn) fsBtn.addEventListener('click', () => this.toggleFullscreen());
+
+    this.sync();
+    this.changeLang(this.lang);
+},
     changeLang(val) {
         this.lang = val;
         const t = this.translations[val];
-        document.getElementById('langSwitcher').value = val;
+        const switcher = document.getElementById('langSwitcher');
+        if(switcher) switcher.value = val;
         
-        // Update labels safely
         const elements = {
             'lblInputTitle': t.title,
             'lblInputSub': t.sub,
@@ -348,235 +381,199 @@ const logic = {
         this.draw();
     },
 
-const logic = {
-    names: [], angle: 0, isSpinning: false, history: [], totalSpins: 0, lang: 'en',
-    logoImg: null, // Add this line
-
-    init() {
-        // Load the logo first
-        this.logoImg = new Image();
-        this.logoImg.src = 'logo.jpg'; // Ensure this matches your filename
-        this.logoImg.onload = () => this.draw(); 
-
-        this.totalSpins = parseInt(localStorage.getItem('ts_lifetime_spins')) || 15050;
-        document.getElementById('valTotalSpins').innerText = this.totalSpins;
-        document.getElementById('mainInput').addEventListener('input', () => this.sync());
-        this.sync();
-        this.changeLang(this.lang);
-    },
-sync() {
-    const val = document.getElementById('mainInput').value;
-    const rawNames = val.split('\n').map(n => n.trim()).filter(n => n !== "");
-    
-    // Duplicate Detection
-    const seen = new Set();
-    const duplicates = rawNames.filter(name => {
-        const lower = name.toLowerCase();
-        if (seen.has(lower)) return true;
-        seen.add(lower);
-        return false;
-    });
-
-    const statusEl = document.getElementById('lblStatus');
-    const iconEl = document.getElementById('statusIcon');
-    
-    if (duplicates.length > 0) {
-        const uniqueDupes = [...new Set(duplicates)];
-        if(iconEl) {
-            iconEl.innerText = "⚠️";
-            iconEl.style.color = "var(--danger)";
-        }
-        if(statusEl) {
-            statusEl.style.color = "var(--danger)";
-            statusEl.innerText = (this.lang === 'np' ? "दोहोरिएका नामहरू: " : "Duplicates: ") + uniqueDupes.join(', ');
-        }
-    } else {
-        if(iconEl) {
-            iconEl.innerText = "✔";
-            iconEl.style.color = "var(--success)";
-        }
-        if(statusEl) {
-            statusEl.style.color = "var(--success)";
-            statusEl.innerText = this.translations[this.lang].status;
-        }
-    }
-
-    this.names = rawNames;
-    document.getElementById('valCount').innerText = this.names.length;
-    this.draw();
-},
-
-removeDuplicates() {
-    // 3. Keep first occurrence, remove others
-    const unique = [...new Set(this.names)];
-    document.getElementById('mainInput').value = unique.join('\n');
-    this.sync();
-    
-    Swal.fire({
-        toast: true,
-        position: 'top-end',
-        icon: 'success',
-        title: this.lang === 'np' ? 'डुप्लिकेटहरू हटाइयो' : 'Duplicates removed',
-        showConfirmButton: false,
-        timer: 2000
-    });
-},
-
- draw() {
-    const canvas = document.getElementById('wheelCanvas');
-    if (!canvas) return;
-    const ctx = canvas.getContext('2d');
-    const len = this.names.length;
-    const center = canvas.width / 2;
-    const radius = center - 10;
-    
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    if (len === 0) {
-        ctx.fillStyle = ui.theme === 'light' ? '#cbd5e1' : '#1e293b';
-        ctx.beginPath(); ctx.arc(center, center, radius, 0, Math.PI * 2); ctx.fill();
-        return;
-    }
-
-    const arc = (Math.PI * 2) / len;
-    const colors = ui.theme === 'light' ? 
-        ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6'] :
-        ['#1d4ed8', '#065f46', '#92400e', '#991b1b', '#5b21b6'];
-
-    this.names.forEach((name, i) => {
-        const ang = this.angle + (i * arc);
-        ctx.beginPath();
-        ctx.fillStyle = colors[i % colors.length];
-        ctx.moveTo(center, center);
-        ctx.arc(center, center, radius, ang, ang + arc);
-        ctx.fill();
+    sync() {
+        const val = document.getElementById('mainInput').value;
+        const rawNames = val.split('\n').map(n => n.trim()).filter(n => n !== "");
         
-        ctx.strokeStyle = ui.theme === 'light' ? '#fff' : '#0f172a';
-        ctx.lineWidth = 2;
-        ctx.stroke();
+        // Duplicate Detection
+        const seen = new Set();
+        const duplicates = rawNames.filter(name => {
+            const lower = name.toLowerCase();
+            if (seen.has(lower)) return true;
+            seen.add(lower);
+            return false;
+        });
 
+        const statusEl = document.getElementById('lblStatus');
+        const iconEl = document.getElementById('statusIcon');
+        
+        if (duplicates.length > 0) {
+            const uniqueDupes = [...new Set(duplicates)];
+            if(iconEl) { iconEl.innerText = "⚠️"; iconEl.style.color = "var(--danger)"; }
+            if(statusEl) {
+                statusEl.style.color = "var(--danger)";
+                statusEl.innerText = (this.lang === 'np' ? "दोहोरिएका नामहरू: " : "Duplicates: ") + uniqueDupes.join(', ');
+            }
+        } else {
+            if(iconEl) { iconEl.innerText = "✔"; iconEl.style.color = "var(--success)"; }
+            if(statusEl) {
+                statusEl.style.color = "var(--success)";
+                statusEl.innerText = this.translations[this.lang].status;
+            }
+        }
+
+        this.names = rawNames;
+        document.getElementById('valCount').innerText = this.names.length;
+        this.draw();
+    },
+
+    draw() {
+        const canvas = document.getElementById('wheelCanvas');
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
+        const center = canvas.width / 2;
+        const radius = center - 15;
+        
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        if (this.names.length === 0) {
+            ctx.fillStyle = ui.theme === 'light' ? '#cbd5e1' : '#1e293b';
+            ctx.beginPath(); ctx.arc(center, center, radius, 0, Math.PI * 2); ctx.fill();
+            return;
+        }
+
+        const arc = (Math.PI * 2) / this.names.length;
+        const colors = ui.theme === 'light' ? 
+            ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6'] :
+            ['#1d4ed8', '#065f46', '#92400e', '#991b1b', '#5b21b6'];
+
+        this.names.forEach((name, i) => {
+            const ang = this.angle + (i * arc);
+            ctx.beginPath();
+            ctx.fillStyle = colors[i % colors.length];
+            ctx.moveTo(center, center);
+            ctx.arc(center, center, radius, ang, ang + arc);
+            ctx.fill();
+            
+            ctx.strokeStyle = ui.theme === 'light' ? '#fff' : '#0f172a';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+
+            ctx.save();
+            ctx.translate(center, center);
+            ctx.rotate(ang + arc / 2);
+            ctx.textAlign = "right";
+            ctx.fillStyle = "#fff";
+            ctx.font = "bold 30px Inter, sans-serif";
+            ctx.fillText(name.substring(0, 15), radius - 40, 10);
+            ctx.restore();
+        });
+
+        // --- MOBILE RESPONSIVE LOGO ---
+        const logoSize = canvas.width * 0.14; // Scales with wheel size
         ctx.save();
-        ctx.translate(center, center);
-        ctx.rotate(ang + arc / 2);
-        ctx.textAlign = "right";
-        ctx.fillStyle = "#fff";
-        ctx.font = "bold 30px Inter, sans-serif";
-        ctx.fillText(name.substring(0, 15), radius - 40, 10);
-        ctx.restore();
-    });
-
-    // --- LOGO PLACEMENT IN MIDDLE ---
-    const logoSize = 80; // Small size for logo
-    ctx.save();
-    
-    // Draw white circle background for logo
-    ctx.beginPath();
-    ctx.arc(center, center, logoSize / 2 + 5, 0, Math.PI * 2);
-    ctx.fillStyle = "white";
-    ctx.fill();
-    ctx.strokeStyle = "rgba(0,0,0,0.1)";
-    ctx.stroke();
-
-    // Clip to make the logo circular
-    ctx.beginPath();
-    ctx.arc(center, center, logoSize / 2, 0, Math.PI * 2);
-    ctx.clip();
-
-    if (this.logoImg && this.logoImg.complete) {
-        ctx.drawImage(this.logoImg, center - logoSize/2, center - logoSize/2, logoSize, logoSize);
-    }
-    ctx.restore();
-},
-        // Center Pin/Circle
+        
+        // Glow/Border
         ctx.beginPath();
+        ctx.arc(center, center, (logoSize/2) + 6, 0, Math.PI * 2);
         ctx.fillStyle = "white";
-        ctx.arc(center, center, 30, 0, Math.PI * 2);
+        ctx.shadowBlur = 15;
+        ctx.shadowColor = "rgba(0,0,0,0.15)";
         ctx.fill();
-        ctx.stroke();
+
+        // Clip Circle
+        ctx.beginPath();
+        ctx.arc(center, center, logoSize/2, 0, Math.PI * 2);
+        ctx.clip();
+
+        if (this.logoImg && this.logoImg.complete && this.logoImg.naturalWidth !== 0) {
+            ctx.drawImage(this.logoImg, center - logoSize/2, center - logoSize/2, logoSize, logoSize);
+        } else {
+            ctx.fillStyle = "#2563eb";
+            ctx.fillRect(center - logoSize/2, center - logoSize/2, logoSize, logoSize);
+            ctx.fillStyle = "white";
+            ctx.font = `bold ${logoSize/2.5}px Inter`;
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+            ctx.fillText("T", center, center);
+        }
+        ctx.restore();
     },
 
     spin() {
-    if (this.isSpinning || this.names.length < 2) return;
-    this.isSpinning = true;
-    
-    const sndSpin = document.getElementById('sndSpin');
-    const sndWin = document.getElementById('sndWin');
-
-    // WARM UP: This "unlocks" the audio for the browser
-    if (document.getElementById('cfgSound').checked) {
-        // Play and immediately pause/reset to bypass auto-play blocks
-        sndWin.play().then(() => { sndWin.pause(); sndWin.currentTime = 0; }).catch(e => {});
+        if (this.isSpinning || this.names.length < 2) return;
+        this.isSpinning = true;
         
-        sndSpin.currentTime = 0;
-        sndSpin.play().catch(e => console.log("Spin sound blocked"));
-    }
+        const sndSpin = document.getElementById('sndSpin');
+        const sndWin = document.getElementById('sndWin');
 
-    const startAngle = this.angle;
-    const spinRotation = (Math.PI * 2 * 10) + (Math.random() * Math.PI * 2);
-    const duration = 5000;
-    const start = performance.now();
+        if (document.getElementById('cfgSound').checked) {
+            // Unlock audio
+            sndWin.play().then(() => { sndWin.pause(); sndWin.currentTime = 0; }).catch(() => {});
+            sndSpin.currentTime = 0;
+            sndSpin.play().catch(() => {});
+        }
 
-    const animate = (time) => {
-        const elapsed = time - start;
-        const progress = Math.min(elapsed / duration, 1);
-        const ease = 1 - Math.pow(1 - progress, 4); 
+        const startAngle = this.angle;
+        const spinRotation = (Math.PI * 2 * 12) + (Math.random() * Math.PI * 2);
+        const duration = 5000;
+        const start = performance.now();
+
+        const animate = (time) => {
+            const elapsed = time - start;
+            const progress = Math.min(elapsed / duration, 1);
+            const ease = 1 - Math.pow(1 - progress, 4); 
+            
+            this.angle = startAngle + (spinRotation * ease);
+            this.draw();
+            
+            if (progress < 1) requestAnimationFrame(animate);
+            else this.finish();
+        };
+        requestAnimationFrame(animate);
+    },
+
+    finish() {
+        this.isSpinning = false;
+        const arc = (Math.PI * 2) / this.names.length;
+        const normalizedAngle = ((Math.PI * 1.5) - this.angle) % (Math.PI * 2);
+        const idx = Math.floor((normalizedAngle < 0 ? normalizedAngle + Math.PI * 2 : normalizedAngle) / arc) % this.names.length;
+        const winner = this.names[idx];
+
+        this.totalSpins++;
+        localStorage.setItem('ts_lifetime_spins', this.totalSpins);
+        document.getElementById('valTotalSpins').innerText = this.totalSpins;
         
-        this.angle = startAngle + (spinRotation * ease);
-        this.draw();
+        confetti({ 
+            particleCount: 150, 
+            spread: 70, 
+            origin: { y: 0.6 },
+            colors: ['#2563eb', '#10b981', '#f59e0b', '#ef4444']
+        });
         
-        if (progress < 1) requestAnimationFrame(animate);
-        else this.finish();
-    };
-    requestAnimationFrame(animate);
-},
+        if (document.getElementById('cfgSound').checked) {
+            const winSnd = document.getElementById('sndWin');
+            winSnd.currentTime = 0; 
+            winSnd.play().catch(() => {});
+        }
 
-finish() {
-    this.isSpinning = false;
-    const arc = (Math.PI * 2) / this.names.length;
-    const normalizedAngle = ((Math.PI * 1.5) - this.angle) % (Math.PI * 2);
-    const idx = Math.floor((normalizedAngle < 0 ? normalizedAngle + Math.PI * 2 : normalizedAngle) / arc) % this.names.length;
-    const winner = this.names[idx];
+        Swal.fire({
+            title: this.translations[this.lang].winner,
+            html: `<h2 style="color:#2563eb; font-size:3rem;">${winner}</h2>`,
+            icon: 'success',
+            confirmButtonColor: '#2563eb'
+        });
 
-    // Update Lifetime Spins
-    this.totalSpins++;
-    localStorage.setItem('ts_lifetime_spins', this.totalSpins);
-    document.getElementById('valTotalSpins').innerText = this.totalSpins;
-    
-    // Effects
-    confetti({ particleCount: 200, spread: 90, origin: { y: 0.6 } });
-    
-    // Play your winner.mp3
-    if (document.getElementById('cfgSound').checked) {
-        const winSnd = document.getElementById('sndWin');
-        winSnd.currentTime = 0; 
-        winSnd.play().catch(e => console.error("Winner sound failed:", e));
-    }
+        this.addToHistory(winner);
+        
+        if (document.getElementById('cfgRemove').checked) {
+            this.names.splice(idx, 1);
+            document.getElementById('mainInput').value = this.names.join('\n');
+            this.sync();
+        }
+    },
 
-    // Winner Popup
-    Swal.fire({
-        title: `<span style="font-family:inherit;">${this.translations[this.lang].winner}</span>`,
-        html: `<h2 style="color:#2563eb; font-size:3rem;">${winner}</h2>`,
-        icon: 'success',
-        confirmButtonColor: '#2563eb'
-    });
-
-    this.addToHistory(winner);
-    
-    if (document.getElementById('cfgRemove').checked) {
-        this.names.splice(idx, 1);
-        document.getElementById('mainInput').value = this.names.join('\n');
-        this.sync();
-    }
-}
     addToHistory(name) {
         const time = new Date().toLocaleTimeString();
         this.history.unshift({name, time});
         const list = document.getElementById('historyList');
-        list.innerHTML = this.history.slice(0, 8).map(h => `
-            <li class="history-item" style="list-style:none; padding:8px; border-bottom:1px solid var(--border); font-size:14px;">
-                <strong>${h.name}</strong> <small style="color:var(--text-muted); float:right;">${h.time}</small>
-            </li>
-        `).join('');
+        if(list) {
+            list.innerHTML = this.history.slice(0, 8).map(h => `
+                <li style="list-style:none; padding:8px; border-bottom:1px solid var(--border); font-size:14px;">
+                    <strong>${h.name}</strong> <small style="color:var(--text-muted); float:right;">${h.time}</small>
+                </li>
+            `).join('');
+        }
     },
 
     shuffle() {
@@ -584,7 +581,73 @@ finish() {
         document.getElementById('mainInput').value = this.names.join('\n');
         this.sync();
     },
-    reset() { if(confirm("Clear everything?")) { document.getElementById('mainInput').value=""; this.sync(); } },
+
+    removeDuplicates() {
+        const unique = [...new Set(this.names)];
+        document.getElementById('mainInput').value = unique.join('\n');
+        this.sync();
+        Swal.fire({
+            toast: true, position: 'top-end', icon: 'success',
+            title: this.lang === 'np' ? 'दोहोरिएका नामहरू हटाइयो' : 'Duplicates removed',
+            showConfirmButton: false, timer: 1500
+        });
+    },
+
+    toggleFullscreen() {
+        const elem = document.querySelector('.canvas-wrapper');
+        if (!document.fullscreenElement) {
+            elem.requestFullscreen().catch(err => {
+                alert(`Error: ${err.message}`);
+            });
+        } else {
+            document.exitFullscreen();
+        }
+    },
+handleLogoUpload(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+        const img = new Image();
+        img.onload = () => {
+            this.logoImg = img; 
+            this.draw(); // Instantly update the wheel center
+            localStorage.setItem('ts_custom_logo', event.target.result); // Save for next time
+        };
+        img.src = event.target.result;
+    };
+    reader.readAsDataURL(file);
+
+    Swal.fire({
+        toast: true,
+        position: 'top-end',
+        icon: 'success',
+        title: 'Logo Updated!',
+        showConfirmButton: false,
+        timer: 1500
+    });
+},
+    resetLogo() {
+    localStorage.removeItem('ts_custom_logo');
+    this.logoImg.src = 'logo.jpg';
+    this.draw();
+    Swal.fire({
+        toast: true,
+        position: 'top-end',
+        icon: 'info',
+        title: this.lang === 'np' ? 'लोगो रिसेट गरियो' : 'Logo Reset to Default',
+        showConfirmButton: false,
+        timer: 1500
+    });
+},
+    reset() { 
+    const msg = this.lang === 'np' ? this.translations.np.confirmClear : "Clear everything?";
+    if(confirm(msg)) { 
+        document.getElementById('mainInput').value = ""; 
+        this.sync(); 
+    } 
+},
     clearHistory() { this.history = []; document.getElementById('historyList').innerHTML = ""; },
     importFile(e) {
         const reader = new FileReader();
@@ -597,10 +660,8 @@ finish() {
         a.download = "TeamSpin_List.txt"; a.click();
     }
 };
+
 window.onload = () => logic.init();
 </script>
 </body>
 </html>
-
-
-
