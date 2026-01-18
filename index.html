@@ -9,6 +9,12 @@
     <meta name="keywords" content="wheel of names, teacher tool, random picker, नेपाली नाम छान्ने, TeamSpin PRO, classroom spinner, raffle tool">
     
    <style>
+       .blog-card { transition: all 0.3s ease; cursor: pointer; }
+.blog-card:hover { 
+    transform: translateY(-8px); 
+    box-shadow: 0 15px 30px rgba(0,0,0,0.1); 
+    border-color: var(--primary) !important;
+}
     :root {
         --primary: #2563eb;
         --primary-dark: #1e40af;
@@ -131,13 +137,14 @@
     </div>
 
     <nav class="nav-links">
-        <a href="#features" class="nav-link">Features</a>
-        <a href="#faq" class="nav-link">FAQ</a>
-        <select id="langSwitcher" onchange="logic.changeLang(this.value)" class="btn-ghost" style="padding:5px 10px; font-size:12px;">
-            <option value="en">English</option>
-            <option value="np">नेपाली</option>
-        </select>
-    </nav>
+    <a href="index.html" class="nav-link">Home</a>
+    <a href="faq.html" class="nav-link">FAQ</a>
+    <select id="langSwitcher" onchange="logic.changeLang(this.value)" class="btn-ghost" style="padding:5px 10px; font-size:12px;">
+        <option value="en">English</option>
+        <option value="np">नेपाली</option>
+        <option value="hi">हिन्दी</option>
+    </select>
+</nav>
 
     <div style="display:flex; gap:8px; align-items:center;">
         <button class="mobile-menu-btn" onclick="ui.showMobileMenu()">☰ Menu</button>
@@ -210,35 +217,33 @@
 <div class="feedback-container">
     <h3 id="lblFeedTitle">Professional Feedback Area</h3>
     <p id="lblFeedSub" style="color:var(--text-muted);">We are constantly improving TeamSpin PRO. Tell us what features you need next!</p>
-    
-    <textarea id="userFeedback" placeholder="Share your suggestions... (तपाईंको सुझाव यहाँ लेख्नुहोस्...)" 
-              style="width:100%; height:120px; border-radius:15px; border:1px solid var(--border); padding:15px; margin:15px 0; font-family:inherit; background: var(--bg-body); color: var(--text-main);">
-    </textarea>
-    
-    <button class="btn btn-blue" style="width:220px;" 
-            onclick="Swal.fire({title: 'Thank you!', text: 'Your feedback has been noted.', icon: 'success', confirmButtonColor: '#2563eb'})">
-        SUBMIT FEEDBACK
-    </button>
+    <textarea id="userFeedback" placeholder="Share your suggestions..." style="width:100%; height:100px; border-radius:15px; border:1px solid var(--border); padding:15px; margin:15px 0; background: var(--bg-body); color: var(--text-main); font-family:inherit;"></textarea>
+    <button class="btn btn-blue" style="width:200px;" onclick="Swal.fire({title: 'Thank you!', text: 'Your feedback has been noted.', icon: 'success', confirmButtonColor: '#2563eb'})">SUBMIT FEEDBACK</button>
 </div>
-    <section class="content-area" style="max-width: 1200px; margin: 40px auto; padding: 20px; line-height: 1.6;">
-    <div id="faq">
-        <h2 style="text-align: center; margin-bottom: 30px;">Frequently Asked Questions (FAQ)</h2>
-        <div style="display: grid; gap: 20px;">
-            <details style="background: var(--bg-panel); padding: 15px; border-radius: 12px; border: 1px solid var(--border); cursor: pointer;">
-                <summary><strong>Is this name picker truly random?</strong></summary>
-                <p>Yes. We use <code>window.crypto.getRandomValues</code>, which is a cryptographically strong random number generator, ensuring 100% fairness.</p>
-            </details>
-            <details style="background: var(--bg-panel); padding: 15px; border-radius: 12px; border: 1px solid var(--border); cursor: pointer;">
-                <summary><strong>How many names can I add?</strong></summary>
-                <p>You can add up to 10,000 names. However, for the best visual experience on the wheel, we recommend 2 to 100 names.</p>
-            </details>
-        </div>
+
+<section id="blog-section" style="max-width: 1200px; margin: 60px auto; padding: 0 20px;">
+    <h2 id="lblBlogTitle" style="font-size: 1.8rem; margin-bottom: 25px;">Latest from TeamSpin Blog</h2>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px;">
+        
+        <article class="blog-card" style="background: var(--bg-panel); border: 1px solid var(--border); border-radius: 20px; overflow: hidden; transition: 0.3s; padding: 20px;">
+            <div style="background: var(--accent); height: 150px; border-radius: 12px; margin-bottom: 15px; display: flex; align-items: center; justify-content: center; color: var(--text-muted);">[Image Placeholder]</div>
+            <h3 style="font-size: 18px; margin-bottom: 10px;">How to use TeamSpin for Giveaways</h3>
+            <p style="font-size: 14px; color: var(--text-muted); margin-bottom: 15px;">A complete guide on setting up a fair raffle for your social media events...</p>
+            <a href="blog/giveaway-guide.html" style="color: var(--primary); font-weight: 600; text-decoration: none; font-size: 14px;">Read Article →</a>
+        </article>
+
+        <article class="blog-card" style="background: var(--bg-panel); border: 1px solid var(--border); border-radius: 20px; overflow: hidden; padding: 20px; opacity: 0.6;">
+            <h3 style="font-size: 18px; margin-bottom: 10px;">Coming Soon...</h3>
+            <p style="font-size: 14px; color: var(--text-muted);">We are working on new tips for classroom management.</p>
+        </article>
     </div>
 </section>
+
 <footer style="background:var(--bg-panel); padding:60px 20px; text-align:center; border-top:1px solid var(--border); margin-top:50px;">
-    <div style="margin-bottom: 20px;">
-        <a href="javascript:void(0)" onclick="showPrivacy()" style="margin: 0 10px; color: var(--primary); text-decoration: none; font-size: 14px;">Privacy Policy</a>
-        <a href="javascript:void(0)" onclick="showTerms()" style="margin: 0 10px; color: var(--primary); text-decoration: none; font-size: 14px;">Terms of Service</a>
+    <div style="margin-bottom: 25px; display: flex; justify-content: center; gap: 20px; flex-wrap: wrap;">
+        <a href="faq.html" style="color: var(--primary); text-decoration: none; font-weight: 600;">FAQ</a>
+        <a href="privacy.html" style="color: var(--primary); text-decoration: none; font-weight: 600;">Privacy Policy</a>
+        <a href="terms.html" style="color: var(--primary); text-decoration: none; font-weight: 600;">Terms of Service</a>
     </div>
     <p id="lblLegalText" style="max-width:700px; margin:0 auto 20px; font-size:13px; color:var(--text-muted);"></p>
     <div style="font-size:12px; color:var(--text-muted);">&copy; 2026 TeamSpin PRO. Built for Fairness.</div>
@@ -258,69 +263,71 @@ const ui = {
         document.body.setAttribute('data-theme', this.theme);
         logic.draw();
     },
-    showMobileMenu() {
-        Swal.fire({
-            title: 'TeamSpin Menu',
-            html: `
-                <div style="display:flex; flex-direction:column; gap:12px;">
-                    <button class="btn btn-ghost" onclick="location.hash='#features'; Swal.close()">🚀 Features (विशेषताहरू)</button>
-                    <button class="btn btn-ghost" onclick="location.hash='#faq'; Swal.close()">❓ FAQ (प्रश्नोत्तर)</button>
-                    <hr style="border:0; border-top:1px solid var(--border)">
-                    <p style="font-size:12px; margin:5px 0; color:var(--text-muted);">Language / भाषा:</p>
-                    <button class="btn btn-ghost" onclick="logic.changeLang('en'); Swal.close()">🇺🇸 English</button>
-                    <button class="btn btn-ghost" onclick="logic.changeLang('np'); Swal.close()">🇳🇵 नेपाली (Nepali)</button>
-                    <button class="btn btn-ghost" onclick="logic.changeLang('hi'); Swal.close()">🇮🇳 हिन्दी (Hindi)</button>
-                </div>
-            `,
-            showConfirmButton: false,
-            showCloseButton: true
-        });
-    }
+showMobileMenu() {
+    Swal.fire({
+        title: 'TeamSpin Menu',
+        html: `
+            <div style="display:flex; flex-direction:column; gap:12px;">
+                <button class="btn btn-ghost" onclick="location.href='index.html'">🏠 Home (गृहपृष्ठ)</button>
+                <button class="btn btn-ghost" onclick="location.href='faq.html'">❓ FAQ (प्रश्नोत्तर)</button>
+                <button class="btn btn-ghost" onclick="location.href='privacy.html'">🔒 Privacy (गोपनीयता)</button>
+                <hr style="border:0; border-top:1px solid var(--border)">
+                <p style="font-size:12px; margin:5px 0; color:var(--text-muted);">Language / भाषा:</p>
+                <button class="btn btn-ghost" onclick="logic.changeLang('en'); Swal.close()">🇺🇸 English</button>
+                <button class="btn btn-ghost" onclick="logic.changeLang('np'); Swal.close()">🇳🇵 नेपाली (Nepali)</button>
+                <button class="btn btn-ghost" onclick="logic.changeLang('hi'); Swal.close()">🇮🇳 हिन्दी (Hindi)</button>
+            </div>
+        `,
+        showConfirmButton: false,
+        showCloseButton: true
+    });
+}
 };
 
 const logic = {
     names: [], angle: 0, isSpinning: false, history: [], totalSpins: 0, lang: 'en',
-    translations: {
-        en: {
-            title: "Classroom & Office Names",
-            sub: "One name per line. Best for teachers and HR raffle events.",
-            spin: "Click the Wheel to Spin!",
-            status: "Name list is valid.",
-            winner: "The winner is: ",
-            legal: "TeamSpin PRO respects your privacy. No data is stored on our servers.",
-            seoHTML: `<div class="seo-grid" id="features"><div class="seo-card"><h2>🚀 Features</h2><p>High-speed rendering and CSV support.</p></div><div class="seo-card"><h2>🔒 Private</h2><p>Data stays on your device.</p></div></div>`
-        },
-        np: {
-            title: "कक्षा र कार्यालयका नामहरू",
-            sub: "प्रति पङ्क्ति एक नाम। शिक्षक र राफल कार्यक्रमका लागि उत्तम।",
-            spin: "घुमाउनका लागि व्हीलमा क्लिक गर्नुहोस्!",
-            status: "नाम सूची मान्य छ।",
-            winner: "विजेता हुनुहुन्छ: ",
-            legal: "TeamSpin PRO तपाईंको गोपनीयताको सम्मान गर्दछ। कुनै डाटा राखिँदैन।",
-            seoHTML: `<div class="seo-grid" id="features"><div class="seo-card"><h2>🚀 विशेषताहरू</h2><p>उच्च गतिको व्हील र फाइल आयात गर्ने सुविधा।</p></div><div class="seo-card"><h2>🔒 गोप्य</h2><p>तपाईंको डाटा सुरक्षित रहन्छ।</p></div></div>`
-        },
-        hi: {
-            title: "कक्षा और कार्यालय के नाम",
-            sub: "प्रति पंक्ति एक नाम। शिक्षकों और रैफल कार्यक्रमों के लिए उत्तम।",
-            spin: "स्पिन करने के लिए व्हील पर क्लिक करें!",
-            status: "नाम सूची मान्य है।",
-            winner: "विजेता है: ",
-            legal: "TeamSpin PRO आपकी गोपनीयता का सम्मान करता है। कोई डेटा सेव नहीं होता।",
-            seoHTML: `<div class="seo-grid" id="features"><div class="seo-card"><h2>🚀 विशेषताएं</h2><p>तेज़ रेंडरिंग और आसान फाइल इम्पोर्ट।</p></div><div class="seo-card"><h2>🔒 सुरक्षित</h2><p>आपका डेटा आपके पास सुरक्षित है।</p></div></div>`
-        }
+    // REPLACE your translations object inside logic with this:
+translations: {
+    en: {
+        title: "Classroom & Office Names",
+        sub: "One name per line. Best for teachers and HR raffle events.",
+        spin: "Click the Wheel to Spin!",
+        status: "Name list is valid.",
+        winner: "The winner is: ",
+        legal: "TeamSpin PRO respects your privacy. No data is stored on our servers.",
+        blogTitle: "Latest from TeamSpin Blog",
+        seoHTML: `<div class="seo-grid"><h2>Random Name Picker</h2><p>Professional tool for teachers and giveaways.</p></div>`
     },
+    np: {
+        title: "कक्षा र कार्यालयका नामहरू",
+        sub: "प्रति पङ्क्ति एक नाम। शिक्षक र राफल कार्यक्रमका लागि उत्तम।",
+        spin: "घुमाउनका लागि व्हीलमा क्लिक गर्नुहोस्!",
+        status: "नाम सूची मान्य छ।",
+        winner: "विजेता हुनुहुन्छ: ",
+        legal: "TeamSpin PRO तपाईंको गोपनीयताको सम्मान गर्दछ।",
+        blogTitle: "हाम्रो ब्लगबाट नयाँ जानकारी",
+        seoHTML: `<div class="seo-grid"><h2>गोलाप्रथा र नाम छान्ने मेसिन</h2><p>शिक्षक र अफिसका लागि उत्कृष्ट डिजिटल व्हील।</p></div>`
+    },
+    hi: {
+        title: "कक्षा और कार्यालय के नाम",
+        sub: "प्रति पंक्ति एक नाम। शिक्षकों और रैफल कार्यक्रमों के लिए उत्तम।",
+        spin: "स्पिन करने के लिए व्हील पर क्लिक करें!",
+        status: "नाम सूची मान्य है।",
+        winner: "विजेता है: ",
+        legal: "TeamSpin PRO आपकी गोपनीयता का सम्मान करता है।",
+        blogTitle: "ब्लॉग से नवीनतम जानकारी",
+        seoHTML: `<div class="seo-grid"><h2>नाम चुनने वाला रैंडम व्हील</h2><p>शिक्षकों और ऑफिस लकी ड्रा के लिए सबसे अच्छा टूल।</p></div>`
+    }
+},
 
-    changeLang(val) {
-        this.lang = val;
-        const t = this.translations[val];
-        document.getElementById('lblInputTitle').innerText = t.title;
-        document.getElementById('lblInputSub').innerText = t.sub;
-        document.getElementById('lblStatus').innerText = t.status;
-        document.getElementById('lblClickToSpin').innerText = t.spin;
-        document.getElementById('dynamic-seo').innerHTML = t.seoHTML || "";
-        document.getElementById('lblLegalText').innerHTML = t.legal;
-        this.draw();
-    },
+// UPDATE your changeLang(val) function to include this line:
+changeLang(val) {
+    this.lang = val;
+    const t = this.translations[val];
+    // ... your existing document.getElementById lines ...
+    document.getElementById('lblBlogTitle').innerText = t.blogTitle; // New line
+    this.draw();
+}
 
     init() {
         this.totalSpins = parseInt(localStorage.getItem('ts_lifetime_spins')) || 0;
@@ -481,3 +488,4 @@ function showTerms() {
 </script>
 </body>
 </html>
+
