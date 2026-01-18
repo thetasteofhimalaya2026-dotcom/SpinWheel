@@ -263,25 +263,25 @@ const ui = {
         document.body.setAttribute('data-theme', this.theme);
         logic.draw();
     },
-showMobileMenu() {
-    Swal.fire({
-        title: 'TeamSpin Menu',
-        html: `
-            <div style="display:flex; flex-direction:column; gap:12px;">
-                <button class="btn btn-ghost" onclick="location.href='index.html'">🏠 Home (गृहपृष्ठ)</button>
-                <button class="btn btn-ghost" onclick="location.href='faq.html'">❓ FAQ (प्रश्नोत्तर)</button>
-                <button class="btn btn-ghost" onclick="location.href='privacy.html'">🔒 Privacy (गोपनीयता)</button>
-                <hr style="border:0; border-top:1px solid var(--border)">
-                <p style="font-size:12px; margin:5px 0; color:var(--text-muted);">Language / भाषा:</p>
-                <button class="btn btn-ghost" onclick="logic.changeLang('en'); Swal.close()">🇺🇸 English</button>
-                <button class="btn btn-ghost" onclick="logic.changeLang('np'); Swal.close()">🇳🇵 नेपाली (Nepali)</button>
-                <button class="btn btn-ghost" onclick="logic.changeLang('hi'); Swal.close()">🇮🇳 हिन्दी (Hindi)</button>
-            </div>
-        `,
-        showConfirmButton: false,
-        showCloseButton: true
-    });
-}
+    showMobileMenu() {
+        Swal.fire({
+            title: 'TeamSpin Menu',
+            html: `
+                <div style="display:flex; flex-direction:column; gap:12px;">
+                    <button class="btn btn-ghost" onclick="location.href='index.html'">🏠 Home</button>
+                    <button class="btn btn-ghost" onclick="location.href='faq.html'">❓ FAQ</button>
+                    <button class="btn btn-ghost" onclick="location.href='privacy.html'">🔒 Privacy</button>
+                    <hr style="border:0; border-top:1px solid var(--border)">
+                    <p style="font-size:12px; margin:5px 0; color:var(--text-muted);">भाषा (Language):</p>
+                    <button class="btn btn-ghost" onclick="logic.changeLang('en'); Swal.close()">🇺🇸 English</button>
+                    <button class="btn btn-ghost" onclick="logic.changeLang('np'); Swal.close()">🇳🇵 नेपाली</button>
+                    <button class="btn btn-ghost" onclick="logic.changeLang('hi'); Swal.close()">🇮🇳 हिन्दी</button>
+                </div>
+            `,
+            showConfirmButton: false,
+            showCloseButton: true
+        });
+    }
 };
 
 const logic = {
@@ -303,7 +303,7 @@ const logic = {
             spin: "घुमाउनका लागि व्हीलमा क्लिक गर्नुहोस्!",
             status: "नाम सूची मान्य छ।",
             winner: "विजेता हुनुहुन्छ: ",
-            legal: "TeamSpin PRO तपाईंको गोपनीयताको सम्मान गर्दछ।",
+            legal: "TeamSpin PRO तपाईंको गोपनीयताको सम्मान गर्दछ। डाटा सर्भरमा भण्डारण हुँदैन।",
             blogTitle: "हाम्रो ब्लगबाट नयाँ जानकारी",
             seoHTML: `<div class="seo-grid"><h2>गोलाप्रथा र नाम छान्ने मेसिन</h2><p>शिक्षक र अफिसका लागि उत्कृष्ट डिजिटल व्हील।</p></div>`
         },
@@ -313,7 +313,7 @@ const logic = {
             spin: "स्पिन करने के लिए व्हील पर क्लिक करें!",
             status: "नाम सूची मान्य है।",
             winner: "विजेता है: ",
-            legal: "TeamSpin PRO आपकी गोपनीयता का सम्मान करता है।",
+            legal: "TeamSpin PRO आपकी गोपनीयता का सम्मान करता है। डेटा सर्वर पर स्टोर नहीं होता।",
             blogTitle: "ब्लॉग से नवीनतम जानकारी",
             seoHTML: `<div class="seo-grid"><h2>नाम चुनने वाला रैंडम व्हील</h2><p>शिक्षकों और ऑफिस लकी ड्रा के लिए सबसे अच्छा टूल।</p></div>`
         }
@@ -322,16 +322,26 @@ const logic = {
     changeLang(val) {
         this.lang = val;
         const t = this.translations[val];
+        document.getElementById('langSwitcher').value = val;
         
-        // Update UI Elements
-        document.getElementById('lblInputTitle').innerText = t.title;
-        document.getElementById('lblInputSub').innerText = t.sub;
-        document.getElementById('lblStatus').innerText = t.status;
-        document.getElementById('lblClickToSpin').innerText = t.spin;
-        document.getElementById('lblLegalText').innerText = t.legal;
-        document.getElementById('lblBlogTitle').innerText = t.blogTitle;
-        document.getElementById('dynamic-seo').innerHTML = t.seoHTML;
-        
+        // Update labels safely
+        const elements = {
+            'lblInputTitle': t.title,
+            'lblInputSub': t.sub,
+            'lblStatus': t.status,
+            'lblClickToSpin': t.spin,
+            'lblLegalText': t.legal,
+            'lblBlogTitle': t.blogTitle,
+            'dynamic-seo': t.seoHTML
+        };
+
+        for (let id in elements) {
+            const el = document.getElementById(id);
+            if (el) {
+                if (id === 'dynamic-seo') el.innerHTML = elements[id];
+                else el.innerText = elements[id];
+            }
+        }
         this.draw();
     },
 
@@ -340,11 +350,11 @@ const logic = {
         document.getElementById('valTotalSpins').innerText = this.totalSpins;
         document.getElementById('mainInput').addEventListener('input', () => this.sync());
         
-        // Set default language based on dropdown
-        const savedLang = document.getElementById('langSwitcher').value;
-        this.changeLang(savedLang);
+        // Ensure initial sync and draw
         this.sync();
+        this.changeLang(this.lang);
     },
+
     sync() {
         const val = document.getElementById('mainInput').value;
         this.names = val.split('\n').map(n => n.trim()).filter(n => n !== "");
@@ -355,12 +365,14 @@ const logic = {
     draw() {
         const canvas = document.getElementById('wheelCanvas');
         if (!canvas) return;
-        canvas.width = 1000; canvas.height = 1000;
         const ctx = canvas.getContext('2d');
         const len = this.names.length;
-        const center = 500; const radius = 480;
-        ctx.clearRect(0, 0, 1000, 1000);
+        const center = canvas.width / 2;
+        const radius = center - 10;
+        
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
 
+        // Draw placeholder if empty
         if (len === 0) {
             ctx.fillStyle = ui.theme === 'light' ? '#cbd5e1' : '#1e293b';
             ctx.beginPath(); ctx.arc(center, center, radius, 0, Math.PI * 2); ctx.fill();
@@ -374,33 +386,59 @@ const logic = {
 
         this.names.forEach((name, i) => {
             const ang = this.angle + (i * arc);
-            ctx.beginPath(); ctx.fillStyle = colors[i % colors.length];
-            ctx.moveTo(center, center); ctx.arc(center, center, radius, ang, ang + arc); ctx.fill(); 
+            ctx.beginPath();
+            ctx.fillStyle = colors[i % colors.length];
+            ctx.moveTo(center, center);
+            ctx.arc(center, center, radius, ang, ang + arc);
+            ctx.fill();
+            
             ctx.strokeStyle = ui.theme === 'light' ? '#fff' : '#0f172a';
-            ctx.lineWidth = 4; ctx.stroke();
-            ctx.save(); ctx.translate(center, center); ctx.rotate(ang + arc / 2);
-            ctx.textAlign = "right"; ctx.fillStyle = "#fff"; ctx.font = "bold 35px Inter";
-            ctx.fillText(name.substring(0, 18), radius - 40, 12); ctx.restore();
+            ctx.lineWidth = 2;
+            ctx.stroke();
+
+            // Draw Text
+            ctx.save();
+            ctx.translate(center, center);
+            ctx.rotate(ang + arc / 2);
+            ctx.textAlign = "right";
+            ctx.fillStyle = "#fff";
+            ctx.font = "bold 30px Inter, sans-serif";
+            // Support for Nepali/Hindi fonts
+            ctx.fillText(name.substring(0, 15), radius - 30, 10);
+            ctx.restore();
         });
-        ctx.beginPath(); ctx.fillStyle = "white"; ctx.arc(center, center, 40, 0, Math.PI * 2); ctx.fill();
+
+        // Center Pin/Circle
+        ctx.beginPath();
+        ctx.fillStyle = "white";
+        ctx.arc(center, center, 30, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.stroke();
     },
 
     spin() {
         if (this.isSpinning || this.names.length < 2) return;
         this.isSpinning = true;
-        if (document.getElementById('cfgSound').checked) document.getElementById('sndSpin').play();
+        
+        if (document.getElementById('cfgSound').checked) {
+            const snd = document.getElementById('sndSpin');
+            snd.currentTime = 0;
+            snd.play();
+        }
+
         const startAngle = this.angle;
-        const array = new Uint32Array(1);
-        window.crypto.getRandomValues(array);
-        const totalRotation = (Math.PI * 2 * 12) + ((array[0] / 0xFFFFFFFF) * Math.PI * 2);
-        const duration = 5000; const start = performance.now();
+        const spinRotation = (Math.PI * 2 * 10) + (Math.random() * Math.PI * 2);
+        const duration = 5000;
+        const start = performance.now();
 
         const animate = (time) => {
             const elapsed = time - start;
             const progress = Math.min(elapsed / duration, 1);
-            const ease = 1 - Math.pow(1 - progress, 5);
-            this.angle = startAngle + (totalRotation * ease);
+            const ease = 1 - Math.pow(1 - progress, 4); // Quartic ease-out
+            
+            this.angle = startAngle + (spinRotation * ease);
             this.draw();
+            
             if (progress < 1) requestAnimationFrame(animate);
             else this.finish();
         };
@@ -418,11 +456,12 @@ const logic = {
         localStorage.setItem('ts_lifetime_spins', this.totalSpins);
         document.getElementById('valTotalSpins').innerText = this.totalSpins;
 
-        confetti({ particleCount: 200, spread: 80, origin: { y: 0.6 } });
+        confetti({ particleCount: 200, spread: 90, origin: { y: 0.6 } });
         if (document.getElementById('cfgSound').checked) document.getElementById('sndWin').play();
 
         Swal.fire({
-            title: `${this.translations[this.lang].winner} <span style="color:#2563eb">${winner}</span>`,
+            title: `<span style="font-family:inherit;">${this.translations[this.lang].winner}</span>`,
+            html: `<h2 style="color:#2563eb; font-size:3rem;">${winner}</h2>`,
             icon: 'success',
             confirmButtonColor: '#2563eb'
         });
@@ -438,8 +477,11 @@ const logic = {
     addToHistory(name) {
         const time = new Date().toLocaleTimeString();
         this.history.unshift({name, time});
-        document.getElementById('historyList').innerHTML = this.history.slice(0, 8).map(h => `
-            <li class="history-item"><strong>${h.name}</strong> <small>${h.time}</small></li>
+        const list = document.getElementById('historyList');
+        list.innerHTML = this.history.slice(0, 8).map(h => `
+            <li class="history-item" style="list-style:none; padding:8px; border-bottom:1px solid var(--border); font-size:14px;">
+                <strong>${h.name}</strong> <small style="color:var(--text-muted); float:right;">${h.time}</small>
+            </li>
         `).join('');
     },
 
@@ -464,37 +506,9 @@ const logic = {
 };
 
 window.onload = () => logic.init();
-    function showPrivacy() {
-    Swal.fire({
-        title: 'Privacy Policy',
-        html: `<div style="text-align:left; font-size:14px; color: var(--text-main);">
-            <p><strong>TeamSpin PRO</strong> takes your privacy seriously:</p>
-            <ul>
-                <li><strong>Local Execution:</strong> Your name lists are processed entirely in your browser. We never upload your data to any server.</li>
-                <li><strong>Storage:</strong> We only use your browser's Local Storage to remember your lifetime spin count.</li>
-                <li><strong>Third Parties:</strong> We do not sell or share any user data.</li>
-            </ul>
-        </div>`,
-        confirmButtonColor: '#2563eb'
-    });
-}
-
-function showTerms() {
-    Swal.fire({
-        title: 'Terms of Service',
-        html: `<div style="text-align:left; font-size:14px; color: var(--text-main);">
-            <p>By using this tool, you agree that:</p>
-            <ul>
-                <li>The results are generated randomly for entertainment and educational purposes.</li>
-                <li>TeamSpin PRO is not liable for any decisions made based on the spin results.</li>
-                <li>You will not use this tool for illegal gambling activities.</li>
-            </ul>
-        </div>`,
-        confirmButtonColor: '#2563eb'
-    });
-}
 </script>
 </body>
 </html>
+
 
 
