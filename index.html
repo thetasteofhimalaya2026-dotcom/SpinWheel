@@ -3,569 +3,502 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>TeamSpin PRO – Professional Wheel of Names for Office Meetings & Class Teachers</title>
-    <meta name="description" content="Advanced random name picker for teachers and office raffles. Features 3D graphics, CSV import, and real-time sync.">
-    <meta name="keywords" content="wheel of names, teacher tool, office raffle, random name picker, TeamSpin PRO, नेपाली नाम छान्ने">
+    <title>TeamSpin PRO | Professional Random Name Picker & Raffle Tool</title>
+    
+    <meta name="description" content="Professional wheel of names for teachers and offices. Features 3D rendering, CSV import, and winner history.">
+    <meta name="keywords" content="wheel of names, teacher tool, random picker, नेपाली नाम छान्ने, TeamSpin PRO">
     
     <style>
-        /* --- CSS VARIABLES & THEMES --- */
+        /* ========================================
+           CSS DESIGN SYSTEM
+           ========================================
+        */
         :root {
-            --primary: #007bff;
-            --primary-hover: #0056b3;
-            --bg: #fdfdfd;
-            --header-bg: #ffffff;
-            --text: #1a1a1a;
-            --sidebar-bg: #ffffff;
-            --card-bg: #ffffff;
+            --primary: #2563eb;
+            --primary-dark: #1e40af;
+            --bg-body: #f1f5f9;
+            --bg-panel: #ffffff;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
             --border: #e2e8f0;
-            --shadow: rgba(0,0,0,0.08);
-            --wheel-border: #334155;
+            --accent: #f8fafc;
+            --win-gold: #fbbf24;
         }
 
         [data-theme="dark"] {
-            --primary: #38bdf8;
-            --bg: #0f172a;
-            --header-bg: #1e293b;
-            --text: #f8fafc;
-            --sidebar-bg: #1e293b;
-            --card-bg: #0f172a;
-            --border: #334155;
-            --shadow: rgba(0,0,0,0.4);
+            --primary: #3b82f6;
+            --bg-body: #020617;
+            --bg-panel: #0f172a;
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            --border: #1e293b;
+            --accent: #1e293b;
         }
 
-        [data-theme="neon"] {
-            --primary: #00ffe0;
-            --bg: #050b12;
-            --header-bg: #101a26;
-            --text: #e5f9ff;
-            --sidebar-bg: #101a26;
-            --card-bg: #050b12;
-            --border: #00ffe0;
-        }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
-        /* --- GLOBAL STYLES --- */
         body {
-            margin: 0; font-family: 'Inter', -apple-system, system-ui, sans-serif;
-            background: var(--bg); color: var(--text); transition: background 0.4s, color 0.4s;
-            line-height: 1.6; overflow-x: hidden;
+            margin: 0; padding: 0;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            transition: background 0.3s ease;
         }
 
         /* --- NAVIGATION --- */
-        .header-bar {
+        .navbar {
+            height: 70px; background: var(--bg-panel);
+            border-bottom: 1px solid var(--border);
             display: flex; align-items: center; justify-content: space-between;
-            padding: 15px 40px; background: var(--header-bg); border-bottom: 1px solid var(--border);
-            position: sticky; top: 0; z-index: 1000; box-shadow: 0 2px 10px var(--shadow);
+            padding: 0 40px; position: sticky; top: 0; z-index: 1000;
         }
-        .brand { display: flex; align-items: center; gap: 12px; font-size: 26px; font-weight: 900; letter-spacing: -0.5px; }
-        .brand span { color: var(--primary); }
-        .nav-desktop { display: flex; gap: 25px; }
-        .nav-desktop a { text-decoration: none; color: var(--text); font-size: 14px; font-weight: 600; opacity: 0.7; transition: 0.2s; }
-        .nav-desktop a:hover { opacity: 1; color: var(--primary); }
-
-        .header-actions { display: flex; gap: 12px; align-items: center; }
-        select, .btn-secondary {
-            padding: 10px 14px; border: 1px solid var(--border); border-radius: 10px;
-            background: var(--sidebar-bg); color: var(--text); font-weight: 600; cursor: pointer;
+        .logo-area { display: flex; align-items: center; gap: 12px; font-weight: 800; font-size: 22px; cursor: pointer; }
+        .logo-area span { color: var(--primary); }
+        
+        .nav-links { display: flex; gap: 25px; }
+        .nav-link { 
+            text-decoration: none; color: var(--text-muted); 
+            font-weight: 600; font-size: 14px; cursor: pointer; transition: 0.2s;
         }
+        .nav-link:hover { color: var(--primary); }
 
-        /* --- MAIN APP LAYOUT --- */
-        .app-container {
-            display: grid; grid-template-columns: 350px 1fr 320px;
-            gap: 30px; padding: 40px; max-width: 1700px; margin: auto;
+        /* --- MAIN LAYOUT --- */
+        .master-container {
+            max-width: 1600px; margin: 30px auto;
+            display: grid; grid-template-columns: 380px 1fr 340px;
+            gap: 25px; padding: 0 20px;
         }
 
-        .panel-card {
-            background: var(--sidebar-bg); border: 1px solid var(--border);
-            padding: 25px; border-radius: 20px; box-shadow: 0 10px 30px var(--shadow);
-            height: fit-content;
+        .side-panel {
+            background: var(--bg-panel); border: 1px solid var(--border);
+            border-radius: 24px; padding: 25px; height: fit-content;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
         }
 
-        /* --- TEXT AREA & INPUTS --- */
-        #nameInput {
-            width: 100%; height: 380px; padding: 20px; border-radius: 15px;
-            border: 2px solid var(--border); background: var(--card-bg);
-            color: var(--text); resize: none; box-sizing: border-box; font-size: 16px;
-            font-family: inherit; transition: border-color 0.3s;
+        /* --- INPUT FIELD --- */
+        .input-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .name-editor {
+            width: 100%; height: 450px; border-radius: 16px;
+            border: 2px solid var(--border); background: var(--bg-body);
+            color: var(--text-main); padding: 20px; font-size: 16px;
+            line-height: 1.5; resize: none; transition: 0.3s;
         }
-        #nameInput:focus { border-color: var(--primary); outline: none; }
-
-        .status-badge { font-size: 13px; font-weight: 700; margin-top: 10px; display: none; }
-        .status-ok { color: #10b981; }
-        .status-err { color: #ef4444; }
+        .name-editor:focus { border-color: var(--primary); outline: none; box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1); }
 
         /* --- WHEEL CORE --- */
-        .wheel-center-stage { display: flex; flex-direction: column; align-items: center; }
-        .wheel-frame {
-            width: 580px; height: 580px; position: relative; margin: 20px 0;
-            cursor: pointer; user-select: none;
+        .wheel-stage { display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .canvas-wrapper {
+            position: relative; width: min(85vw, 620px); height: min(85vw, 620px);
+            cursor: pointer; transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
-        #wheelCanvas {
-            width: 100%; height: 100%; border-radius: 50%;
-            filter: drop-shadow(0 20px 50px var(--shadow));
-        }
-        .wheel-pointer {
-            position: absolute; top: -20px; left: 50%; transform: translateX(-50%);
-            width: 0; height: 0; border-left: 25px solid transparent;
-            border-right: 25px solid transparent; border-top: 50px solid #f43f5e;
-            z-index: 100; filter: drop-shadow(0 4px 4px rgba(0,0,0,0.2));
+        .canvas-wrapper:active { transform: scale(0.96); }
+        .wheel-indicator {
+            position: absolute; top: -10px; left: 50%; transform: translateX(-50%);
+            z-index: 50; width: 50px; filter: drop-shadow(0 4px 10px rgba(0,0,0,0.2));
         }
 
-        /* --- STATS & OPTIONS --- */
-        .stats-box {
-            background: var(--card-bg); padding: 20px; border-radius: 15px;
-            border: 1px solid var(--border); margin-bottom: 25px;
+        /* --- UI COMPONENTS --- */
+        .btn {
+            padding: 14px 24px; border-radius: 12px; font-weight: 700;
+            cursor: pointer; border: none; transition: 0.2s;
+            display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%;
         }
-        .counter-num { font-size: 28px; font-weight: 800; color: var(--primary); }
-        
-        .option-row { display: flex; align-items: center; gap: 12px; margin-bottom: 15px; cursor: pointer; }
-        .option-row input { width: 20px; height: 20px; }
-
-        .btn-action {
-            width: 100%; padding: 14px; margin-top: 12px; border-radius: 12px;
-            border: none; font-weight: 800; cursor: pointer; transition: 0.3s;
-            text-transform: uppercase; font-size: 14px; display: flex; align-items: center; justify-content: center; gap: 10px;
-        }
-        .btn-primary { background: var(--primary); color: white; }
-        .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0,123,255,0.3); }
-        .btn-ghost { background: transparent; border: 1px solid var(--border); color: var(--text); }
+        .btn-blue { background: var(--primary); color: white; }
+        .btn-blue:hover { background: var(--primary-dark); transform: translateY(-1px); }
+        .btn-ghost { background: var(--accent); color: var(--text-main); border: 1px solid var(--border); }
         .btn-ghost:hover { background: var(--border); }
 
-        /* --- INFORMATIONAL SECTIONS --- */
-        .info-grid {
-            max-width: 1200px; margin: 80px auto; padding: 0 40px;
-            display: grid; grid-template-columns: 1fr 1fr; gap: 60px;
-        }
-        .info-card h2 { color: var(--primary); font-size: 32px; margin-bottom: 20px; }
-        .info-card p { font-size: 17px; opacity: 0.8; }
+        .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px; }
+        .stat-box { background: var(--accent); padding: 15px; border-radius: 15px; text-align: center; }
+        .stat-label { font-size: 12px; color: var(--text-muted); text-transform: uppercase; }
+        .stat-val { font-size: 20px; font-weight: 800; color: var(--primary); }
 
-        .feedback-section {
-            max-width: 1000px; margin: 40px auto 100px; padding: 40px;
-            background: var(--sidebar-bg); border-radius: 30px; border: 1px solid var(--border);
-        }
-        #feedbackText {
-            width: 100%; height: 150px; padding: 20px; border-radius: 15px;
-            border: 1px solid var(--border); background: var(--card-bg); color: var(--text);
-            margin: 20px 0; resize: none; font-size: 16px;
-        }
-
-        /* --- MODALS --- */
+        /* --- MODAL SYSTEM --- */
         .modal-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.85); backdrop-filter: blur(8px);
-            display: none; align-items: center; justify-content: center; z-index: 5000;
+            position: fixed; inset: 0; background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(8px); z-index: 2000; display: none;
+            align-items: center; justify-content: center; padding: 20px;
         }
-        .modal-body {
-            background: var(--sidebar-bg); padding: 50px; border-radius: 30px;
-            text-align: center; max-width: 500px; width: 90%;
-            border: 5px solid var(--primary); position: relative;
+        .modal-card {
+            background: var(--bg-panel); border-radius: 32px;
+            width: 100%; max-width: 600px; padding: 40px; position: relative;
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
         }
+        .close-btn { position: absolute; top: 25px; right: 25px; cursor: pointer; font-size: 24px; opacity: 0.5; }
+        
+        /* --- FAQ/LEGAL TEXT --- */
+        .legal-content { max-height: 400px; overflow-y: auto; padding-right: 15px; font-size: 14px; line-height: 1.7; }
+        .legal-content h3 { color: var(--primary); margin-top: 25px; }
 
-        /* --- RESPONSIVENESS --- */
-        @media (max-width: 1250px) {
-            .app-container { grid-template-columns: 1fr; }
-            .wheel-center-stage { order: -1; }
-            .info-grid { grid-template-columns: 1fr; }
-        }
-        @media (max-width: 600px) {
-            .header-bar { padding: 15px; flex-direction: column; gap: 15px; }
-            .wheel-frame { width: 90vw; height: 90vw; }
+        /* --- MOBILE OPTIMIZATION --- */
+        @media (max-width: 1200px) {
+            .master-container { grid-template-columns: 1fr; }
+            .wheel-stage { order: -1; margin-bottom: 30px; }
         }
     </style>
 </head>
 <body>
 
-    <audio id="audioSpin" loop><source src="https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3" type="audio/mpeg"></audio>
-    <audio id="audioWinner"><source src="https://assets.mixkit.co/active_storage/sfx/1435/1435-preview.mp3" type="audio/mpeg"></audio>
+<audio id="sndSpin" loop><source src="https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3"></audio>
+<audio id="sndWin"><source src="https://assets.mixkit.co/active_storage/sfx/1435/1435-preview.mp3"></audio>
 
-    <header class="header-bar">
-        <div class="brand">TeamSpin <span>PRO</span></div>
-        <nav class="nav-desktop">
-            <a href="#features" id="navFeatures">Features</a>
-            <a href="#about" id="navAbout">About Teachers Tool</a>
-            <a href="#faq">FAQ</a>
-        </nav>
-        <div class="header-actions">
-            <select id="langSelect" onchange="applyLanguage()">
-                <option value="en">English (US)</option>
-                <option value="np">नेपाली (Nepal)</option>
-            </select>
-            <select id="themeSelect" onchange="updateTheme(this.value)">
-                <option value="classic">☀️ Light</option>
-                <option value="dark">🌙 Dark</option>
-                <option value="neon">⚡ Neon</option>
-            </select>
-            <button class="btn-secondary" onclick="showHistory()">📜 History</button>
+<header class="navbar">
+    <div class="logo-area" onclick="location.reload()">
+        <img src="logo.jpg" width="35" style="border-radius:8px;" alt="Logo">
+        TeamSpin <span>PRO</span>
+    </div>
+    
+    <nav class="nav-links">
+        <a class="nav-link" onclick="ui.showModal('modalFAQ')">Help & FAQ</a>
+        <a class="nav-link" onclick="ui.showModal('modalTerms')">Terms</a>
+        <a class="nav-link" onclick="ui.showModal('modalPrivacy')">Privacy</a>
+        <a class="nav-link" onclick="ui.showModal('modalContact')">Contact</a>
+    </nav>
+
+    <div style="display:flex; gap:12px;">
+        <select id="langSwitcher" onchange="logic.changeLang(this.value)" class="btn-ghost" style="width:auto; padding:5px 10px;">
+            <option value="en">English (US)</option>
+            <option value="np">नेपाली (Nepal)</option>
+            <option value="hi">हिन्दी (Hindi)</option>
+        </select>
+        <button class="btn-ghost" style="width:auto; padding:5px 10px;" onclick="ui.toggleTheme()">🌓</button>
+    </div>
+</header>
+
+<main class="master-container">
+    
+    <aside class="side-panel">
+        <div class="input-header">
+            <h3 id="lblNames">Entries List</h3>
+            <span id="nameBadge" style="background:var(--primary); color:white; padding:2px 8px; border-radius:10px; font-size:12px;">0</span>
         </div>
-    </header>
-
-    <main class="app-container">
+        <textarea id="mainInput" class="name-editor" placeholder="Enter one name per line...">Teacher Alex&#10;Marketing Team&#10;Principal Sarah&#10;Maya Devi&#10;Officer Rahul&#10;Student Sam&#10;Arjun Karki&#10;Deepa Thapa</textarea>
         
-        <section class="panel-card">
-            <h3 id="labelInput">Classroom & Office Names</h3>
-            <p style="font-size: 13px; opacity: 0.6; margin-bottom: 15px;" id="labelSubInput">Enter one name per line. Best for teacher picks and office raffles.</p>
-            
-            <textarea id="nameInput" spellcheck="false">Student Alex&#10;Marketing Team&#10;Principal Sarah&#10;Maya Devi&#10;Officer Rahul&#10;Teacher Sam&#10;Subash Gurung</textarea>
-            
-            <div id="validBadge" class="status-badge status-ok">✓ List looks great!</div>
-            <div id="errorBadge" class="status-badge status-err">× Please add at least 2 names.</div>
-
-            <button class="btn-action btn-ghost" style="margin-top: 20px;" onclick="shuffleNames()">🔀 Shuffle Names</button>
-            <button class="btn-action btn-ghost" onclick="triggerCSV()">📥 Import CSV/Excel</button>
-            <input type="file" id="csvFile" hidden accept=".csv,.txt" onchange="handleCSV(event)">
-            <button class="btn-action btn-ghost" style="color: #ef4444;" onclick="clearList()">🗑️ Clear All Names</button>
-        </section>
-
-        <section class="wheel-center-stage">
-            <div class="wheel-frame" onclick="spinWheel()">
-                <div class="wheel-pointer"></div>
-                <canvas id="wheelCanvas" width="1000" height="1000"></canvas>
-            </div>
-            <h1 id="spinPrompt" style="font-weight: 800; margin-top: 10px;">Click the Wheel to Spin!</h1>
-        </section>
-
-        <section class="panel-card">
-            <h3 id="labelStats">Live Statistics</h3>
-            <div class="stats-box">
-                <div style="opacity: 0.7; font-size: 14px;" id="labelNamesLoaded">Names Loaded</div>
-                <div class="counter-num" id="nameCount">0</div>
-            </div>
-
-            <h3 id="labelOptions" style="margin-top: 30px;">Options</h3>
-            <label class="option-row">
-                <input type="checkbox" id="checkRemove">
-                <span id="optRemove">Remove winner after spin</span>
-            </label>
-            <label class="option-row">
-                <input type="checkbox" id="checkSound" checked>
-                <span id="optSound">Enable Sound Effects</span>
-            </label>
-            <label class="option-row">
-                <input type="checkbox" id="checkConfetti" checked>
-                <span id="optConfetti">Show Celebration Confetti</span>
-            </label>
-
-            <div style="margin-top: 30px;">
-                <button class="btn-action btn-primary" onclick="exportList()">📤 Export Current List</button>
-                <button class="btn-action btn-ghost" onclick="shareTool()">🔗 Copy Link to Share</button>
-            </div>
-        </section>
-    </main>
-
-    <section class="info-grid">
-        <div class="info-card">
-            <h2 id="seoH1">The Ultimate Teacher's Assistant</h2>
-            <p id="seoP1">Teachers around the globe use TeamSpin PRO to maintain a fair and engaging classroom. By using our random name picker, you ensure every student gets an equal chance to participate, reducing bias and keeping the energy high.</p>
+        <div style="margin-top:20px; display:flex; flex-direction:column; gap:10px;">
+            <button class="btn btn-ghost" onclick="logic.shuffle()">🔀 Shuffle Names</button>
+            <button class="btn btn-ghost" onclick="document.getElementById('csvFile').click()">📥 Import CSV/Text</button>
+            <input type="file" id="csvFile" hidden onchange="logic.importFile(event)">
+            <button class="btn btn-ghost" style="color:#ef4444;" onclick="logic.reset()">🗑️ Clear All</button>
         </div>
-        <div class="info-card">
-            <h2 id="seoH2">Corporate Office Raffles</h2>
-            <p id="seoP2">Planning an HR giveaway or a lucky draw? TeamSpin PRO handles massive lists with ease. Simply import your employee roster and spin to pick winners live during your next meeting or virtual Zoom call.</p>
+    </aside>
+
+    <section class="wheel-stage">
+        <div class="canvas-wrapper" onclick="logic.spin()">
+            <svg class="wheel-indicator" viewBox="0 0 50 50">
+                <path d="M25 50 L50 0 L0 0 Z" fill="#ff4757" />
+            </svg>
+            <canvas id="wheelCanvas" width="900" height="900"></canvas>
         </div>
+        <h1 id="lblStatus" style="margin-top:25px; font-weight:900;">Click to Spin the Wheel</h1>
+        <button id="btnSpinMain" class="btn btn-blue" style="width:280px; font-size:18px; height:60px;" onclick="logic.spin()">SPIN THE WHEEL</button>
     </section>
 
-    <section class="feedback-section">
-        <h2 id="labelFeedbackTitle">Professional Feedback Area</h2>
-        <p id="labelFeedbackSub">We are constantly improving for our community of teachers and managers. What feature should we add next?</p>
-        <textarea id="feedbackText" placeholder="Describe the feature you want or report a bug..."></textarea>
-        <div style="text-align: right;">
-            <button class="btn-action btn-primary" style="width: auto; padding: 15px 50px;" onclick="submitFeedback()">Submit Feedback</button>
-        </div>
-    </section>
-
-    <div id="winnerModal" class="modal-overlay">
-        <div class="modal-body">
-            <h2 id="labelWinnerTitle">🎉 WE HAVE A WINNER! 🎉</h2>
-            <div id="winnerDisplayName" style="font-size: 4.5rem; font-weight: 900; color: var(--primary); margin: 30px 0; word-wrap: break-word;">Winner</div>
-            <div class="btn-group" style="display: flex; gap: 15px;">
-                <button class="btn-action btn-primary" onclick="closeModal()">Awesome!</button>
-                <button class="btn-action btn-ghost" id="btnRemoveWinner" onclick="removeWinnerNow()">Remove Name</button>
+    <aside class="side-panel">
+        <h3 id="lblStats">Real-time Stats</h3>
+        <div class="stat-grid">
+            <div class="stat-box">
+                <div class="stat-label">Total Names</div>
+                <div class="stat-val" id="valCount">0</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-label">Lifetime Spins</div>
+                <div class="stat-val" id="valSpins">0</div>
             </div>
         </div>
-    </div>
 
-    <div id="historyModal" class="modal-overlay">
-        <div class="modal-body" style="max-width: 600px;">
-            <h2 id="labelHistoryTitle">🏆 Selection History</h2>
-            <div id="historyList" style="text-align: left; max-height: 400px; overflow-y: auto; margin: 20px 0; border: 1px solid var(--border); border-radius: 12px; background: var(--card-bg);">
-                </div>
-            <button class="btn-action btn-primary" onclick="document.getElementById('historyModal').style.display='none'">Close History</button>
+        <h3 style="margin-top:30px;" id="lblSettings">Preferences</h3>
+        <div style="display:flex; flex-direction:column; gap:15px;">
+            <label style="display:flex; justify-content:space-between; cursor:pointer;">
+                <span id="txtRemove">Remove winner auto</span>
+                <input type="checkbox" id="cfgRemove" style="width:20px; height:20px;">
+            </label>
+            <label style="display:flex; justify-content:space-between; cursor:pointer;">
+                <span id="txtSound">Sound Effects</span>
+                <input type="checkbox" id="cfgSound" checked style="width:20px; height:20px;">
+            </label>
+            <label style="display:flex; justify-content:space-between; cursor:pointer;">
+                <span id="txtConfetti">Confetti Burst</span>
+                <input type="checkbox" id="cfgConfetti" checked style="width:20px; height:20px;">
+            </label>
+        </div>
+
+        <button class="btn btn-ghost" style="margin-top:30px;" onclick="ui.showModal('modalHistory')">📜 View Winner History</button>
+        <button class="btn btn-blue" style="margin-top:10px;" onclick="logic.exportNames()">📤 Export List</button>
+    </aside>
+</main>
+
+<div id="modalFAQ" class="modal-overlay">
+    <div class="modal-card">
+        <span class="close-btn" onclick="ui.closeAll()">&times;</span>
+        <h2>Frequently Asked Questions</h2>
+        <div class="legal-content">
+            <h3>How do I use this tool?</h3>
+            <p>Simply enter your list of participants in the box on the left. Each name must be on a new line. Click the wheel or the spin button to select a random winner.</p>
+            <h3>Is it truly random?</h3>
+            <p>Yes. TeamSpin PRO uses the browser's high-entropy Math.random() function combined with physics-based deceleration to ensure a non-deterministic outcome.</p>
         </div>
     </div>
+</div>
 
-    <footer style="text-align: center; padding: 60px; opacity: 0.5; font-size: 14px; border-top: 1px solid var(--border);">
-        <p>© 2026 TeamSpin PRO. Professional Random Name Picker. All Rights Reserved.</p>
-    </footer>
+<div id="modalWinner" class="modal-overlay">
+    <div class="modal-card" style="text-align:center;">
+        <h2 id="lblWinHeader">🎉 WE HAVE A WINNER! 🎉</h2>
+        <div id="winnerName" style="font-size: 4rem; font-weight: 900; color: var(--primary); margin: 20px 0;">Winner</div>
+        <div style="display:flex; gap:10px;">
+            <button class="btn btn-blue" onclick="ui.closeAll()">Continue</button>
+            <button class="btn btn-ghost" onclick="logic.removeWinnerFromModal()">Remove Name</button>
+        </div>
+    </div>
+</div>
 
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-    <script>
-        /* --- CORE LOGIC ENGINE --- */
-        const canvas = document.getElementById('wheelCanvas');
-        const ctx = canvas.getContext('2d');
-        const nameInput = document.getElementById('nameInput');
-        const audioSpin = document.getElementById('audioSpin');
-        const audioWinner = document.getElementById('audioWinner');
+<div id="modalHistory" class="modal-overlay">
+    <div class="modal-card">
+        <span class="close-btn" onclick="ui.closeAll()">&times;</span>
+        <h2>Winner History</h2>
+        <div id="historyList" style="max-height: 300px; overflow-y: auto; margin: 20px 0; border: 1px solid var(--border); border-radius: 12px;"></div>
+        <button class="btn btn-ghost" onclick="logic.clearHistory()">Clear History</button>
+    </div>
+</div>
 
-        let names = [];
-        let history = [];
-        let currentAngle = 0;
-        let isSpinning = false;
-        let selectedTheme = 'classic';
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
-        const themeData = {
-            classic: ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899', '#06b6d4'],
-            dark: ['#1e293b', '#334155', '#475569', '#64748b', '#94a3b8'],
-            neon: ['#00ffe0', '#ff00ff', '#ffff00', '#00ff00', '#ff0000', '#0000ff']
-        };
+<script>
+    const ui = {
+        theme: 'light',
+        toggleTheme() {
+            this.theme = this.theme === 'light' ? 'dark' : 'light';
+            document.body.setAttribute('data-theme', this.theme);
+            logic.draw();
+        },
+        showModal(id) {
+            document.getElementById(id).style.display = 'flex';
+        },
+        closeAll() {
+            document.querySelectorAll('.modal-overlay').forEach(m => m.style.display = 'none');
+        },
+        updateBadge(count) {
+            document.getElementById('nameBadge').innerText = count;
+            document.getElementById('valCount').innerText = count;
+        }
+    };
 
-        const i18n = {
-            en: {
-                title: "Classroom & Office Names",
-                sub: "Enter one name per line. Best for teacher picks and office raffles.",
-                stats: "Live Statistics",
-                loaded: "Names Loaded",
-                opts: "Options",
-                rm: "Remove winner after spin",
-                sd: "Enable Sound Effects",
-                cf: "Show Celebration Confetti",
-                prompt: "Click the Wheel to Spin!",
-                win: "🎉 WE HAVE A WINNER! 🎉",
-                hist: "🏆 Selection History"
+    const logic = {
+        names: [],
+        history: [],
+        angle: 0,
+        isSpinning: false,
+        lang: 'en',
+        idleRotation: 0.002, // ROTATING STATE FEATURE
+        lifetimeSpins: parseInt(localStorage.getItem('lifetimeSpins')) || 0,
+
+        dict: {
+            en: { 
+                names: "Entries List", status: "Click to Spin the Wheel", stats: "Real-time Stats", 
+                set: "Preferences", win: "WE HAVE A WINNER!", btn: "SPIN THE WHEEL", 
+                remove: "Remove winner auto", sound: "Sound Effects", confetti: "Confetti Burst" 
             },
-            np: {
-                title: "कार्यालय र कक्षाका नामहरू",
-                sub: "प्रत्येक हरफमा एउटा नाम लेख्नुहोस्। शिक्षक र कार्यालयका लागि उत्तम।",
-                stats: "लाइभ तथ्याङ्क",
-                loaded: "लोड गरिएका नामहरू",
-                opts: "विकल्पहरू",
-                rm: "विजेतालाई सूचीबाट हटाउनुहोस्",
-                sd: "ध्वनि प्रभावहरू खोल्नुहोस्",
-                cf: "बधाई कन्फेटी देखाउनुहोस्",
-                prompt: "घुमाउनका लागि पाङ्ग्रामा क्लिक गर्नुहोस्!",
-                win: "🎉 हामीसँग विजेता छ! 🎉",
-                hist: "🏆 चयन इतिहास"
+            np: { 
+                names: "नामहरूको सूची", status: "घुमाउनका लागि क्लिक गर्नुहोस्", stats: "प्रत्यक्ष तथ्याङ्क", 
+                set: "सेटिङहरू", win: "विजेता घोषणा!", btn: "ह्विल घुमाउनुहोस्",
+                remove: "विजेता आफै हटाउनुहोस्", sound: "ध्वनि प्रभाव", confetti: "बधाई एनिमेसन"
+            },
+            hi: { 
+                names: "नामों की सूची", status: "घूमने के लिए क्लिक करें", stats: "रियल-टाइम आंकड़े", 
+                set: "प्राथमिकताएं", win: "विजेता घोषित!", btn: "पहिया घुमाएं",
+                remove: "विजेता को स्वतः हटाएं", sound: "ध्वनि प्रभाव", confetti: "बधाई एनीमेशन"
             }
-        };
+        },
 
-        /* --- INITIALIZATION --- */
-        function initApp() {
-            nameInput.addEventListener('input', syncWheelData);
-            window.addEventListener('resize', drawWheel);
-            syncWheelData();
-            applyLanguage();
-        }
+        init() {
+            const input = document.getElementById('mainInput');
+            input.addEventListener('input', () => this.sync());
+            document.getElementById('valSpins').innerText = this.lifetimeSpins;
+            this.sync();
+            this.animateIdle(); // START IDLE ROTATION
+        },
 
-        function syncWheelData() {
-            names = nameInput.value.split('\n').map(n => n.trim()).filter(n => n !== "");
-            document.getElementById('nameCount').innerText = names.length;
-            
-            const err = document.getElementById('errorBadge');
-            const ok = document.getElementById('validBadge');
-            
-            if(names.length < 2) {
-                err.style.display = "block"; ok.style.display = "none";
-            } else {
-                err.style.display = "none"; ok.style.display = "block";
+        sync() {
+            this.names = document.getElementById('mainInput').value.split('\n').map(n => n.trim()).filter(n => n !== "");
+            ui.updateBadge(this.names.length);
+            this.draw();
+        },
+
+        animateIdle() {
+            if (!this.isSpinning) {
+                this.angle += this.idleRotation;
+                this.draw();
             }
-            drawWheel();
-        }
+            requestAnimationFrame(() => this.animateIdle());
+        },
 
-        /* --- RENDERING ENGINE --- */
-        function drawWheel() {
-            const count = names.length;
-            if (count === 0) { ctx.clearRect(0,0,1000,1000); return; }
+        draw() {
+            const canvas = document.getElementById('wheelCanvas');
+            const ctx = canvas.getContext('2d');
+            const len = this.names.length;
             
-            const arc = (Math.PI * 2) / count;
-            ctx.clearRect(0, 0, 1000, 1000);
+            ctx.clearRect(0, 0, 900, 900);
+            if(len === 0) return;
 
-            const palette = themeData[selectedTheme];
+            const arc = (Math.PI * 2) / len;
+            const colors = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899', '#06b6d4'];
 
-            names.forEach((name, i) => {
-                const angle = currentAngle + (i * arc);
-                
-                // Draw Segment
+            for(let i = 0; i < len; i++) {
+                const currentAngle = this.angle + (i * arc);
                 ctx.beginPath();
-                ctx.fillStyle = palette[i % palette.length];
-                ctx.moveTo(500, 500);
-                ctx.arc(500, 500, 480, angle, angle + arc);
+                ctx.fillStyle = colors[i % colors.length];
+                ctx.moveTo(450, 450);
+                ctx.arc(450, 450, 430, currentAngle, currentAngle + arc);
                 ctx.fill();
-                ctx.strokeStyle = "rgba(255,255,255,0.2)";
+                ctx.strokeStyle = "rgba(255,255,255,0.15)";
                 ctx.lineWidth = 2;
                 ctx.stroke();
 
-                // Draw Text
                 ctx.save();
-                ctx.translate(500, 500);
-                ctx.rotate(angle + arc / 2);
+                ctx.translate(450, 450);
+                ctx.rotate(currentAngle + arc/2);
                 ctx.textAlign = "right";
-                ctx.fillStyle = "#ffffff";
-                ctx.font = "bold 32px Inter, sans-serif";
+                ctx.fillStyle = "white";
+                ctx.font = "bold 26px sans-serif";
                 ctx.shadowColor = "rgba(0,0,0,0.4)";
-                ctx.shadowBlur = 6;
-                
-                // Handle Long Text
-                const displayTxt = name.length > 18 ? name.substring(0, 15) + "..." : name;
-                ctx.fillText(displayTxt, 440, 12);
+                ctx.shadowBlur = 5;
+                ctx.fillText(this.names[i].substring(0, 20), 400, 10);
                 ctx.restore();
-            });
+            }
 
-            // Center Pin Decorative
             ctx.beginPath();
-            ctx.arc(500, 500, 40, 0, Math.PI * 2);
-            ctx.fillStyle = "#ffffff";
+            ctx.arc(450, 450, 40, 0, Math.PI*2);
+            ctx.fillStyle = ui.theme === 'light' ? '#fff' : '#0f172a';
             ctx.fill();
+            ctx.strokeStyle = '#3b82f6';
+            ctx.lineWidth = 5;
             ctx.stroke();
-        }
+        },
 
-        /* --- ANIMATION ENGINE --- */
-        function spinWheel() {
-            if (isSpinning || names.length < 2) return;
-            isSpinning = true;
+        spin() {
+            if(this.isSpinning || this.names.length < 2) return;
+            this.isSpinning = true;
+            
+            if(document.getElementById('cfgSound').checked) {
+                const s = document.getElementById('sndSpin');
+                s.currentTime = 0; s.play();
+            }
 
-            const useSound = document.getElementById('checkSound').checked;
-            if (useSound) { audioSpin.currentTime = 0; audioSpin.play(); }
-
-            const duration = 5000; 
+            const duration = 5000 + Math.random() * 2000;
             const startTime = performance.now();
-            const startAngle = currentAngle;
-            const extraRots = (Math.PI * 2 * 10); // 10 full turns
-            const randomOffset = Math.random() * Math.PI * 2;
-            const totalRotation = extraRots + randomOffset;
+            const startAngle = this.angle;
+            const totalRotation = (Math.PI * 2 * 12) + (Math.random() * Math.PI * 2);
 
-            function animate(now) {
+            const animate = (now) => {
                 const elapsed = now - startTime;
                 const progress = Math.min(elapsed / duration, 1);
-                
-                // Ease Out Power 3
                 const ease = 1 - Math.pow(1 - progress, 3);
-                currentAngle = startAngle + (totalRotation * ease);
-                
-                drawWheel();
+                this.angle = startAngle + (totalRotation * ease);
+                this.draw();
 
-                if (progress < 1) {
+                if(progress < 1) {
                     requestAnimationFrame(animate);
                 } else {
-                    finalizeSpin();
+                    this.finalize();
                 }
-            }
+            };
             requestAnimationFrame(animate);
-        }
+        },
 
-        function finalizeSpin() {
-            isSpinning = false;
-            audioSpin.pause();
-
-            const useSound = document.getElementById('checkSound').checked;
-            if (useSound) { audioWinner.currentTime = 0; audioWinner.play(); }
-
-            const count = names.length;
-            const arc = (Math.PI * 2) / count;
+        finalize() {
+            this.isSpinning = false;
+            document.getElementById('sndSpin').pause();
             
-            // Calculate winner based on pointer at top (3*PI/2)
-            const normalizedAngle = (currentAngle + (3 * Math.PI / 2)) % (Math.PI * 2);
-            const winnerIdx = count - 1 - Math.floor(normalizedAngle / arc);
-            const winner = names[winnerIdx];
+            const len = this.names.length;
+            const arc = (Math.PI * 2) / len;
+            const normalized = (this.angle + (3 * Math.PI / 2)) % (Math.PI * 2);
+            const idx = len - 1 - Math.floor(normalized / arc);
+            const winner = this.names[idx];
 
-            // Trigger Celebration
-            if (document.getElementById('checkConfetti').checked) {
-                confetti({ particleCount: 250, spread: 90, origin: { y: 0.6 } });
+            if(document.getElementById('cfgSound').checked) document.getElementById('sndWin').play();
+            if(document.getElementById('cfgConfetti').checked) {
+                confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
             }
 
-            // Show Result
-            document.getElementById('winnerDisplayName').innerText = winner;
-            document.getElementById('winnerModal').style.display = "flex";
+            this.lifetimeSpins++;
+            localStorage.setItem('lifetimeSpins', this.lifetimeSpins);
+            document.getElementById('valSpins').innerText = this.lifetimeSpins;
+
+            document.getElementById('winnerName').innerText = winner;
+            ui.showModal('modalWinner');
+            this.history.unshift({ name: winner, time: new Date().toLocaleTimeString() });
             
-            // Add to History
-            history.unshift({ name: winner, time: new Date().toLocaleTimeString() });
-            
-            if (document.getElementById('checkRemove').checked) {
-                removeWinnerNow();
+            if(document.getElementById('cfgRemove').checked) {
+                this.removeWinner(winner);
             }
-        }
+        },
 
-        /* --- UI HELPERS --- */
-        function closeModal() { document.getElementById('winnerModal').style.display = "none"; }
-        
-        function removeWinnerNow() {
-            const winName = document.getElementById('winnerDisplayName').innerText;
-            const newNames = names.filter(n => n !== winName);
-            nameInput.value = newNames.join('\n');
-            syncWheelData();
-            closeModal();
-        }
+        removeWinner(name) {
+            this.names = this.names.filter(n => n !== name);
+            document.getElementById('mainInput').value = this.names.join('\n');
+            this.sync();
+        },
 
-        function applyLanguage() {
-            const l = document.getElementById('langSelect').value;
-            const d = i18n[l];
-            document.getElementById('labelInput').innerText = d.title;
-            document.getElementById('labelSubInput').innerText = d.sub;
-            document.getElementById('labelStats').innerText = d.stats;
-            document.getElementById('labelNamesLoaded').innerText = d.loaded;
-            document.getElementById('labelOptions').innerText = d.opts;
-            document.getElementById('optRemove').innerText = d.rm;
-            document.getElementById('optSound').innerText = d.sd;
-            document.getElementById('optConfetti').innerText = d.cf;
-            document.getElementById('spinPrompt').innerText = d.prompt;
-            document.getElementById('labelWinnerTitle').innerText = d.win;
-            document.getElementById('labelHistoryTitle').innerText = d.hist;
-        }
+        removeWinnerFromModal() {
+            const name = document.getElementById('winnerName').innerText;
+            this.removeWinner(name);
+            ui.closeAll();
+        },
 
-        function updateTheme(val) {
-            document.body.setAttribute('data-theme', val);
-            selectedTheme = val;
-            drawWheel();
-        }
+        shuffle() {
+            this.names.sort(() => Math.random() - 0.5);
+            document.getElementById('mainInput').value = this.names.join('\n');
+            this.sync();
+        },
 
-        function showHistory() {
-            const container = document.getElementById('historyList');
-            container.innerHTML = history.length > 0 
-                ? history.map(h => `<div style="padding:15px; border-bottom:1px solid var(--border); display:flex; justify-content:space-between;"><b>${h.name}</b> <span style="opacity:0.5">${h.time}</span></div>`).join('')
-                : "<p style='padding:20px; opacity:0.5'>No selections recorded yet.</p>";
-            document.getElementById('historyModal').style.display = "flex";
-        }
-
-        function shuffleNames() {
-            const arr = nameInput.value.split('\n').filter(n => n.trim() !== "");
-            for (let i = arr.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [arr[i], arr[j]] = [arr[j], arr[i]];
+        reset() {
+            if(confirm("Are you sure? This will delete all names.")) {
+                document.getElementById('mainInput').value = "";
+                this.sync();
             }
-            nameInput.value = arr.join('\n');
-            syncWheelData();
-        }
+        },
 
-        function clearList() { if(confirm("Clear all names from the list?")) { nameInput.value = ""; syncWheelData(); } }
-        
-        function triggerCSV() { document.getElementById('csvFile').click(); }
-        function handleCSV(e) {
-            const file = e.target.files[0];
+        changeLang(val) {
+            this.lang = val;
+            const d = this.dict[val];
+            document.getElementById('lblNames').innerText = d.names;
+            document.getElementById('lblStatus').innerText = d.status;
+            document.getElementById('lblStats').innerText = d.stats;
+            document.getElementById('lblSettings').innerText = d.set;
+            document.getElementById('lblWinHeader').innerText = d.win;
+            document.getElementById('btnSpinMain').innerText = d.btn;
+            document.getElementById('txtRemove').innerText = d.remove;
+            document.getElementById('txtSound').innerText = d.sound;
+            document.getElementById('txtConfetti').innerText = d.confetti;
+        },
+
+        importFile(e) {
             const reader = new FileReader();
             reader.onload = (ev) => {
-                const lines = ev.target.result.split(/[\n,]/).map(l => l.trim()).filter(l => l !== "");
-                nameInput.value = lines.join('\n');
-                syncWheelData();
+                const content = ev.target.result;
+                document.getElementById('mainInput').value = content.split(/,|\n/).map(s => s.trim()).filter(s => s).join('\n');
+                this.sync();
             };
-            reader.readAsText(file);
-        }
+            reader.readAsText(e.target.files[0]);
+        },
 
-        function exportList() {
-            const blob = new Blob([nameInput.value], {type: 'text/plain'});
+        exportNames() {
+            const blob = new Blob([document.getElementById('mainInput').value], {type: 'text/plain'});
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
-            a.href = url; a.download = "TeamSpin_Names.txt"; a.click();
-        }
+            a.href = url; a.download = "TeamSpin_Export.txt"; a.click();
+        },
 
-        function shareTool() {
-            navigator.clipboard.writeText(window.location.href);
-            alert("Tool link copied to clipboard!");
+        clearHistory() {
+            this.history = [];
+            ui.closeAll();
         }
+    };
 
-        function submitFeedback() {
-            const txt = document.getElementById('feedbackText').value;
-            if(!txt) return alert("Please enter some feedback.");
-            alert("Thank you! Your suggestion has been sent to our development team.");
-            document.getElementById('feedbackText').value = "";
-        }
+    window.onclick = function(event) {
+        if (event.target.className === 'modal-overlay') ui.closeAll();
+    };
 
-        initApp();
-    </script>
+    logic.init();
+</script>
 </body>
 </html>
