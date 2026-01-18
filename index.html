@@ -84,19 +84,17 @@
         .wheel-stage { 
             display: flex; flex-direction: column; align-items: center; justify-content: flex-start; 
         }
-        .canvas-wrapper {
+       .canvas-wrapper {
     position: relative;
-    width: 90vw;          /* scales with viewport width */
-    max-width: 600px;     /* limits max size on large screens */
-    height: auto;         /* maintain aspect ratio using JS */
-    aspect-ratio: 1 / 1;  /* ensures perfect circle */
+    width: 90vw;
+    max-width: 600px;
+    aspect-ratio: 1 / 1;
     cursor: pointer;
     transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
     border-radius: 50%;
-    margin: 0 auto;       /* center it horizontally */
+    margin: 0 auto;
 }
-        }
         .canvas-wrapper:hover { transform: scale(1.02); }
         #wheelCanvas {
             width: 100% !important;
@@ -119,7 +117,6 @@
         .name-editor:focus { border-color: var(--primary); outline: none; box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1); }
 
         /* --- BUTTONS --- */
-        <button id="btnFullScreen" class="btn btn-blue" style="margin-top:15px; width:200px;">🖥️ Full Screen</button>
 
         .btn {
             padding: 14px 20px; border-radius: 12px; font-weight: 700;
@@ -172,6 +169,7 @@
         }
     </style>
 </head>
+     <button id="btnFullScreen" class="btn btn-blue" style="margin-top:15px; width:200px;">🖥️ Full Screen</button>
 <body>
 
 <header class="navbar">
@@ -222,7 +220,14 @@
         <h1 id="lblClickToSpin" style="margin-top:40px; font-weight:900; font-size:2.5rem; text-align:center;">Click the Wheel to Spin!</h1>
         <p style="color:var(--text-muted); text-align:center;">True random results powered by <code>crypto.getRandomValues()</code></p>
     </section>
-<button id="btnFullScreen" class="btn btn-blue" style="margin-top:15px; width:200px;">🖥️ Full Screen</button>
+<button id="btnFullScreen" class="btn btn-blue" style="
+width:140px;
+padding:10px;
+font-size:13px;
+border-radius:30px;
+margin-top:15px;">
+⛶ Fullscreen
+</button>
     <aside class="side-panel">
         <h3>Live Statistics</h3>
         <div style="background:var(--accent); padding:20px; border-radius:15px; border:1px solid var(--border);">
@@ -304,8 +309,9 @@
 <audio id="sndWin"><source src="https://assets.mixkit.co/active_storage/sfx/1435/1435-preview.mp3"></audio>
 
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
+
     /* --- UI ENGINE --- */
     const ui = {
         theme: 'light',
@@ -518,7 +524,6 @@ changeLang(val) {
     if(document.getElementById('cfgConfetti').checked) {
         confetti({ particleCount: 200, spread: 80, origin: { y: 0.6 }, colors: ['#2563eb', '#10b981', '#fbbf24'] });
     }
-
     // Sound
     if(document.getElementById('cfgSound').checked) document.getElementById('sndWin').play();
 
@@ -603,28 +608,27 @@ changeLang(val) {
             a.click();
         }
     };
-
-    logic.init();
     // Full-Screen Functionality
-document.getElementById('btnFullScreen').addEventListener('click', () => {
+// Fullscreen Toggle
+document.getElementById('btnFullScreen').addEventListener('click', (e) => {
+    e.stopPropagation();
     const elem = document.querySelector('.wheel-stage');
     if (!document.fullscreenElement) {
-        elem.requestFullscreen().catch(err => {
-            alert(`Error attempting to enable full-screen mode: ${err.message}`);
-        });
+        elem.requestFullscreen();
     } else {
         document.exitFullscreen();
     }
 });
-</script>
-    window.addEventListener('load', () => {
+
+// Page Load Init
+window.addEventListener('load', () => {
     logic.init();
-    logic.changeLang('en'); // load English by default
+    logic.changeLang('en');
 });
+</script>
 
     <!-- Dynamic SEO & Legal Section -->
 <div id="dynamic-seo"></div>
-
 <footer class="site-footer" style="background:var(--bg-panel); padding:20px; text-align:center; border-top:1px solid var(--border); margin-top:30px;">
     <div class="footer-links" style="margin-bottom:10px;">
         <a href="privacy-policy.html" class="f-link" style="color:var(--primary); text-decoration:none;">Privacy Policy</a>
@@ -636,11 +640,10 @@ document.getElementById('btnFullScreen').addEventListener('click', () => {
     </div>
     <div class="copyright">&copy; 2026 TeamSpin PRO.</div>
 </footer>
-    
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 </body>
 </html>
+
 
 
 
