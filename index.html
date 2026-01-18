@@ -322,6 +322,7 @@ margin-top:15px;">
     };
 
     /* --- LOGIC ENGINE --- */
+   /* --- LOGIC ENGINE --- */
     const logic = {
         names: [],
         angle: 0,
@@ -330,80 +331,83 @@ margin-top:15px;">
         totalSpins: 0,
         lang: 'en',
 
- translations: {
-    en: {
-        title: "Classroom & Office Names",
-        sub: "One name per line. Best for teachers and HR raffle events.",
-        spin: "Click the Wheel to Spin!",
-        status: "Name list is valid.",
-        winner: "The winner is: ",
-        legal: "TeamSpin PRO respects your privacy. No data is stored on our servers. Read our <a href='privacy-policy.html' style='color:var(--primary);'>Full Policy</a>.",
-        seoHTML: `
-            <section class="seo-grid">
-                <div class="seo-card"><h2>🎓 Teacher Tool</h2><p>Used by educators to pick students fairly. Eliminate bias in your classroom today.</p></div>
-                <div class="seo-card"><h2>🏢 HR Raffle</h2><p>Perfect for corporate giveaways and office raffles. Import employee lists easily.</p></div>
-                <div class="seo-card"><h2>🎲 Fair Logic</h2><p>Powered by hardware-level randomness using the Web Crypto API.</p></div>
-            </section>
-            <div class="faq-wrapper">
-                <h2 style="text-align:center;">Frequently Asked Questions</h2>
-                <div class="faq-item"><span class="faq-q">Is it truly random?</span><p class="faq-a">Yes, we use secure crypto algorithms for every spin.</p></div>
-            </div>`
-    },
-    np: {
-        title: "कक्षा र कार्यालयका नामहरू",
-        sub: "प्रति पङ्क्ति एक नाम। शिक्षक र राफल कार्यक्रमका लागि उत्तम।",
-        spin: "घुमाउनका लागि व्हीलमा क्लिक गर्नुहोस्!",
-        status: "नाम सूची मान्य छ।",
-        winner: "विजेता हुनुहुन्छ: ",
-        legal: "TeamSpin PRO तपाईंको गोपनीयताको सम्मान गर्दछ। कुनै पनि डाटा हाम्रो सर्भरमा राखिँदैन। <a href='privacy-policy.html' style='color:var(--primary);'>पूर्ण नीति पढ्नुहोस्</a>.",
-        seoHTML: `
-            <section class="seo-grid">
-                <div class="seo-card"><h2>🎓 शिक्षकको सहयोगी</h2><p>शिक्षकहरूले निष्पक्ष कक्षाकोठा सुनिश्चित गर्न यो प्रयोग गर्छन्।</p></div>
-                <div class="seo-card"><h2>🏢 कर्पोरेट राफल</h2><p>कार्यालयमा उपहार वितरण र राफल कार्यक्रमको लागि उत्तम।</p></div>
-                <div class="seo-card"><h2>🎲 निष्पक्ष लजिक</h2><p>हाम्रो व्हीलले सुरक्षित क्रिप्टो लजिक प्रयोग गर्दछ।</p></div>
-            </section>
-            <div class="faq-wrapper">
-                <h2 style="text-align:center;">धेरै सोधिने प्रश्नहरू (FAQ)</h2>
-                <div class="faq-item"><span class="faq-q">के यो साँच्चै अनियमित छ?</span><p class="faq-a">हो, हामी प्रत्येक स्पिनको लागि सुरक्षित क्रिप्टो एल्गोरिदम प्रयोग गर्छौं।</p></div>
-            </div>`
-    },
-    hi: {
-        title: "कक्षा और कार्यालय के नाम",
-        sub: "प्रति पंक्ति एक नाम। शिक्षकों और रैफल कार्यक्रमों के लिए उत्तम।",
-        spin: "स्पिन करने के लिए व्हील पर क्लिक करें!",
-        status: "नाम सूची मान्य है।",
-        winner: "विजेता है: ",
-        legal: "TeamSpin PRO आपकी गोपनीयता का सम्मान करता है। कोई डेटा हमारे सर्वर पर संग्रहीत नहीं किया जाता। <a href='privacy-policy.html' style='color:var(--primary);'>पूर्ण नीति पढ़ें</a>।",
-        seoHTML: `
-            <section class="seo-grid">
-                <div class="seo-card"><h2>🎓 शिक्षक उपकरण</h2><p>शिक्षक निष्पक्ष रूप से छात्रों का चयन करने के लिए TeamSpin PRO का उपयोग करते हैं।</p></div>
-                <div class="seo-card"><h2>🏢 कार्यालय रैफल</h2><p>कर्मचारी रैफल और कार्यालय उपहार वितरण के लिए आदर्श।</p></div>
-                <div class="seo-card"><h2>🎲 निष्पक्ष लोजिक</h2><p>हमारी व्हील क्रिप्टो-लेवल रैंडमनेस का उपयोग करके निष्पक्ष परिणाम देती है।</p></div>
-            </section>
-            <div class="faq-wrapper">
-                <h2 style="text-align:center;">अक्सर पूछे जाने वाले प्रश्न (FAQ)</h2>
-                <div class="faq-item"><span class="faq-q">क्या यह वास्तव में यादृच्छिक है?</span><p class="faq-a">हाँ, हम प्रत्येक स्पिन के लिए सुरक्षित क्रिप्टो एल्गोरिदम का उपयोग करते हैं।</p></div>
-            </div>`
-    }
-}
-},
+        translations: {
+            en: {
+                title: "Classroom & Office Names",
+                sub: "One name per line. Best for teachers and HR raffle events.",
+                spin: "Click the Wheel to Spin!",
+                status: "Name list is valid.",
+                winner: "The winner is: ",
+                legal: "TeamSpin PRO respects your privacy. No data is stored on our servers. Read our <a href='privacy-policy.html' style='color:var(--primary);'>Full Policy</a>.",
+                seoHTML: `
+                    <section class="seo-grid">
+                        <div class="seo-card"><h2>🎓 Teacher Tool</h2><p>Used by educators to pick students fairly. Eliminate bias in your classroom today.</p></div>
+                        <div class="seo-card"><h2>🏢 HR Raffle</h2><p>Perfect for corporate giveaways and office raffles.</p></div>
+                        <div class="seo-card"><h2>🎲 Fair Logic</h2><p>Powered by hardware-level randomness using the Web Crypto API.</p></div>
+                    </section>
+                    <div class="faq-wrapper" style="max-width:900px; margin: 40px auto; padding: 20px; background:var(--accent); border-radius:20px;">
+                        <h2 style="text-align:center;">Frequently Asked Questions</h2>
+                        <div class="faq-item" style="margin-bottom:15px; padding:15px; background:var(--bg-panel); border-radius:10px; border:1px solid var(--border);">
+                            <span class="faq-q" style="font-weight:800; color:var(--primary);">Is it truly random?</span>
+                            <p class="faq-a">Yes, we use secure crypto algorithms for every spin.</p>
+                        </div>
+                    </div>`
+            },
+            np: {
+                title: "कक्षा र कार्यालयका नामहरू",
+                sub: "प्रति पङ्क्ति एक नाम। शिक्षक र राफल कार्यक्रमका लागि उत्तम।",
+                spin: "घुमाउनका लागि व्हीलमा क्लिक गर्नुहोस्!",
+                status: "नाम सूची मान्य छ।",
+                winner: "विजेता हुनुहुन्छ: ",
+                legal: "TeamSpin PRO तपाईंको गोपनीयताको सम्मान गर्दछ। कुनै पनि डाटा हाम्रो सर्भरमा राखिँदैन। <a href='privacy-policy.html' style='color:var(--primary);'>पूर्ण नीति पढ्नुहोस्</a>।",
+                seoHTML: `
+                    <section class="seo-grid">
+                        <div class="seo-card"><h2>🎓 शिक्षकको सहयोगी</h2><p>शिक्षकहरूले निष्पक्ष कक्षाकोठा सुनिश्चित गर्न यो प्रयोग गर्छन्।</p></div>
+                        <div class="seo-card"><h2>🏢 कर्पोरेट राफल</h2><p>कार्यालयमा उपहार वितरण र राफल कार्यक्रमको लागि उत्तम।</p></div>
+                        <div class="seo-card"><h2>🎲 निष्पक्ष लजिक</h2><p>हाम्रो व्हीलले सुरक्षित क्रिप्टो लजिक प्रयोग गर्दछ।</p></div>
+                    </section>
+                    <div class="faq-wrapper" style="max-width:900px; margin: 40px auto; padding: 20px; background:var(--accent); border-radius:20px;">
+                        <h2 style="text-align:center;">धेरै सोधिने प्रश्नहरू (FAQ)</h2>
+                        <div class="faq-item" style="margin-bottom:15px; padding:15px; background:var(--bg-panel); border-radius:10px; border:1px solid var(--border);">
+                            <span class="faq-q" style="font-weight:800; color:var(--primary);">के यो साँच्चै अनियमित छ?</span>
+                            <p class="faq-a">हो, हामी प्रत्येक स्पिनको लागि सुरक्षित क्रिप्टो एल्गोरिदम प्रयोग गर्छौं।</p>
+                        </div>
+                    </div>`
+            },
+            hi: {
+                title: "कक्षा और कार्यालय के नाम",
+                sub: "प्रति पंक्ति एक नाम। शिक्षकों और रैफल कार्यक्रमों के लिए उत्तम।",
+                spin: "स्पिन करने के लिए व्हील पर क्लिक करें!",
+                status: "नाम सूची मान्य है।",
+                winner: "विजेता है: ",
+                legal: "TeamSpin PRO आपकी गोपनीयता का सम्मान करता है। कोई डेटा हमारे सर्वर पर संग्रहीत नहीं किया जाता। <a href='privacy-policy.html' style='color:var(--primary);'>पूर्ण नीति पढ़ें</a>।",
+                seoHTML: `
+                    <section class="seo-grid">
+                        <div class="seo-card"><h2>🎓 शिक्षक उपकरण</h2><p>शिक्षक निष्पक्ष रूप से छात्रों का चयन करने के लिए TeamSpin PRO का उपयोग करते हैं।</p></div>
+                        <div class="seo-card"><h2>🏢 कार्यालय रैफल</h2><p>कर्मचारी रैफल और कार्यालय उपहार वितरण के लिए आदर्श।</p></div>
+                        <div class="seo-card"><h2>🎲 निष्पक्ष लोजिक</h2><p>हमारी व्हील क्रिप्टो-लेवल रैंडमनेस का उपयोग करके निष्पक्ष परिणाम देती है।</p></div>
+                    </section>
+                    <div class="faq-wrapper" style="max-width:900px; margin: 40px auto; padding: 20px; background:var(--accent); border-radius:20px;">
+                        <h2 style="text-align:center;">अक्सर पूछे जाने वाले प्रश्न (FAQ)</h2>
+                        <div class="faq-item" style="margin-bottom:15px; padding:15px; background:var(--bg-panel); border-radius:10px; border:1px solid var(--border);">
+                            <span class="faq-q" style="font-weight:800; color:var(--primary);">क्या यह वास्तव में यादृच्छिक है?</span>
+                            <p class="faq-a">हाँ, हम प्रत्येक स्पिन के लिए सुरक्षित क्रिप्टो एल्गोरिदम का उपयोग करते हैं।</p>
+                        </div>
+                    </div>`
+            }
+        },
 
-changeLang(val) {
-    this.lang = val;
-    const t = this.translations[val];
-
-    // Core Labels
-    document.getElementById('lblInputTitle').innerText = t.title;
-    document.getElementById('lblInputSub').innerText = t.sub;
-    document.getElementById('lblStatus').innerText = t.status;
-    document.getElementById('lblClickToSpin').innerText = t.spin;
-
-    // Dynamic SEO & Legal Content
-    document.getElementById('dynamic-seo').innerHTML = t.seoHTML;
-    document.getElementById('lblLegalText').innerHTML = t.legal;
-
-    this.draw();
-},
+        changeLang(val) {
+            this.lang = val;
+            const t = this.translations[val];
+            document.getElementById('lblInputTitle').innerText = t.title;
+            document.getElementById('lblInputSub').innerText = t.sub;
+            document.getElementById('lblStatus').innerText = t.status;
+            document.getElementById('lblClickToSpin').innerText = t.spin;
+            document.getElementById('dynamic-seo').innerHTML = t.seoHTML;
+            document.getElementById('lblLegalText').innerHTML = t.legal;
+            this.draw();
+        },
 
         init() {
             document.getElementById('mainInput').addEventListener('input', () => this.sync());
@@ -413,78 +417,67 @@ changeLang(val) {
 
         sync() {
             const val = document.getElementById('mainInput').value;
-            this.names = val.split('\n')
-                           .map(n => n.trim())
-                           .filter(n => n !== "");
+            this.names = val.split('\n').map(n => n.trim()).filter(n => n !== "");
             document.getElementById('valCount').innerText = this.names.length;
             this.draw();
         },
 
-      draw() {
-    const canvas = document.getElementById('wheelCanvas');
-    const size = canvas.parentElement.offsetWidth; // dynamic width
-    canvas.width = size;
-    canvas.height = size;
+        draw() {
+            const canvas = document.getElementById('wheelCanvas');
+            const size = canvas.parentElement.offsetWidth;
+            canvas.width = size;
+            canvas.height = size;
+            const ctx = canvas.getContext('2d');
+            const len = this.names.length;
+            ctx.clearRect(0, 0, size, size);
 
-    const ctx = canvas.getContext('2d');
-    const len = this.names.length;
-    ctx.clearRect(0, 0, size, size);
+            if (len === 0) {
+                ctx.fillStyle = ui.theme === 'light' ? '#cbd5e1' : '#1e293b';
+                ctx.beginPath(); ctx.arc(size/2, size/2, size/2 - 10, 0, Math.PI * 2); ctx.fill();
+                return;
+            }
 
-    if (len === 0) {
-        ctx.fillStyle = ui.theme === 'light' ? '#cbd5e1' : '#1e293b';
-        ctx.beginPath(); ctx.arc(size/2, size/2, size/2 - 10, 0, Math.PI * 2); ctx.fill();
-        return;
-    }
+            const arc = (Math.PI * 2) / len;
+            const colors = ui.theme === 'light' ? 
+                ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899'] :
+                ['#1d4ed8', '#065f46', '#92400e', '#991b1b', '#5b21b6', '#9d174d'];
 
-    const arc = (Math.PI * 2) / len;
-    const colors = ui.theme === 'light' ? 
-        ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899'] :
-        ['#1d4ed8', '#065f46', '#92400e', '#991b1b', '#5b21b6', '#9d174d'];
+            this.names.forEach((name, i) => {
+                const currentAngle = this.angle + (i * arc);
+                ctx.beginPath();
+                ctx.fillStyle = colors[i % colors.length];
+                ctx.moveTo(size/2, size/2);
+                ctx.arc(size/2, size/2, size/2 - 10, currentAngle, currentAngle + arc);
+                ctx.fill();
+                ctx.strokeStyle = ui.theme === 'light' ? '#ffffff' : '#0f172a';
+                ctx.lineWidth = 3;
+                ctx.stroke();
 
-    this.names.forEach((name, i) => {
-        const currentAngle = this.angle + (i * arc);
-        ctx.beginPath();
-        ctx.fillStyle = colors[i % colors.length];
-        ctx.moveTo(size/2, size/2);
-        ctx.arc(size/2, size/2, size/2 - 10, currentAngle, currentAngle + arc);
-        ctx.fill();
-        ctx.strokeStyle = ui.theme === 'light' ? '#ffffff' : '#0f172a';
-        ctx.lineWidth = 3;
-        ctx.stroke();
+                ctx.save();
+                ctx.translate(size/2, size/2);
+                ctx.rotate(currentAngle + arc / 2);
+                ctx.textAlign = "right";
+                ctx.fillStyle = "#ffffff";
+                ctx.font = `bold ${Math.floor(size/20)}px Inter, sans-serif`;
+                ctx.shadowBlur = 4;
+                ctx.shadowColor = "rgba(0,0,0,0.3)";
+                ctx.fillText(name.substring(0, 18), size/2 - 20, 10);
+                ctx.restore();
+            });
 
-        ctx.save();
-        ctx.translate(size/2, size/2);
-        ctx.rotate(currentAngle + arc / 2);
-        ctx.textAlign = "right";
-        ctx.fillStyle = "#ffffff";
-        ctx.font = `bold ${Math.floor(size/20)}px Inter, sans-serif`;
-        ctx.shadowBlur = 4;
-        ctx.shadowColor = "rgba(0,0,0,0.3)";
-        ctx.fillText(name.substring(0, 18), size/2 - 20, 10);
-        ctx.restore();
-    });
+            ctx.beginPath(); ctx.fillStyle = "white"; ctx.arc(size/2, size/2, size/15, 0, Math.PI * 2); ctx.fill();
+        },
 
-    // Center Pin
-    ctx.beginPath();
-    ctx.fillStyle = "white";
-    ctx.arc(size/2, size/2, size/15, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.shadowBlur = 10; ctx.shadowColor = "rgba(0,0,0,0.2)";
-}
         spin() {
             if (this.isSpinning || this.names.length < 2) return;
             this.isSpinning = true;
-            
             if(document.getElementById('cfgSound').checked) {
                 const s = document.getElementById('sndSpin');
                 s.currentTime = 0; s.play();
             }
-
             const duration = 5000;
             const start = performance.now();
             const startAngle = this.angle;
-            
-            // Cryptographically secure randomness
             const array = new Uint32Array(1);
             window.crypto.getRandomValues(array);
             const randomFactor = array[0] / (0xFFFFFFFF + 1);
@@ -493,81 +486,49 @@ changeLang(val) {
             const animate = (time) => {
                 const elapsed = time - start;
                 const progress = Math.min(elapsed / duration, 1);
-                
-                // Quintic ease out
                 const ease = 1 - Math.pow(1 - progress, 5);
-                
                 this.angle = startAngle + (totalRotation * ease);
                 this.draw();
-
-                if (progress < 1) {
-                    requestAnimationFrame(animate);
-                } else {
-                    this.finishSpin();
-                }
+                if (progress < 1) requestAnimationFrame(animate);
+                else this.finishSpin();
             };
             requestAnimationFrame(animate);
         },
 
-      finishSpin() {
-    this.isSpinning = false;
-    this.totalSpins++;
-    document.getElementById('valTotalSpins').innerText = this.totalSpins;
+        finishSpin() {
+            this.isSpinning = false;
+            this.totalSpins++;
+            document.getElementById('valTotalSpins').innerText = this.totalSpins;
+            const arc = (Math.PI * 2) / this.names.length;
+            const normalized = (this.angle + (3 * Math.PI / 2)) % (Math.PI * 2);
+            const idx = this.names.length - 1 - Math.floor(normalized / arc);
+            const winner = this.names[idx];
 
-    const arc = (Math.PI * 2) / this.names.length;
-    const normalized = (this.angle + (3 * Math.PI / 2)) % (Math.PI * 2);
-    const idx = this.names.length - 1 - Math.floor(normalized / arc);
-    const winner = this.names[idx];
+            if(document.getElementById('cfgConfetti').checked) confetti({ particleCount: 200, spread: 80, origin: { y: 0.6 } });
+            if(document.getElementById('cfgSound').checked) document.getElementById('sndWin').play();
 
-    // Confetti
-    if(document.getElementById('cfgConfetti').checked) {
-        confetti({ particleCount: 200, spread: 80, origin: { y: 0.6 }, colors: ['#2563eb', '#10b981', '#fbbf24'] });
-    }
-    // Sound
-    if(document.getElementById('cfgSound').checked) document.getElementById('sndWin').play();
+            Swal.fire({
+                title: `<span style="color:#2563eb; font-weight:bold;">${winner}</span>`,
+                html: `<p style="color:#64748b; font-size:14px; margin-top:8px;">Winner selected fairly via crypto-randomness.</p>`,
+                icon: 'success',
+                confirmButtonText: 'Spin Again 🔄',
+                confirmButtonColor: '#2563eb'
+            });
 
-    // --- Minimal Winner Popup with SEO Rich Sentence ---
-    setTimeout(() => {
-        const t = this.translations[this.lang];
+            this.addToHistory(winner);
+            if(document.getElementById('cfgRemove').checked) {
+                this.names.splice(idx, 1);
+                document.getElementById('mainInput').value = this.names.join('\n');
+                this.sync();
+            }
+        },
 
-        Swal.fire({
-            title: `<span style="color:#2563eb; font-weight:bold;">${winner}</span>`,
-            html: `<p style="color:#64748b; font-size:14px; margin-top:8px;">
-                    Winner selected randomly and fairly using secure crypto-level randomness. Perfect for classrooms, office raffles, and events.
-                   </p>`,
-            icon: 'success',
-            showCloseButton: true,
-            confirmButtonText: 'Spin Again 🔄',
-            confirmButtonColor: '#2563eb',
-            background: ui.theme === 'light' ? '#ffffff' : '#0f172a',
-            color: ui.theme === 'light' ? '#0f172a' : '#f1f5f9',
-        });
-
-        this.addToHistory(winner);
-
-        if(document.getElementById('cfgRemove').checked) {
-            this.names.splice(idx, 1);
-            document.getElementById('mainInput').value = this.names.join('\n');
-            this.sync();
-        }
-    }, 300);
-},
         addToHistory(name) {
             const time = new Date().toLocaleTimeString();
             this.history.unshift({name, time});
-            const list = document.getElementById('historyList');
-            list.innerHTML = this.history.map(h => `
-                <li class="history-item">
-                    <strong>${h.name}</strong>
-                    <span style="color:var(--text-muted)">${h.time}</span>
-                </li>
+            document.getElementById('historyList').innerHTML = this.history.slice(0, 10).map(h => `
+                <li class="history-item"><strong>${h.name}</strong> <span style="color:var(--text-muted)">${h.time}</span></li>
             `).join('');
-        },
-
-        runRandomTest() {
-            alert("Running 10,000 spins simulation via crypto.getRandomValues()...");
-            // Logic to simulate results instantly would go here
-            console.log("Randomness audit passed.");
         },
 
         shuffle() {
@@ -577,71 +538,57 @@ changeLang(val) {
         },
 
         reset() {
-            if(confirm("Are you sure you want to clear the list?")) {
-                document.getElementById('mainInput').value = "";
-                this.sync();
-            }
+            if(confirm("Clear the list?")) { document.getElementById('mainInput').value = ""; this.sync(); }
         },
 
-        clearHistory() {
-            this.history = [];
-            document.getElementById('historyList').innerHTML = "";
-        },
+        clearHistory() { this.history = []; document.getElementById('historyList').innerHTML = ""; },
 
         importFile(e) {
-            const file = e.target.files[0];
             const reader = new FileReader();
-            reader.onload = (event) => {
-                document.getElementById('mainInput').value = event.target.result;
-                this.sync();
-            };
-            reader.readAsText(file);
+            reader.onload = (ev) => { document.getElementById('mainInput').value = ev.target.result; this.sync(); };
+            reader.readAsText(e.target.files[0]);
         },
 
         exportNames() {
             const blob = new Blob([this.names.join('\n')], {type: 'text/plain'});
-            const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
-            a.href = url;
+            a.href = URL.createObjectURL(blob);
             a.download = "TeamSpin_PRO_List.txt";
             a.click();
         }
     };
-    // Full-Screen Functionality
-// Fullscreen Toggle
-document.getElementById('btnFullScreen').addEventListener('click', (e) => {
-    e.stopPropagation();
-    const elem = document.querySelector('.wheel-stage');
-    if (!document.fullscreenElement) {
-        elem.requestFullscreen();
-    } else {
-        document.exitFullscreen();
-    }
-});
 
-// Page Load Init
-window.addEventListener('load', () => {
-    logic.init();
-    logic.changeLang('en');
-});
+    // Fullscreen Toggle
+    document.getElementById('btnFullScreen').addEventListener('click', (e) => {
+        const elem = document.querySelector('.wheel-stage');
+        if (!document.fullscreenElement) elem.requestFullscreen();
+        else document.exitFullscreen();
+    });
+
+    // Page Load Init
+    window.addEventListener('load', () => {
+        logic.init();
+        logic.changeLang('en');
+    });
 </script>
-
     <!-- Dynamic SEO & Legal Section -->
 <div id="dynamic-seo"></div>
-<footer class="site-footer" style="background:var(--bg-panel); padding:20px; text-align:center; border-top:1px solid var(--border); margin-top:30px;">
-    <div class="footer-links" style="margin-bottom:10px;">
-        <a href="privacy-policy.html" class="f-link" style="color:var(--primary); text-decoration:none;">Privacy Policy</a>
-        <span class="sep">|</span>
-        <a href="terms.html" class="f-link" style="color:var(--primary); text-decoration:none;">Terms of Service</a>
+
+<footer class="site-footer" style="background:var(--bg-panel); padding:40px 20px; text-align:center; border-top:1px solid var(--border); margin-top:30px;">
+    <div class="footer-links" style="margin-bottom:15px;">
+        <a href="privacy-policy.html" style="color:var(--primary); text-decoration:none; font-weight:600;">Privacy Policy</a>
+        <span style="margin: 0 10px; color:var(--text-muted);">|</span>
+        <a href="terms.html" style="color:var(--primary); text-decoration:none; font-weight:600;">Terms of Service</a>
     </div>
-    <div class="legal-snippet" style="margin-bottom:10px;">
+    <div class="legal-snippet" style="max-width:600px; margin: 0 auto 15px; font-size:13px; color:var(--text-muted);">
         <p id="lblLegalText"></p>
     </div>
-    <div class="copyright">&copy; 2026 TeamSpin PRO.</div>
+    <div class="copyright" style="font-size:12px; color:var(--text-muted);">&copy; 2026 TeamSpin PRO.</div>
 </footer>
 
 </body>
 </html>
+
 
 
 
