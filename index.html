@@ -315,7 +315,7 @@
         totalSpins: 0,
         lang: 'en',
 
-     logic.translations = {
+   translations: {
     en: {
         title: "Classroom & Office Names",
         sub: "One name per line. Best for teachers and HR raffle events.",
@@ -340,7 +340,7 @@
         spin: "घुमाउनका लागि व्हीलमा क्लिक गर्नुहोस्!",
         status: "नाम सूची मान्य छ।",
         winner: "विजेता हुनुहुन्छ: ",
-        legal: "TeamSpin PRO तपाईंको गोपनीयताको सम्मान गर्दछ। कुनै पनि डाटा हाम्रो सर्भरमा राखिँदैन। <a href='privacy-policy.html' style='color:var(--primary);'>पूर्ण नीति पढ्नुहोस्</a>।",
+        legal: "TeamSpin PRO तपाईंको गोपनीयताको सम्मान गर्दछ। कुनै पनि डाटा हाम्रो सर्भरमा राखिँदैन। <a href='privacy-policy.html' style='color:var(--primary);'>पूर्ण नीति पढ्नुहोस्</a>.",
         seoHTML: `
             <section class="seo-grid">
                 <div class="seo-card"><h2>🎓 शिक्षकको सहयोगी</h2><p>शिक्षकहरूले निष्पक्ष कक्षाकोठा सुनिश्चित गर्न यो प्रयोग गर्छन्।</p></div>
@@ -352,31 +352,29 @@
                 <div class="faq-item"><span class="faq-q">के यो साँच्चै अनियमित छ?</span><p class="faq-a">हो, हामी प्रत्येक स्पिनको लागि सुरक्षित क्रिप्टो एल्गोरिदम प्रयोग गर्छौं।</p></div>
             </div>`
     }
-};
+},
 
-
-        init() {
-            document.getElementById('mainInput').addEventListener('input', () => this.sync());
-            this.sync();
-            this.draw();
-        },
-
-       logic.changeLang = function(val) {
+changeLang(val) {
     this.lang = val;
     const t = this.translations[val];
 
     // Core Labels
-    document.getElementById('lblNames').innerText = t.title;
+    document.getElementById('lblInputTitle').innerText = t.title;
+    document.getElementById('lblInputSub').innerText = t.sub;
     document.getElementById('lblStatus').innerText = t.status;
-    document.getElementById('lblWinHeader').innerText = t.winner;
+    document.getElementById('lblClickToSpin').innerText = t.spin;
 
     // Dynamic SEO & Legal Content
     document.getElementById('dynamic-seo').innerHTML = t.seoHTML;
     document.getElementById('lblLegalText').innerHTML = t.legal;
 
     this.draw();
-};
+},
 
+        init() {
+            document.getElementById('mainInput').addEventListener('input', () => this.sync());
+            this.sync();
+            this.draw();
         },
 
         sync() {
@@ -580,3 +578,4 @@
 </footer>
 
 </html>
+
