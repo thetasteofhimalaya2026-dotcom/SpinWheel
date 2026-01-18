@@ -228,10 +228,10 @@
                 <span>Names:</span>
                 <strong id="valCount" style="color:var(--primary);">0</strong>
             </div>
-            <div style="display:flex; justify-content:space-between;">
-                <span>Spins:</span>
-                <strong id="valTotalSpins">0</strong>
-            </div>
+           <div style="display:flex; justify-content:space-between;">
+    <span>Lifetime Spins:</span>
+    <strong id="valTotalSpins" style="color:var(--primary);">0</strong>
+</div>
         </div>
 
         <h3 style="margin-top:30px;">Options</h3>
@@ -331,14 +331,12 @@
             this.draw();
         },
 
-        init() {
-            document.getElementById('mainInput').addEventListener('input', () => this.sync());
-            document.getElementById('btnFullScreen').onclick = () => {
-                const elem = document.querySelector('.wheel-stage');
-                if (!document.fullscreenElement) elem.requestFullscreen();
-                else document.exitFullscreen();
-            };
-            this.sync();
+       init() {
+    // Add this line at the start of init:
+    this.totalSpins = parseInt(localStorage.getItem('ts_lifetime_spins')) || 0;
+    document.getElementById('valTotalSpins').innerText = this.totalSpins;
+
+    document.getElementById('mainInput').addEventListener('input', () => this.sync());
             this.changeLang('en');
         },
 
@@ -407,13 +405,12 @@
         },
 
         finish() {
-            this.isSpinning = false;
-            this.totalSpins++;
-            document.getElementById('valTotalSpins').innerText = this.totalSpins;
-            const arc = (Math.PI * 2) / this.names.length;
-            const normalized = (this.angle + (3 * Math.PI / 2)) % (Math.PI * 2);
-            const idx = this.names.length - 1 - Math.floor(normalized / arc);
-            const winner = this.names[idx];
+    this.isSpinning = false;
+    
+    // Update and save lifetime spins
+    this.totalSpins++;
+    localStorage.setItem('ts_lifetime_spins', this.totalSpins);
+    document.getElementById('valTotalSpins').innerText = this.totalSpins;
 
             confetti({ particleCount: 200, spread: 80, origin: { y: 0.6 } });
             if (document.getElementById('cfgSound').checked) document.getElementById('sndWin').play();
@@ -467,4 +464,5 @@
 </script>
 </body>
 </html>
+
 
