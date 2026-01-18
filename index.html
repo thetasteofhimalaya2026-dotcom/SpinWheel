@@ -189,7 +189,7 @@
             </div>
            <div style="display:flex; justify-content:space-between;">
     <span>Lifetime Spins:</span>
-    <strong id="valTotalSpins" style="color:var(--primary);">16520</strong>
+    <strong id="valTotalSpins" style="color:var(--primary);">25000</strong>
 </div>
         </div>
 
@@ -344,7 +344,7 @@ init() {
     const logoInput = document.getElementById('logoUpload');
     if(logoInput) logoInput.addEventListener('change', (e) => this.handleLogoUpload(e));
 
-    this.totalSpins = parseInt(localStorage.getItem('ts_lifetime_spins')) || 15050;
+    this.totalSpins = parseInt(localStorage.getItem('ts_lifetime_spins')) || 25000;
     document.getElementById('valTotalSpins').innerText = this.totalSpins;
     
     document.getElementById('mainInput').addEventListener('input', () => this.sync());
@@ -665,3 +665,4 @@ window.onload = () => logic.init();
 </script>
 </body>
 </html>
+
