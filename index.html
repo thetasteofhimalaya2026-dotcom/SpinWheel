@@ -82,13 +82,17 @@
             display: flex; flex-direction: column; align-items: center; justify-content: flex-start; 
         }
         .canvas-wrapper {
-            position: relative; 
-            width: min(85vw, 650px); 
-            aspect-ratio: 1 / 1; /* FORCES PERFECT CIRCLE */
-            cursor: pointer; 
-            transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
-            border-radius: 50%;
+    position: relative;
+    width: 90vw;          /* scales with viewport width */
+    max-width: 600px;     /* limits max size on large screens */
+    height: auto;         /* maintain aspect ratio using JS */
+    aspect-ratio: 1 / 1;  /* ensures perfect circle */
+    cursor: pointer;
+    transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+    border-radius: 50%;
+    margin: 0 auto;       /* center it horizontally */
+}
         }
         .canvas-wrapper:hover { transform: scale(1.02); }
         #wheelCanvas {
@@ -112,6 +116,8 @@
         .name-editor:focus { border-color: var(--primary); outline: none; box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1); }
 
         /* --- BUTTONS --- */
+        <button id="btnFullScreen" class="btn btn-blue" style="margin-top:15px; width:200px;">🖥️ Full Screen</button>
+
         .btn {
             padding: 14px 20px; border-radius: 12px; font-weight: 700;
             cursor: pointer; border: none; transition: 0.3s;
@@ -213,7 +219,7 @@
         <h1 id="lblClickToSpin" style="margin-top:40px; font-weight:900; font-size:2.5rem; text-align:center;">Click the Wheel to Spin!</h1>
         <p style="color:var(--text-muted); text-align:center;">True random results powered by <code>crypto.getRandomValues()</code></p>
     </section>
-
+<button id="btnFullScreen" class="btn btn-blue" style="margin-top:15px; width:200px;">🖥️ Full Screen</button>
     <aside class="side-panel">
         <h3>Live Statistics</h3>
         <div style="background:var(--accent); padding:20px; border-radius:15px; border:1px solid var(--border);">
@@ -406,57 +412,57 @@ changeLang(val) {
             this.draw();
         },
 
-        draw() {
-            const canvas = document.getElementById('wheelCanvas');
-            const ctx = canvas.getContext('2d');
-            const len = this.names.length;
-            
-            ctx.clearRect(0, 0, 900, 900);
-            if (len === 0) {
-                ctx.fillStyle = ui.theme === 'light' ? '#cbd5e1' : '#1e293b';
-                ctx.beginPath(); ctx.arc(450, 450, 400, 0, Math.PI * 2); ctx.fill();
-                return;
-            }
+      draw() {
+    const canvas = document.getElementById('wheelCanvas');
+    const size = canvas.parentElement.offsetWidth; // dynamic width
+    canvas.width = size;
+    canvas.height = size;
 
-            const arc = (Math.PI * 2) / len;
-            const colors = ui.theme === 'light' ? 
-                ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899'] :
-                ['#1d4ed8', '#065f46', '#92400e', '#991b1b', '#5b21b6', '#9d174d'];
+    const ctx = canvas.getContext('2d');
+    const len = this.names.length;
+    ctx.clearRect(0, 0, size, size);
 
-            this.names.forEach((name, i) => {
-                const currentAngle = this.angle + (i * arc);
-                
-                // Draw Slice
-                ctx.beginPath();
-                ctx.fillStyle = colors[i % colors.length];
-                ctx.moveTo(450, 450);
-                ctx.arc(450, 450, 440, currentAngle, currentAngle + arc);
-                ctx.fill();
-                ctx.strokeStyle = ui.theme === 'light' ? '#ffffff' : '#0f172a';
-                ctx.lineWidth = 3;
-                ctx.stroke();
+    if (len === 0) {
+        ctx.fillStyle = ui.theme === 'light' ? '#cbd5e1' : '#1e293b';
+        ctx.beginPath(); ctx.arc(size/2, size/2, size/2 - 10, 0, Math.PI * 2); ctx.fill();
+        return;
+    }
 
-                // Draw Text
-                ctx.save();
-                ctx.translate(450, 450);
-                ctx.rotate(currentAngle + arc / 2);
-                ctx.textAlign = "right";
-                ctx.fillStyle = "#ffffff";
-                ctx.font = "bold 28px Inter, sans-serif";
-                ctx.shadowBlur = 4;
-                ctx.shadowColor = "rgba(0,0,0,0.3)";
-                ctx.fillText(name.substring(0, 18), 400, 10);
-                ctx.restore();
-            });
+    const arc = (Math.PI * 2) / len;
+    const colors = ui.theme === 'light' ? 
+        ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899'] :
+        ['#1d4ed8', '#065f46', '#92400e', '#991b1b', '#5b21b6', '#9d174d'];
 
-            // Center Pin
-            ctx.beginPath();
-            ctx.fillStyle = "white";
-            ctx.arc(450, 450, 30, 0, Math.PI * 2);
-            ctx.fill();
-            ctx.shadowBlur = 10; ctx.shadowColor = "rgba(0,0,0,0.2)";
-        },
+    this.names.forEach((name, i) => {
+        const currentAngle = this.angle + (i * arc);
+        ctx.beginPath();
+        ctx.fillStyle = colors[i % colors.length];
+        ctx.moveTo(size/2, size/2);
+        ctx.arc(size/2, size/2, size/2 - 10, currentAngle, currentAngle + arc);
+        ctx.fill();
+        ctx.strokeStyle = ui.theme === 'light' ? '#ffffff' : '#0f172a';
+        ctx.lineWidth = 3;
+        ctx.stroke();
 
+        ctx.save();
+        ctx.translate(size/2, size/2);
+        ctx.rotate(currentAngle + arc / 2);
+        ctx.textAlign = "right";
+        ctx.fillStyle = "#ffffff";
+        ctx.font = `bold ${Math.floor(size/20)}px Inter, sans-serif`;
+        ctx.shadowBlur = 4;
+        ctx.shadowColor = "rgba(0,0,0,0.3)";
+        ctx.fillText(name.substring(0, 18), size/2 - 20, 10);
+        ctx.restore();
+    });
+
+    // Center Pin
+    ctx.beginPath();
+    ctx.fillStyle = "white";
+    ctx.arc(size/2, size/2, size/15, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.shadowBlur = 10; ctx.shadowColor = "rgba(0,0,0,0.2)";
+}
         spin() {
             if (this.isSpinning || this.names.length < 2) return;
             this.isSpinning = true;
@@ -596,6 +602,17 @@ changeLang(val) {
     };
 
     logic.init();
+    // Full-Screen Functionality
+document.getElementById('btnFullScreen').addEventListener('click', () => {
+    const elem = document.querySelector('.wheel-stage');
+    if (!document.fullscreenElement) {
+        elem.requestFullscreen().catch(err => {
+            alert(`Error attempting to enable full-screen mode: ${err.message}`);
+        });
+    } else {
+        document.exitFullscreen();
+    }
+});
 </script>
     window.addEventListener('load', () => {
     logic.init();
@@ -621,4 +638,5 @@ changeLang(val) {
 
 </body>
 </html>
+
 
