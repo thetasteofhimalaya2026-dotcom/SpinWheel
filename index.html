@@ -156,7 +156,7 @@
         
         <textarea id="mainInput" class="name-editor" placeholder="Enter names here...">Student Alex&#10;Marketing Team&#10;Principal Sarah&#10;Maya Devi&#10;Officer Rahul&#10;Teacher Sam</textarea>
         
-        <div style="margin: 15px 0; display:flex; align-items:center; gap:8px; font-weight:600; font-size:13px;">
+      <div style="margin: 15px 0; display:flex; align-items:center; gap:8px; font-weight:600; font-size:13px;">
     <span id="statusIcon" style="color:var(--success)">✔</span> 
     <span id="lblStatus" style="color:var(--success)">Name list is valid.</span>
 </div>
@@ -344,8 +344,8 @@ const logic = {
         this.draw();
     },
 
- init() {
-    // 1. Starts Lifetime count from 15,050
+init() {
+    // Sets starting lifetime spins to 15050 if never used before
     this.totalSpins = parseInt(localStorage.getItem('ts_lifetime_spins')) || 15050;
     document.getElementById('valTotalSpins').innerText = this.totalSpins;
     
@@ -353,12 +353,11 @@ const logic = {
     this.sync();
     this.changeLang(this.lang);
 },
-
 sync() {
     const val = document.getElementById('mainInput').value;
     const rawNames = val.split('\n').map(n => n.trim()).filter(n => n !== "");
     
-    // 2. Duplicate Detection Logic
+    // Duplicate Detection
     const seen = new Set();
     const duplicates = rawNames.filter(name => {
         const lower = name.toLowerCase();
@@ -556,3 +555,4 @@ window.onload = () => logic.init();
 </script>
 </body>
 </html>
+
