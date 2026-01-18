@@ -344,8 +344,17 @@ init() {
     const logoInput = document.getElementById('logoUpload');
     if(logoInput) logoInput.addEventListener('change', (e) => this.handleLogoUpload(e));
 
-    this.totalSpins = parseInt(localStorage.getItem('ts_lifetime_spins')) || 25000;
-    document.getElementById('valTotalSpins').innerText = this.totalSpins;
+   // Load Lifetime Spins
+let savedSpins = localStorage.getItem('ts_lifetime_spins');
+if (!savedSpins) {
+    // If it's a new user, start at 25000
+    this.totalSpins = 25000;
+    localStorage.setItem('ts_lifetime_spins', 25000);
+} else {
+    // If they have spun before, use the saved number
+    this.totalSpins = parseInt(savedSpins);
+}
+document.getElementById('valTotalSpins').innerText = this.totalSpins;
     
     document.getElementById('mainInput').addEventListener('input', () => this.sync());
     
@@ -522,47 +531,51 @@ init() {
         };
         requestAnimationFrame(animate);
     },
+finish() {
+    this.isSpinning = false;
+    
+    // --- 1. CALCULATE THE WINNER (The Missing Part) ---
+    const arc = (Math.PI * 2) / this.names.length;
+    // Calculate which segment is at the top (12 o'clock position)
+    const normalizedAngle = ((this.angle % (Math.PI * 2)) + (Math.PI * 2)) % (Math.PI * 2);
+    const idx = Math.floor(( (Math.PI * 2) - (normalizedAngle + Math.PI / 2) % (Math.PI * 2) + (Math.PI * 2) ) % (Math.PI * 2) / arc);
+    const winner = this.names[idx];
 
-    finish() {
-        this.isSpinning = false;
-        const arc = (Math.PI * 2) / this.names.length;
-        const normalizedAngle = ((Math.PI * 1.5) - this.angle) % (Math.PI * 2);
-        const idx = Math.floor((normalizedAngle < 0 ? normalizedAngle + Math.PI * 2 : normalizedAngle) / arc) % this.names.length;
-        const winner = this.names[idx];
+    // --- 2. UPDATE & SAVE LIFETIME SPINS ---
+    this.totalSpins++; 
+    localStorage.setItem('ts_lifetime_spins', this.totalSpins); 
+    document.getElementById('valTotalSpins').innerText = this.totalSpins;
 
-        this.totalSpins++;
-        localStorage.setItem('ts_lifetime_spins', this.totalSpins);
-        document.getElementById('valTotalSpins').innerText = this.totalSpins;
-        
-        confetti({ 
-            particleCount: 150, 
-            spread: 70, 
-            origin: { y: 0.6 },
-            colors: ['#2563eb', '#10b981', '#f59e0b', '#ef4444']
-        });
-        
-        if (document.getElementById('cfgSound').checked) {
-            const winSnd = document.getElementById('sndWin');
-            winSnd.currentTime = 0; 
-            winSnd.play().catch(() => {});
-        }
+    // --- 3. EFFECTS & ALERTS ---
+    confetti({ 
+        particleCount: 150, 
+        spread: 70, 
+        origin: { y: 0.6 },
+        colors: ['#2563eb', '#10b981', '#f59e0b', '#ef4444']
+    });
+    
+    if (document.getElementById('cfgSound').checked) {
+        const winSnd = document.getElementById('sndWin');
+        winSnd.currentTime = 0; 
+        winSnd.play().catch(() => {});
+    }
 
-        Swal.fire({
-            title: this.translations[this.lang].winner,
-            html: `<h2 style="color:#2563eb; font-size:3rem;">${winner}</h2>`,
-            icon: 'success',
-            confirmButtonColor: '#2563eb'
-        });
+    Swal.fire({
+        title: this.translations[this.lang].winner,
+        html: `<h2 style="color:#2563eb; font-size:3rem;">${winner}</h2>`,
+        icon: 'success',
+        confirmButtonColor: '#2563eb'
+    });
 
-        this.addToHistory(winner);
-        
-        if (document.getElementById('cfgRemove').checked) {
-            this.names.splice(idx, 1);
-            document.getElementById('mainInput').value = this.names.join('\n');
-            this.sync();
-        }
-    },
-
+    this.addToHistory(winner);
+    
+    // --- 4. AUTO-REMOVE LOGIC ---
+    if (document.getElementById('cfgRemove').checked) {
+        this.names.splice(idx, 1);
+        document.getElementById('mainInput').value = this.names.join('\n');
+        this.sync();
+    }
+},
     addToHistory(name) {
         const time = new Date().toLocaleTimeString();
         this.history.unshift({name, time});
@@ -665,4 +678,5 @@ window.onload = () => logic.init();
 </script>
 </body>
 </html>
+
 
