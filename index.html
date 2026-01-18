@@ -561,7 +561,11 @@ changeLang(val) {
 
     logic.init();
 </script>
-</body>
+    window.addEventListener('load', () => {
+    logic.init();
+    logic.changeLang('en'); // load English by default
+});
+
     <!-- Dynamic SEO & Legal Section -->
 <div id="dynamic-seo"></div>
 
@@ -576,6 +580,5 @@ changeLang(val) {
     </div>
     <div class="copyright">&copy; 2026 TeamSpin PRO.</div>
 </footer>
-
+</body>
 </html>
-
