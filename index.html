@@ -1,402 +1,556 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TeamSpin PRO – Free Wheel of Names | Random Name Picker & Decision Maker</title>
-    <meta name="description" content="TeamSpin PRO is the best free online Wheel of Names. Perfect for teachers, raffles, and random giveaways. Spin the wheel to pick a winner instantly!">
-    <meta name="keywords" content="wheel of names, random name picker, spin the wheel, random winner generator, TeamSpin PRO, decision maker">
-    <link rel="icon" type="image/jpeg" href="logo.jpg">
-    <link rel="apple-touch-icon" href="logo.jpg">
-    <meta name="theme-color" content="#007bff">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TeamSpin PRO – Free Wheel of Names | Random Name Picker & Decision Maker</title>
+<meta name="description" content="TeamSpin PRO is the best free online Wheel of Names. Perfect for teachers, raffles, and random giveaways. Spin the wheel to pick a winner instantly!">
+<meta name="keywords" content="wheel of names, random name picker, spin the wheel, random winner generator, TeamSpin PRO, decision maker, नाम छान्ने, नाम चुनने वाला पहिया">
+<link rel="icon" type="image/jpeg" href="logo.jpg">
+<link rel="apple-touch-icon" href="logo.jpg">
+<meta name="theme-color" content="#007bff">
 
-    <style>
-        :root {
-            --primary: #007bff;
-            --primary-light: #e7f3ff;
-            --bg: #ffffff;
-            --text: #333;
-            --sidebar-bg: #ffffff;
-            --accent: #ffd700;
-        }
+<style>
+:root {
+    --primary: #007bff;
+    --primary-light: #e7f3ff;
+    --bg: #ffffff;
+    --text: #333333;
+    --sidebar-bg: #ffffff;
+    --border: #e5e7eb;
+    --wheel-border: #333333;
+    --modal-overlay: rgba(0,0,0,0.85);
+}
 
-        /* THEMES */
-        [data-theme="neon"] { --primary:#00ffe0; --bg:#050b12; --text:#e5f9ff; --sidebar-bg:#101a26; }
-        [data-theme="dark"] { --primary:#7dd3fc; --bg:#0f172a; --text:#f8fafc; --sidebar-bg:#1e293b; }
-        [data-theme="pastel"] { --primary:#ff8fab; --bg:#fff0f6; --text:#4a2c2a; --sidebar-bg:#ffffff; }
-        [data-theme="casino"] { --primary:#ffd700; --bg:#062a1f; --text:#fff8dc; --sidebar-bg:#0a3d2e; }
+/* --- THEME DEFINITIONS --- */
+[data-theme="dark"] {
+    --primary: #7dd3fc;
+    --bg: #0f172a;
+    --text: #f8fafc;
+    --sidebar-bg: #1e293b;
+    --border: #334155;
+    --wheel-border: #ffffff;
+}
+[data-theme="neon"] {
+    --primary: #00ffe0;
+    --bg: #050b12;
+    --text: #e5f9ff;
+    --sidebar-bg: #101a26;
+    --border: #00ffe0;
+    --wheel-border: #00ffe0;
+}
+[data-theme="pastel"] {
+    --primary: #ff8fab;
+    --bg: #fff0f6;
+    --text: #4a2c2a;
+    --sidebar-bg: #ffffff;
+    --border: #ffc2d1;
+    --wheel-border: #4a2c2a;
+}
+[data-theme="casino"] {
+    --primary: #ffd700;
+    --bg: #062a1f;
+    --text: #fff8dc;
+    --sidebar-bg: #0a3d2e;
+    --border: #ffd700;
+    --wheel-border: #ffd700;
+}
 
-        body {
-            margin: 0; font-family: system-ui, -apple-system, sans-serif;
-            background: var(--bg); color: var(--text);
-            transition: 0.3s; overflow-x: hidden;
-        }
+body {
+    margin: 0; font-family: system-ui, -apple-system, sans-serif;
+    background: var(--bg); color: var(--text);
+    transition: 0.3s; overflow-x: hidden;
+}
 
-        /* HEADER STYLES */
-        .header-bar {
-            display: flex; align-items: center; gap: 16px;
-            padding: 12px 16px; border-bottom: 1px solid #e5e7eb;
-            background: var(--bg); position: sticky; top: 0; z-index: 1000;
-        }
-        .brand { display: flex; align-items: center; gap: 8px; font-size: 20px; font-weight: 700; }
-        .brand span { color: var(--primary); }
-        .nav-links { display: flex; gap: 16px; flex-grow: 1; }
-        .nav-links a { color: var(--primary); text-decoration: none; font-size: 14px; }
-        .header-right { display: flex; gap: 8px; }
-        select, .header-btn { padding: 6px 10px; border: 1px solid #ccc; border-radius: 6px; background: #fff; cursor: pointer; }
+/* --- HEADER --- */
+.header-bar {
+    display: flex; align-items: center; gap: 16px;
+    padding: 12px 16px; border-bottom: 1px solid var(--border);
+    background: var(--bg); position: sticky; top: 0; z-index: 1000;
+}
+.brand { display: flex; align-items: center; gap: 8px; font-size: 20px; font-weight: 700; cursor: pointer; }
+.brand img { width: 30px; height: 30px; border-radius: 4px; }
+.brand span { color: var(--primary); }
+.nav-links { display: flex; gap: 16px; flex-grow: 1; }
+.nav-links a { color: var(--primary); text-decoration: none; font-size: 14px; font-weight: 500; }
 
-        /* GRID LAYOUT */
-        .app-grid {
-            display: grid; grid-template-columns: 320px 1fr 300px;
-            gap: 20px; padding: 20px;
-        }
+.header-right { display: flex; gap: 8px; align-items: center; }
+select, .header-btn {
+    padding: 6px 10px; border: 1px solid #ccc; border-radius: 6px;
+    background: #fff; color: #333; cursor: pointer; font-size: 13px;
+}
 
-        /* SIDEBAR STYLES */
-        .sidebar {
-            background: var(--sidebar-bg); border: 1px solid #eee;
-            padding: 20px; border-radius: 12px; height: fit-content;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-        }
-        #nameInput {
-            width: 100%; height: 250px; padding: 12px; font-size: 15px; 
-            box-sizing: border-box; border-radius: 8px; border: 1px solid #ccc;
-            background: #fff; color: #000;
-        }
+/* --- GRID LAYOUT --- */
+.app-grid {
+    display: grid; grid-template-columns: 320px 1fr 300px;
+    gap: 20px; padding: 20px; max-width: 1600px; margin: auto;
+}
 
-        /* WHEEL STYLES */
-        .wheel-column { text-align: center; display: flex; flex-direction: column; align-items: center; }
-        .wheel-container {
-            width: min(85vw, 500px); height: min(85vw, 500px);
-            position: relative; margin-bottom: 40px; cursor: pointer;
-        }
-        canvas { width: 100%; height: 100%; border-radius: 50%; box-shadow: 0 20px 60px rgba(0,0,0,0.2); }
+/* --- SIDEBARS --- */
+.sidebar {
+    background: var(--sidebar-bg); border: 1px solid var(--border);
+    padding: 20px; border-radius: 12px; height: fit-content;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+}
+#nameInput {
+    width: 100%; height: 250px; padding: 12px; font-size: 15px;
+    box-sizing: border-box; border-radius: 8px; border: 1px solid #ccc;
+    background: #fff; color: #000; resize: none;
+}
+.duplicate-msg { color: #28a745; font-size: 12px; margin-top: 5px; display: none; font-weight: bold; }
+.error-msg { color: #dc3545; font-size: 12px; margin-top: 5px; display: none; font-weight: bold; animation: shake 0.5s; }
+@keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
 
-        /* POINTER */
-        .pointer {
-            position: absolute; top: -15px; left: 50%; transform: translateX(-50%);
-            z-index: 20; width: 0; height: 0;
-            border-left: 20px solid transparent; border-right: 20px solid transparent;
-            border-top: 45px solid #ff0000; filter: drop-shadow(0 6px 4px rgba(0,0,0,0.4));
-        }
+.control-btn {
+    padding: 12px; border: 1px solid #ccc; border-radius: 8px;
+    background: #f8fafc; cursor: pointer; width: 100%; margin-top: 8px;
+    font-weight: 600; transition: 0.2s; color: #333;
+}
+.control-btn:hover { border-color: var(--primary); background: var(--primary-light); }
+.gallery-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; }
+.gallery-item {
+    padding: 8px; background: #eee; border-radius: 6px;
+    font-size: 12px; text-align: center; cursor: pointer; border: 1px solid transparent; color: #333;
+}
+.gallery-item:hover { border-color: var(--primary); background: #e2e2e2; }
 
-        /* MOBILE FRIENDLY MODALS */
-        .winner-modal {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.85); display: none; align-items: center; justify-content: center;
-            z-index: 9999; animation: fadeIn 0.3s;
-        }
-        .modal-content {
-            background: var(--bg); color: var(--text); padding: 30px; border-radius: 20px;
-            text-align: center; max-width: 400px; width: 85%;
-            box-shadow: 0 10px 50px rgba(0,0,0,0.5); border: 4px solid var(--primary);
-        }
-        .modal-btn-group {
-            display: flex; gap: 10px; margin-top: 20px; justify-content: center;
-        }
-        .close-modal {
-            padding: 12px 20px; background: var(--primary); color: white;
-            border: none; border-radius: 8px; cursor: pointer; font-weight: bold; flex: 1;
-        }
-        .remove-btn { background: #dc3545; }
-        .save-btn { background: #28a745; }
+/* --- WHEEL COMPONENT --- */
+.wheel-column { text-align: center; display: flex; flex-direction: column; align-items: center; }
+.wheel-container {
+    width: min(85vw, 500px); height: min(85vw, 500px);
+    position: relative; margin-bottom: 40px; cursor: pointer;
+}
+canvas { width: 100%; height: 100%; border-radius: 50%; box-shadow: 0 20px 60px rgba(0,0,0,0.2); border: 8px solid var(--wheel-border); }
+.pointer {
+    position: absolute; top: -15px; left: 50%; transform: translateX(-50%);
+    z-index: 20; width: 0; height: 0;
+    border-left: 20px solid transparent; border-right: 20px solid transparent;
+    border-top: 45px solid #ff0000; filter: drop-shadow(0 6px 4px rgba(0,0,0,0.4));
+}
 
-        /* SEO & BLOG SECTION */
-        .seo-section, .blog-section { max-width: 1000px; margin: 40px auto; padding: 20px; line-height: 1.6; }
-        .blog-post { 
-            background: var(--sidebar-bg); padding: 25px; border-radius: 12px; 
-            margin-bottom: 20px; border: 1px solid #eee;
-        }
-        .blog-post h2 { color: var(--primary); margin-top: 0; }
+/* --- MODALS (MOBILE FRIENDLY) --- */
+.winner-modal {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: var(--modal-overlay); display: none; align-items: center; justify-content: center;
+    z-index: 9999; animation: fadeIn 0.3s; backdrop-filter: blur(5px);
+}
+.modal-content {
+    background: var(--bg); color: var(--text); padding: 40px; border-radius: 20px;
+    text-align: center; max-width: 450px; width: 90%;
+    box-shadow: 0 10px 50px rgba(0,0,0,0.5); border: 4px solid var(--primary);
+}
+.modal-btn-group { display: flex; gap: 10px; margin-top: 25px; }
+.m-btn {
+    flex: 1; padding: 14px; border-radius: 10px; border: none;
+    font-weight: 700; cursor: pointer; font-size: 15px;
+}
+.m-btn-close { background: var(--primary); color: white; }
+.m-btn-remove { background: #dc3545; color: white; }
+.m-btn-save { background: #28a745; color: white; }
 
-        /* HISTORY LIST */
-        .history-list {
-            list-style: none; padding: 0; margin: 15px 0;
-            max-height: 200px; overflow-y: auto; border: 1px solid #eee; border-radius: 8px;
-        }
-        .history-item { padding: 8px; border-bottom: 1px solid #eee; text-align: left; }
+/* --- SEO & FEATURES --- */
+.seo-section { max-width: 1000px; margin: 40px auto; padding: 20px; line-height: 1.6; }
+.seo-section h1 { color: var(--primary); text-align: center; }
+.features-container {
+    max-width: 1200px; margin: 40px auto; padding: 0 20px;
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px;
+}
+.feature-card {
+    background: var(--sidebar-bg); border: 1px solid var(--border);
+    border-radius: 12px; padding: 24px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+}
+.feature-card h3 { display: flex; align-items: center; gap: 10px; color: var(--text); margin-top: 0; }
+.feature-card h3 img { width: 24px; height: 24px; border-radius: 4px; }
 
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+/* --- HISTORY --- */
+.history-list {
+    list-style: none; padding: 0; margin: 15px 0;
+    max-height: 250px; overflow-y: auto; border: 1px solid var(--border); border-radius: 8px;
+}
+.history-item { padding: 10px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; font-weight: 600; }
 
-        /* MOBILE RESPONSIVENESS */
-        @media (max-width: 1100px) {
-            .app-grid { grid-template-columns: 1fr; display: flex; flex-direction: column; }
-            .wheel-column { order: -1; }
-            .nav-links { display: none; }
-        }
-        @media (max-width: 480px) {
-            .modal-btn-group { flex-direction: column; }
-            .close-modal { width: 100%; }
-        }
-    </style>
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+@media(max-width:1100px){
+    .app-grid{ grid-template-columns: 1fr; display: flex; flex-direction: column; }
+    .wheel-column{ order: -1; }
+    .nav-links{ display:none; }
+}
+@media (max-width: 480px) {
+    .modal-btn-group { flex-direction: column; }
+}
+</style>
 </head>
 
 <body data-theme="classic">
 
+<input type="file" id="csvFile" accept=".csv,.txt" style="display:none;" onchange="importCSV(event)">
 <audio id="winSound" src="winner.mp3" preload="auto"></audio>
 <audio id="tickSound" src="tick.mp3" preload="auto"></audio>
 
 <div id="winnerModal" class="winner-modal">
     <div class="modal-content">
-        <p style="font-size:1.2rem; margin:0;">🎉 We have a winner! 🎉</p>
-        <h1 id="modalWinnerName" style="font-size: 2.5rem; margin: 15px 0;">Winner</h1>
+        <p id="winCongrats" style="font-size:1.2rem; margin:0;">🎉 We have a winner! 🎉</p>
+        <h1 id="modalWinnerName" style="font-size: 3rem; margin: 20px 0;">Winner</h1>
         <div class="modal-btn-group">
-            <button class="close-modal" onclick="closeModal()">Close</button>
-            <button class="close-modal remove-btn" onclick="removeWinnerAndClose()">Remove Winner</button>
+            <button class="m-btn m-btn-close" id="btn_close" onclick="closeModal()">Close</button>
+            <button class="m-btn m-btn-remove" id="btn_remove" onclick="removeWinnerAndClose()">Remove Winner</button>
         </div>
     </div>
 </div>
 
 <div id="winnerListModal" class="winner-modal">
     <div class="modal-content">
-        <h2>🏆 Winner History</h2>
+        <h2 id="historyTitle">🏆 Winner History</h2>
         <ul id="winnerList" class="history-list"></ul>
         <div class="modal-btn-group">
-            <button class="close-modal" onclick="closeWinnerList()">Close</button>
-            <button class="close-modal save-btn" onclick="downloadWinnerCSV()">Download CSV</button>
+            <button class="m-btn m-btn-close" onclick="closeWinnerList()">Close</button>
+            <button class="m-btn m-btn-save" onclick="downloadWinnerCSV()">Download CSV</button>
         </div>
     </div>
 </div>
 
 <header class="header-bar">
-    <div class="brand">TeamSpin <span>PRO</span></div>
+    <div class="brand"><img src="logo.jpg" alt="Logo"> TeamSpin <span>PRO</span></div>
     <nav class="nav-links">
-        <a href="#">Privacy</a>
-        <a href="#">Terms</a>
-        <a href="#">FAQ</a>
-        <a href="#">About Us</a>
-        <a href="#">Contact</a>
+        <a href="privacy.html" id="nav_privacy">Privacy</a>
+        <a href="terms.html" id="nav_terms">Terms</a>
+        <a href="faq.html" id="nav_faq">FAQ</a>
+        <a href="aboutus.html">About Us</a>
+        <a href="contact.html">Contact Us</a>
     </nav>
     <div class="header-right">
-        <select id="langSelect" onchange="updateLanguage()">
+        <select id="langSelect" onchange="changeLanguage()">
             <option value="en">English</option>
-            <option value="np">नेपाली</option>
+            <option value="np">नेपाली (Nepali)</option>
+            <option value="hi">हिन्दी (Hindi)</option>
         </select>
-        <select id="themeSelect" onchange="document.body.setAttribute('data-theme', this.value)">
+        <select id="themeSelect" onchange="changeTheme(this.value)">
             <option value="classic">Classic</option>
             <option value="neon">Neon</option>
             <option value="dark">Dark</option>
             <option value="pastel">Pastel</option>
             <option value="casino">Casino</option>
         </select>
+        <button class="header-btn" onclick="toggleFullscreen()">Fullscreen</button>
         <button class="header-btn" onclick="showWinnerList()">History</button>
     </div>
 </header>
 
 <div class="app-grid">
     <div class="sidebar">
-        <h3 id="inputTitle">Enter Names</h3>
-        <textarea id="nameInput" placeholder="Enter one name per line...">Alex&#10;Sita&#10;John&#10;Maya&#10;Rahul&#10;Bikram&#10;Sushila</textarea>
-        <button class="header-btn" style="width:100%; margin-top:10px; background:var(--primary); color:#fff;" onclick="updateWheelData()">Update Wheel</button>
+        <h3 id="label_enterNames">Enter Names</h3>
+        <textarea id="nameInput" placeholder="Enter one name per line...">Alex&#10;Sita&#10;Maya&#10;Sushila&#10;John&#10;Rahul&#10;Bikram</textarea>
+        <div id="duplicateMsg" class="duplicate-msg">No duplicates found.</div>
+        <div id="errorMsg" class="error-msg">Please enter at least 2 names.</div>
+        
+        <button class="control-btn" style="background:var(--primary); color:white; border:none;" onclick="updateWheel()">Update Wheel</button>
+        
+        <div class="gallery-grid">
+            <div class="gallery-item" onclick="loadNames('numbers')">1 - 10</div>
+            <div class="gallery-item" onclick="loadNames('letters')">A - J</div>
+        </div>
+        
+        <button class="control-btn" style="margin-top:20px;" onclick="document.getElementById('csvFile').click()">📥 Import CSV/Text</button>
+        <button class="control-btn" onclick="exportCurrentList()">📤 Export List</button>
     </div>
 
-    <div class="wheel-column">
+    <div class="wheel-column" id="wheelSection">
         <div class="wheel-container" onclick="spinWheel()">
             <div class="pointer"></div>
-            <canvas id="wheelCanvas" width="500" height="500"></canvas>
+            <canvas id="wheelCanvas" width="800" height="800"></canvas>
         </div>
-        <h2 id="spinPrompt">Click the wheel to spin!</h2>
+        <h2 id="instructionText">Click the wheel to spin!</h2>
     </div>
 
     <div class="sidebar">
-        <h3>Quick Tools</h3>
-        <button class="header-btn" style="width:100%; margin-bottom:10px;" onclick="shuffleNames()">🔀 Shuffle Names</button>
-        <button class="header-btn" style="width:100%;" onclick="clearNames()">🗑️ Clear All</button>
-        <hr>
-        <p><strong>Status:</strong> <span id="nameCount">0</span> Names loaded</p>
+        <h3 id="label_tools">Quick Tools</h3>
+        <button class="control-btn" onclick="shuffleNames()">🔀 Shuffle Names</button>
+        <button class="control-btn" onclick="clearAll()">🗑️ Clear All</button>
+        <hr style="margin:20px 0; opacity:0.1;">
+        <h3>Options</h3>
+        <label><input type="checkbox" id="autoRemove"> Remove winner automatically</label>
+        <br><br>
+        <label><input type="checkbox" id="soundOn" checked> Sound Effects</label>
+        <br><br>
+        <p><strong>Status:</strong> <span id="nameCount">0</span> names loaded.</p>
     </div>
 </div>
 
 <section class="seo-section">
-    <h1>TeamSpin PRO: Professional Random Name Picker</h1>
-    <p>Welcome to <strong>TeamSpin PRO</strong>, the world's most versatile free online <strong>Wheel of Names</strong>. Whether you are a teacher looking to pick a student, a business running a raffle, or just trying to decide what to eat for dinner, our randomizer wheel provides a fair, fun, and transparent solution.</p>
+    <h1 id="seo_h1">TeamSpin PRO: The Best Random Name Picker</h1>
+    <p>Welcome to <strong>TeamSpin PRO</strong>, the world's leading free online <strong>Wheel of Names</strong>. Our tool is specifically designed for teachers, event organizers, and streamers who need a 100% fair and transparent way to pick winners or make decisions.</p>
 </section>
 
-<div class="blog-section">
-    <div class="blog-post">
-        <h2>How to pick a winner fairly?</h2>
-        <p>Fairness is key in any giveaway. TeamSpin PRO uses a mathematical algorithm to ensure that every slice on the wheel has an mathematically equal probability of winning. Simply enter your list, spin, and let fate decide!</p>
+<div class="features-container">
+    <div class="feature-card">
+        <h3 id="blog_fair_h">Is it truly random?</h3>
+        <p>Yes! We use a cryptographically secure random number generator coupled with a physics-based easing algorithm. This ensures every slice on the wheel has an equal probability of being selected.</p>
     </div>
-    <div class="blog-post">
-        <h2>नेपाली प्रयोगकर्ताहरूका लागि निर्देशिका</h2>
-        <p>TeamSpin PRO अब नेपाली भाषामा पनि उपलब्ध छ। तपाईं आफ्ना साथीहरू, विद्यार्थीहरू वा उपहार विजेताहरूको नाम नेपालीमा टाइप गरेर भाग्यशाली विजेता छान्न सक्नुहुन्छ। यो पूर्ण रूपमा निःशुल्क र सुरक्षित छ।</p>
+    <div class="feature-card">
+        <h3 id="blog_lang_h">नेपाली र हिन्दी भाषा समर्थन</h3>
+        <p>TeamSpin PRO अब नेपाली र हिन्दी भाषामा पूर्ण रूपमा उपलब्ध छ। तपाईं आफ्ना विद्यार्थी वा मित्रहरूको नाम सजिलै टाइप गर्न र विजेता घोषणा गर्न सक्नुहुन्छ। यो विशेष गरी दक्षिण एसियाली प्रयोगकर्ताहरूका लागि बनाइएको हो।</p>
+    </div>
+    <div class="feature-card">
+        <h3>Import & Export CSV</h3>
+        <p>You no longer need to type names manually every time. Use our <strong>Import CSV</strong> feature to load thousands of names instantly. Once the giveaway is over, export the winners' list for your records.</p>
     </div>
 </div>
 
 <footer>
-    <p>© 2026 TeamSpin PRO – Professional Random Name Picker. Made for teachers and creators.</p>
+    <a href="feedback.html" style="color:var(--primary); text-decoration:none; font-weight:bold;">Give Feedback</a>
+    <p>© 2026 TeamSpin PRO – Professional Random Name Picker. All Rights Reserved.</p>
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
 <script>
-    const canvas = document.getElementById("wheelCanvas");
-    const ctx = canvas.getContext("2d");
-    const nameInput = document.getElementById("nameInput");
+// --- CORE VARIABLES ---
+const canvas = document.getElementById("wheelCanvas");
+const ctx = canvas.getContext("2d");
+const nameInput = document.getElementById("nameInput");
+const tickSound = document.getElementById("tickSound");
+const winSound = document.getElementById("winSound");
+
+let names = [];
+let winners = [];
+let startAngle = 0;
+let isSpinning = false;
+let currentTheme = "classic";
+
+const themes = {
+    classic: ["#f87171", "#fb923c", "#fbbf24", "#facc15", "#a3e635", "#4ade80", "#2dd4bf", "#38bdf8", "#818cf8", "#c084fc", "#f472b6"],
+    dark: ["#1e293b", "#334155", "#475569", "#64748b", "#94a3b8", "#cbd5e1"],
+    neon: ["#00ffe0", "#ff00ff", "#ffff00", "#00ff00", "#ff0000", "#0000ff"],
+    pastel: ["#ffadad", "#ffd6a5", "#fdffb6", "#caffbf", "#9bf6ff", "#a0c4ff", "#bdb2ff", "#ffc6ff"],
+    casino: ["#d4af37", "#000000", "#ff0000", "#ffffff"]
+};
+
+const langData = {
+    en: { enter: "Enter Names", tools: "Quick Tools", instr: "Click the wheel to spin!", congrats: "🎉 We have a winner! 🎉", history: "Winner History", close: "Close", remove: "Remove Winner" },
+    np: { enter: "नामहरू लेख्नुहोस्", tools: "उपकरणहरू", instr: "घुमाउनको लागि क्लिक गर्नुहोस्!", congrats: "🎉 विजेता घोषणा! 🎉", history: "विजेता इतिहास", close: "बन्द गर्नुहोस्", remove: "नाम हटाउनुहोस्" },
+    hi: { enter: "नाम दर्ज करें", tools: "उपकरण", instr: "पहिया घुमाने के लिए क्लिक करें!", congrats: "🎉 विजेता घोषित! 🎉", history: "विजेता इतिहास", close: "बंद करें", remove: "नाम हटाएँ" }
+};
+
+// --- INITIALIZATION ---
+function init() {
+    updateWheel();
+    changeLanguage();
+}
+
+function updateWheel() {
+    names = nameInput.value.split('\n').filter(n => n.trim() !== "");
+    document.getElementById("nameCount").innerText = names.length;
     
-    let names = [];
-    let winners = [];
-    let currentRotation = 0;
-    let isSpinning = false;
-
-    // Initialize
-    function init() {
-        updateWheelData();
+    // Duplicate check logic
+    const unique = new Set(names);
+    const dupMsg = document.getElementById("duplicateMsg");
+    if(names.length > unique.size) {
+        dupMsg.style.display = "block";
+        dupMsg.innerText = "⚠️ Duplicates detected!";
+        dupMsg.style.color = "#dc3545";
+    } else {
+        dupMsg.style.display = names.length > 0 ? "block" : "none";
+        dupMsg.innerText = "✅ No duplicates.";
+        dupMsg.style.color = "#28a745";
     }
+    
+    drawWheel();
+}
 
-    function updateWheelData() {
-        names = nameInput.value.split('\n').filter(name => name.trim() !== "");
-        document.getElementById("nameCount").innerText = names.length;
+function drawWheel() {
+    const len = names.length;
+    if (len === 0) { ctx.clearRect(0,0,800,800); return; }
+    
+    const arc = (2 * Math.PI) / len;
+    ctx.clearRect(0, 0, 800, 800);
+
+    const colorPalette = themes[currentTheme];
+
+    for (let i = 0; i < len; i++) {
+        const angle = startAngle + i * arc;
+        
+        // Draw Slice
+        ctx.fillStyle = colorPalette[i % colorPalette.length];
+        ctx.beginPath();
+        ctx.moveTo(400, 400);
+        ctx.arc(400, 400, 380, angle, angle + arc);
+        ctx.fill();
+        ctx.strokeStyle = "rgba(255,255,255,0.2)";
+        ctx.lineWidth = 2;
+        ctx.stroke();
+
+        // High Contrast Text Rendering
+        ctx.save();
+        ctx.translate(400, 400);
+        ctx.rotate(angle + arc / 2);
+        ctx.textAlign = "right";
+        ctx.fillStyle = "#ffffff";
+        ctx.font = "bold 30px sans-serif";
+        
+        // Dynamic outline for visibility
+        ctx.shadowColor = "rgba(0,0,0,0.8)";
+        ctx.shadowBlur = 4;
+        ctx.strokeStyle = "#000000";
+        ctx.lineWidth = 4;
+        ctx.strokeText(names[i], 360, 10);
+        ctx.fillText(names[i], 360, 10);
+        
+        ctx.restore();
+    }
+}
+
+function spinWheel() {
+    if (isSpinning || names.length < 2) {
+        if(names.length < 2) document.getElementById("errorMsg").style.display = "block";
+        return;
+    }
+    document.getElementById("errorMsg").style.display = "none";
+    isSpinning = true;
+
+    const spinDuration = 5000;
+    const startTime = performance.now();
+    const totalRotation = (Math.PI * 2 * 10) + (Math.random() * Math.PI * 2);
+
+    function animate(now) {
+        const elapsed = now - startTime;
+        const progress = Math.min(elapsed / spinDuration, 1);
+        
+        // Cubic Ease Out
+        const easeOut = 1 - Math.pow(1 - progress, 3);
+        startAngle += (totalRotation * (1 - progress)) * 0.05;
+        
         drawWheel();
-    }
 
-    function drawWheel() {
-        const numSegments = names.length;
-        if (numSegments === 0) {
-            ctx.clearRect(0, 0, 500, 500);
-            return;
-        }
-
-        const arcSize = (2 * Math.PI) / numSegments;
-        ctx.clearRect(0, 0, 500, 500);
-
-        for (let i = 0; i < numSegments; i++) {
-            const angle = currentRotation + (i * arcSize);
-            
-            // Segment Color
-            ctx.fillStyle = `hsl(${(i * 360) / numSegments}, 70%, 50%)`;
-            ctx.beginPath();
-            ctx.moveTo(250, 250);
-            ctx.arc(250, 250, 240, angle, angle + arcSize);
-            ctx.fill();
-            ctx.strokeStyle = "#fff";
-            ctx.lineWidth = 2;
-            ctx.stroke();
-
-            // Contrast Text Rendering
-            ctx.save();
-            ctx.translate(250, 250);
-            ctx.rotate(angle + arcSize / 2);
-            ctx.textAlign = "right";
-            ctx.fillStyle = "#fff";
-            ctx.font = "bold 18px sans-serif";
-            
-            // Text Stroke for better visibility on custom backgrounds
-            ctx.strokeStyle = "#000";
-            ctx.lineWidth = 3;
-            ctx.strokeText(names[i], 230, 10);
-            ctx.fillText(names[i], 230, 10);
-            ctx.restore();
-        }
-    }
-
-    function spinWheel() {
-        if (isSpinning || names.length === 0) return;
-        isSpinning = true;
-
-        const spinDuration = 4000;
-        const startTimestamp = performance.now();
-        const extraSpins = Math.random() * 2000 + 3000; // Randomize distance
-
-        function animate(now) {
-            const elapsed = now - startTimestamp;
-            const progress = Math.min(elapsed / spinDuration, 1);
-            
-            // Ease out cubic
-            const easeOut = 1 - Math.pow(1 - progress, 3);
-            currentRotation += (extraSpins * (1 - easeOut)) * 0.001;
-
-            drawWheel();
-
-            if (progress < 1) {
-                requestAnimationFrame(animate);
-            } else {
-                isSpinning = false;
-                finalizeWinner();
-            }
-        }
-        requestAnimationFrame(animate);
-    }
-
-    function finalizeWinner() {
-        const numSegments = names.length;
-        const arcSize = (2 * Math.PI) / numSegments;
-        
-        // Calculate which segment is at the top (12 o'clock = 3pi/2)
-        const normalizedRotation = (currentRotation + (3 * Math.PI / 2)) % (2 * Math.PI);
-        const index = numSegments - 1 - Math.floor(normalizedRotation / arcSize);
-        const winner = names[index];
-
-        winners.push(winner);
-        document.getElementById("modalWinnerName").innerText = winner;
-        document.getElementById("winnerModal").style.display = "flex";
-        
-        // Confetti effect
-        confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
-        document.getElementById("winSound").play();
-    }
-
-    function removeWinnerAndClose() {
-        const winnerName = document.getElementById("modalWinnerName").innerText;
-        names = names.filter(n => n !== winnerName);
-        nameInput.value = names.join('\n');
-        updateWheelData();
-        closeModal();
-    }
-
-    function closeModal() { document.getElementById("winnerModal").style.display = "none"; }
-
-    function showWinnerList() {
-        const listContainer = document.getElementById("winnerList");
-        listContainer.innerHTML = winners.length 
-            ? winners.map(w => `<li class="history-item">🏆 ${w}</li>`).join('')
-            : '<li class="history-item">No winners yet.</li>';
-        document.getElementById("winnerListModal").style.display = "flex";
-    }
-
-    function closeWinnerList() { document.getElementById("winnerListModal").style.display = "none"; }
-
-    function downloadWinnerCSV() {
-        if (winners.length === 0) return alert("Winner list is empty!");
-        let csvContent = "data:text/csv;charset=utf-8,ID,Winner Name\n";
-        winners.forEach((w, i) => csvContent += `${i + 1},${w}\n`);
-        const encodedUri = encodeURI(csvContent);
-        const link = document.createElement("a");
-        link.setAttribute("href", encodedUri);
-        link.setAttribute("download", "TeamSpin_Winners.csv");
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-    }
-
-    function shuffleNames() {
-        let array = nameInput.value.split('\n').filter(n => n.trim() !== "");
-        for (let i = array.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [array[i], array[j]] = [array[j], array[i]];
-        }
-        nameInput.value = array.join('\n');
-        updateWheelData();
-    }
-
-    function clearNames() {
-        if(confirm("Clear all names?")) {
-            nameInput.value = "";
-            updateWheelData();
-        }
-    }
-
-    function updateLanguage() {
-        const lang = document.getElementById("langSelect").value;
-        if(lang === "np") {
-            document.getElementById("inputTitle").innerText = "नामहरू प्रविष्ट गर्नुहोस्";
-            document.getElementById("spinPrompt").innerText = "घुमाउनको लागि क्लिक गर्नुहोस्!";
+        if (progress < 1) {
+            if(document.getElementById("soundOn").checked) tickSound.play();
+            requestAnimationFrame(animate);
         } else {
-            document.getElementById("inputTitle").innerText = "Enter Names";
-            document.getElementById("spinPrompt").innerText = "Click the wheel to spin!";
+            isSpinning = false;
+            finalizeWinner();
         }
     }
+    requestAnimationFrame(animate);
+}
 
-    init();
+function finalizeWinner() {
+    const len = names.length;
+    const arc = (2 * Math.PI) / len;
+    const normalizedAngle = (startAngle + (3 * Math.PI / 2)) % (2 * Math.PI);
+    const winningIndex = len - 1 - Math.floor(normalizedAngle / arc);
+    const winner = names[winningIndex];
+
+    winners.push({ name: winner, time: new Date().toLocaleTimeString() });
+    document.getElementById("modalWinnerName").innerText = winner;
+    document.getElementById("winnerModal").style.display = "flex";
+    
+    confetti({ particleCount: 200, spread: 70, origin: { y: 0.6 } });
+    if(document.getElementById("soundOn").checked) winSound.play();
+
+    if(document.getElementById("autoRemove").checked) removeWinner();
+}
+
+// --- UTILITY FUNCTIONS ---
+function closeModal() { document.getElementById("winnerModal").style.display = "none"; }
+
+function removeWinner() {
+    const currentWin = document.getElementById("modalWinnerName").innerText;
+    names = names.filter(n => n !== currentWin);
+    nameInput.value = names.join('\n');
+    updateWheel();
+}
+
+function removeWinnerAndClose() {
+    removeWinner();
+    closeModal();
+}
+
+function changeTheme(t) {
+    document.body.setAttribute('data-theme', t);
+    currentTheme = t;
+    drawWheel();
+}
+
+function changeLanguage() {
+    const l = document.getElementById("langSelect").value;
+    const d = langData[l];
+    document.getElementById("label_enterNames").innerText = d.enter;
+    document.getElementById("label_tools").innerText = d.tools;
+    document.getElementById("instructionText").innerText = d.instr;
+    document.getElementById("winCongrats").innerText = d.congrats;
+    document.getElementById("historyTitle").innerText = d.history;
+    document.getElementById("btn_close").innerText = d.close;
+    document.getElementById("btn_remove").innerText = d.remove;
+}
+
+function showWinnerList() {
+    const ul = document.getElementById("winnerList");
+    ul.innerHTML = winners.length ? winners.map(w => `<li class="history-item"><span>${w.name}</span> <small>${w.time}</small></li>`).join('') : "<li>No winners yet.</li>";
+    document.getElementById("winnerListModal").style.display = "flex";
+}
+
+function closeWinnerList() { document.getElementById("winnerListModal").style.display = "none"; }
+
+function downloadWinnerCSV() {
+    if(!winners.length) return alert("No history!");
+    let csv = "Winner,Time\n" + winners.map(w => `"${w.name}",${w.time}`).join('\n');
+    const blob = new Blob([csv], {type: 'text/csv'});
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = "TeamSpin_Winners.csv";
+    a.click();
+}
+
+function importCSV(e) {
+    const file = e.target.files[0];
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+        const text = ev.target.result;
+        const rows = text.split(/,|\n/).map(r => r.trim()).filter(r => r !== "");
+        nameInput.value = rows.join('\n');
+        updateWheel();
+    };
+    reader.readAsText(file);
+}
+
+function exportCurrentList() {
+    const blob = new Blob([nameInput.value], {type: 'text/plain'});
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = "TeamSpin_Names.txt";
+    a.click();
+}
+
+function shuffleNames() {
+    let arr = nameInput.value.split('\n').filter(n => n.trim() !== "");
+    for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    nameInput.value = arr.join('\n');
+    updateWheel();
+}
+
+function clearAll() {
+    if(confirm("Clear all names?")) {
+        nameInput.value = "";
+        updateWheel();
+    }
+}
+
+function loadNames(type) {
+    if(type === 'numbers') nameInput.value = "1\n2\n3\n4\n5\n6\n7\n8\n9\n10";
+    if(type === 'letters') nameInput.value = "A\nB\nC\nD\nE\nF\nG\nH\nI\nJ";
+    updateWheel();
+}
+
+function toggleFullscreen() {
+    const elem = document.getElementById("wheelSection");
+    if (!document.fullscreenElement) elem.requestFullscreen().catch(err => alert(err.message));
+    else document.exitFullscreen();
+}
+
+init();
 </script>
 </body>
 </html>
