@@ -21,6 +21,27 @@
             --success: #10b981;
             --danger: #ef4444;
         }
+        /* --- RESTORED SEO & FEEDBACK STYLES --- */
+.seo-grid {
+    max-width: 1200px; margin: 80px auto;
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 40px; padding: 0 20px;
+}
+.seo-card {
+    background: var(--bg-panel); padding: 35px; border-radius: 24px;
+    border: 1px solid var(--border); transition: 0.3s;
+}
+.seo-card:hover { transform: translateY(-10px); box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); }
+.seo-card h2 { color: var(--primary); margin-top: 0; font-size: 1.6rem; }
+
+.faq-container { max-width: 900px; margin: 60px auto; padding: 0 20px; }
+.faq-item { background: var(--bg-panel); border: 1px solid var(--border); border-radius: 15px; margin-bottom: 15px; padding: 20px; }
+.faq-q { font-weight: 800; color: var(--primary); margin-bottom: 10px; display: block; }
+
+.feedback-container {
+    max-width: 800px; margin: 40px auto; padding: 40px; 
+    background: var(--bg-panel); border-radius: 30px; border: 1px solid var(--border);
+}
 
         [data-theme="dark"] {
             --primary: #3b82f6;
@@ -235,6 +256,19 @@
 
 <div id="dynamic-seo"></div>
 
+<div class="feedback-container">
+    <h3 id="lblFeedTitle">Professional Feedback Area</h3>
+    <p id="lblFeedSub" style="color:var(--text-muted);">We are constantly improving TeamSpin PRO. Tell us what features you need next!</p>
+    
+    <textarea id="userFeedback" placeholder="Share your suggestions... (तपाईंको सुझाव यहाँ लेख्नुहोस्...)" 
+              style="width:100%; height:120px; border-radius:15px; border:1px solid var(--border); padding:15px; margin:15px 0; font-family:inherit; background: var(--bg-body); color: var(--text-main);">
+    </textarea>
+    
+    <button class="btn btn-blue" style="width:220px;" 
+            onclick="Swal.fire({title: 'Thank you!', text: 'Your feedback has been noted.', icon: 'success', confirmButtonColor: '#2563eb'})">
+        SUBMIT FEEDBACK
+    </button>
+</div>
 <footer style="background:var(--bg-panel); padding:60px 20px; text-align:center; border-top:1px solid var(--border); margin-top:50px;">
     <p id="lblLegalText" style="max-width:700px; margin:0 auto 20px; font-size:13px; color:var(--text-muted);"></p>
     <div style="font-size:12px; color:var(--text-muted);">&copy; 2026 TeamSpin PRO. Built for Fairness.</div>
@@ -259,48 +293,30 @@
     const logic = {
         names: [], angle: 0, isSpinning: false, history: [], totalSpins: 0, lang: 'en',
         translations: {
-            en: {
-                title: "Classroom & Office Names",
-                sub: "One name per line. Best for teachers and HR raffle events.",
-                spin: "Click the Wheel to Spin!",
-                status: "✔ Name list is valid.",
-                winner: "The winner is: ",
-                legal: "TeamSpin PRO respects your privacy. No data is stored on our servers. <a href='#'>Privacy Policy</a>.",
-                seoHTML: `
-                    <section class="seo-grid" id="features">
-                        <div class="seo-card"><h2>🎓 Teacher Tool</h2><p>Used by educators to pick students fairly. Eliminate bias in your classroom today.</p></div>
-                        <div class="seo-card"><h2>🏢 HR Raffle</h2><p>Perfect for corporate giveaways and office raffles. Handles thousands of names.</p></div>
-                        <div class="seo-card"><h2>🎲 Fair Logic</h2><p>Powered by secure hardware-level randomness using the Web Crypto API.</p></div>
-                    </section>`
-            },
-            np: {
-                title: "कक्षा र कार्यालयका नामहरू",
-                sub: "प्रति पङ्क्ति एक नाम। शिक्षक र राफल कार्यक्रमका लागि उत्तम।",
-                spin: "घुमाउनका लागि व्हीलमा क्लिक गर्नुहोस्!",
-                status: "✔ नाम सूची मान्य छ।",
-                winner: "विजेता हुनुहुन्छ: ",
-                legal: "TeamSpin PRO गोपनीयताको सम्मान गर्दछ। कुनै डाटा सर्भरमा राखिँदैन। <a href='#'>गोपनीयता नीति</a>।",
-                seoHTML: `
-                    <section class="seo-grid">
-                        <div class="seo-card"><h2>🎓 शिक्षकको सहयोगी</h2><p>शिक्षकहरूले निष्पक्ष कक्षाकोठा सुनिश्चित गर्न यो प्रयोग गर्छन्।</p></div>
-                        <div class="seo-card"><h2>🏢 कर्पोरेट राफल</h2><p>कार्यालयमा उपहार वितरण र राफल कार्यक्रमको लागि उत्तम।</p></div>
-                        <div class="seo-card"><h2>🎲 निष्पक्ष लजिक</h2><p>हाम्रो व्हीलले सुरक्षित क्रिप्टो लजिक प्रयोग गर्दछ।</p></div>
-                    </section>`
-            },
-            hi: {
-                title: "कक्षा और कार्यालय के नाम",
-                sub: "प्रति पंक्ति एक नाम। शिक्षकों और रैफल कार्यक्रमों के लिए उत्तम।",
-                spin: "स्पिन करने के लिए व्हील पर क्लिक करें!",
-                status: "✔ नाम सूची मान्य है।",
-                winner: "विजेता है: ",
-                legal: "TeamSpin PRO गोपनीयता का सम्मान करता है। कोई डेटा सर्वर पर नहीं जाता। <a href='#'>नीति पढ़ें</a>।",
-                seoHTML: `
-                    <section class="seo-grid">
-                        <div class="seo-card"><h2>🎓 शिक्षक उपकरण</h2><p>शिक्षक निष्पक्ष रूप से छात्रों का चयन करने के लिए इसका उपयोग करते हैं।</p></div>
-                        <div class="seo-card"><h2>🏢 कार्यालय रैफल</h2><p>कर्मचारी रैफल और कार्यालय उपहार वितरण के लिए आदर्श।</p></div>
-                        <div class="seo-card"><h2>🎲 निष्पक्ष परिणाम</h2><p>सुरक्षित क्रिप्टो-रैंडम एल्गोरिदम द्वारा संचालित।</p></div>
-                    </section>`
-            }
+    en: {
+        title: "Classroom & Office Names",
+        sub: "One name per line. Best for teachers and HR raffle events.",
+        spin: "Click the Wheel to Spin!",
+        status: "Name list is valid.",
+        winner: "The winner is: ",
+        legal: "TeamSpin PRO respects your privacy. No data is stored on our servers."
+    },
+    np: {
+        title: "कक्षा र कार्यालयका नामहरू",
+        sub: "प्रति पङ्क्ति एक नाम। शिक्षक र राफल कार्यक्रमका लागि उत्तम।",
+        spin: "घुमाउनका लागि व्हीलमा क्लिक गर्नुहोस्!",
+        status: "नाम सूची मान्य छ।",
+        winner: "विजेता हुनुहुन्छ: ",
+        legal: "TeamSpin PRO तपाईंको गोपनीयताको सम्मान गर्दछ। कुनै डाटा राखिँदैन।"
+    },
+    hi: {
+        title: "कक्षा और कार्यालय के नाम",
+        sub: "प्रति पंक्ति एक नाम। शिक्षकों और रैफल कार्यक्रमों के लिए उत्तम।",
+        spin: "स्पिन करने के लिए व्हील पर क्लिक करें!",
+        status: "नाम सूची मान्य है।",
+        winner: "विजेता है: ",
+        legal: "TeamSpin PRO आपकी गोपनीयता का सम्मान करता है।"
+    }
         },
 
         changeLang(val) {
@@ -451,3 +467,4 @@
 </script>
 </body>
 </html>
+
