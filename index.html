@@ -117,8 +117,6 @@
     .seo-grid { max-width: 1200px; margin: 60px auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; padding: 0 20px; }
     .seo-card { background: var(--bg-panel); padding: 30px; border-radius: 20px; border: 1px solid var(--border); }
     .feedback-container { max-width: 800px; margin: 40px auto; padding: 30px; background: var(--bg-panel); border-radius: 25px; border: 1px solid var(--border); }
-
-    /* --- RESPONSIVE FIX (THE MOST IMPORTANT PART) --- */
     @media (max-width: 1100px) {
         .master-container { grid-template-columns: 1fr; }
         .nav-links { display: none; } /* Prevents overlapping */
@@ -158,11 +156,12 @@
         
         <textarea id="mainInput" class="name-editor" placeholder="Enter names here...">Student Alex&#10;Marketing Team&#10;Principal Sarah&#10;Maya Devi&#10;Officer Rahul&#10;Teacher Sam</textarea>
         
-        <div style="margin: 15px 0; display:flex; align-items:center; gap:8px; color:var(--success); font-weight:600; font-size:13px;">
-            <span>✔</span> <span id="lblStatus">Name list is valid.</span>
-        </div>
-
-        <button class="btn btn-ghost" onclick="logic.shuffle()">🔀 SHUFFLE NAMES</button>
+        <div style="margin: 15px 0; display:flex; align-items:center; gap:8px; font-weight:600; font-size:13px;">
+    <span id="statusIcon" style="color:var(--success)">✔</span> 
+    <span id="lblStatus" style="color:var(--success)">Name list is valid.</span>
+</div>
+<button class="btn btn-ghost" onclick="logic.shuffle()">🔀 SHUFFLE NAMES</button>
+<button class="btn btn-ghost" style="border: 1px solid var(--primary); color: var(--primary);" onclick="logic.removeDuplicates()">✨ REMOVE DUPLICATES</button>
         <button class="btn btn-ghost" onclick="document.getElementById('csvFile').click()">📥 IMPORT CSV/TXT</button>
         <input type="file" id="csvFile" hidden onchange="logic.importFile(event)">
         <button class="btn btn-ghost" style="color:var(--danger)" onclick="logic.reset()">🗑️ CLEAR ALL</button>
@@ -345,64 +344,73 @@ const logic = {
         this.draw();
     },
 
-  init() {
-this.totalSpins = parseInt(localStorage.getItem('ts_lifetime_spins')) || 15050;
-        document.getElementById('valTotalSpins').innerText = this.totalSpins;
-        document.getElementById('mainInput').addEventListener('input', () => this.sync());
-        this.sync();
-        this.changeLang(this.lang);
-    },
+ init() {
+    // 1. Starts Lifetime count from 15,050
+    this.totalSpins = parseInt(localStorage.getItem('ts_lifetime_spins')) || 15050;
+    document.getElementById('valTotalSpins').innerText = this.totalSpins;
+    
+    document.getElementById('mainInput').addEventListener('input', () => this.sync());
+    this.sync();
+    this.changeLang(this.lang);
+},
 
-    // PASTE THE NEW CODE STARTING HERE:
-    sync() {
-        const val = document.getElementById('mainInput').value;
-        const rawNames = val.split('\n').map(n => n.trim()).filter(n => n !== "");
-        
-        const seen = new Set();
-        const duplicates = rawNames.filter(name => {
-            const lower = name.toLowerCase();
-            if (seen.has(lower)) return true;
-            seen.add(lower);
-            return false;
-        });
+sync() {
+    const val = document.getElementById('mainInput').value;
+    const rawNames = val.split('\n').map(n => n.trim()).filter(n => n !== "");
+    
+    // 2. Duplicate Detection Logic
+    const seen = new Set();
+    const duplicates = rawNames.filter(name => {
+        const lower = name.toLowerCase();
+        if (seen.has(lower)) return true;
+        seen.add(lower);
+        return false;
+    });
 
-        const statusEl = document.getElementById('lblStatus');
-        const iconEl = document.getElementById('statusIcon');
-        
-        if (duplicates.length > 0) {
-            const uniqueDupes = [...new Set(duplicates)];
-            if(iconEl) iconEl.innerText = "⚠️";
-            if(statusEl) {
-                statusEl.style.color = "var(--danger)";
-                statusEl.innerText = (this.lang === 'np' ? "दोहोरिएका नामहरू: " : "Duplicates: ") + uniqueDupes.join(', ');
-            }
-        } else {
-            if(iconEl) iconEl.innerText = "✔";
-            if(statusEl) {
-                statusEl.style.color = "var(--success)";
-                statusEl.innerText = this.translations[this.lang].status;
-            }
+    const statusEl = document.getElementById('lblStatus');
+    const iconEl = document.getElementById('statusIcon');
+    
+    if (duplicates.length > 0) {
+        const uniqueDupes = [...new Set(duplicates)];
+        if(iconEl) {
+            iconEl.innerText = "⚠️";
+            iconEl.style.color = "var(--danger)";
         }
+        if(statusEl) {
+            statusEl.style.color = "var(--danger)";
+            statusEl.innerText = (this.lang === 'np' ? "दोहोरिएका नामहरू: " : "Duplicates: ") + uniqueDupes.join(', ');
+        }
+    } else {
+        if(iconEl) {
+            iconEl.innerText = "✔";
+            iconEl.style.color = "var(--success)";
+        }
+        if(statusEl) {
+            statusEl.style.color = "var(--success)";
+            statusEl.innerText = this.translations[this.lang].status;
+        }
+    }
 
-        this.names = rawNames;
-        document.getElementById('valCount').innerText = this.names.length;
-        this.draw();
-    },
+    this.names = rawNames;
+    document.getElementById('valCount').innerText = this.names.length;
+    this.draw();
+},
 
-    removeDuplicates() {
-        const unique = [...new Set(this.names)];
-        document.getElementById('mainInput').value = unique.join('\n');
-        this.sync();
-        
-        Swal.fire({
-            toast: true,
-            position: 'top-end',
-            icon: 'success',
-            title: this.lang === 'np' ? 'डुप्लिकेटहरू हटाइयो' : 'Duplicates removed',
-            showConfirmButton: false,
-            timer: 2000
-        });
-    },
+removeDuplicates() {
+    // 3. Keep first occurrence, remove others
+    const unique = [...new Set(this.names)];
+    document.getElementById('mainInput').value = unique.join('\n');
+    this.sync();
+    
+    Swal.fire({
+        toast: true,
+        position: 'top-end',
+        icon: 'success',
+        title: this.lang === 'np' ? 'डुप्लिकेटहरू हटाइयो' : 'Duplicates removed',
+        showConfirmButton: false,
+        timer: 2000
+    });
+},
 
     draw() {
         const canvas = document.getElementById('wheelCanvas');
@@ -531,7 +539,6 @@ document.getElementById('valTotalSpins').innerText = this.totalSpins;
         document.getElementById('mainInput').value = this.names.join('\n');
         this.sync();
     },
-
     reset() { if(confirm("Clear everything?")) { document.getElementById('mainInput').value=""; this.sync(); } },
     clearHistory() { this.history = []; document.getElementById('historyList').innerHTML = ""; },
     importFile(e) {
@@ -545,12 +552,7 @@ document.getElementById('valTotalSpins').innerText = this.totalSpins;
         a.download = "TeamSpin_List.txt"; a.click();
     }
 };
-
 window.onload = () => logic.init();
 </script>
 </body>
 </html>
-
-
-
-
