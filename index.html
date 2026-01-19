@@ -99,24 +99,37 @@
     justify-content: center;
     background-color: var(--bg-body);
 }
+/* --- CLEANED FULLSCREEN STYLE --- */
+.canvas-wrapper:fullscreen {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    background-color: #0f172a !important; 
+    z-index: 9999;
+}
 
 .canvas-wrapper:fullscreen #wheelCanvas {
-    /* This "85vh" is the magic number for full-screen size */
     height: 85vh !important;
     width: 85vh !important;
-    max-width: none !important;
+    max-width: 85vh !important;
+    visibility: visible !important;
 }
 
 .canvas-wrapper:fullscreen .wheel-indicator {
-    width: 8vh;  /* Slightly larger for TV/Monitors */
-    top: 2vh;    /* Positioned relative to screen height */
+    width: 8vh;
+    top: 2vh;
 }
     .canvas-wrapper:hover { transform: scale(1.02); }
     #wheelCanvas { width: 100%; height: 100%; display: block; filter: drop-shadow(0 15px 30px rgba(0,0,0,0.2)); }
     
-    .wheel-indicator {
-        position: absolute; top: -15px; left: 50%; transform: translateX(-50%);
-        z-index: 50; width: 50px; filter: drop-shadow(0 4px 10px rgba(0,0,0,0.3));
+ .wheel-indicator {
+        position: absolute; 
+        top: -10px; /* Moves it slightly down so it touches the wheel */
+        left: 50%; 
+        transform: translateX(-50%);
+        z-index: 100; /* Ensures it sits on top of everything */
+        width: 60px; 
+        filter: drop-shadow(0 4px 10px rgba(0,0,0,0.3));
     }
 
     /* --- INPUTS & BUTTONS --- */
@@ -444,14 +457,18 @@ document.getElementById('valTotalSpins').innerText = this.totalSpins;
         document.getElementById('valCount').innerText = this.names.length;
         this.draw();
     },
+        draw() {
+    const canvas = document.getElementById('wheelCanvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    
+    // Add these two lines to ensure internal resolution matches
+    canvas.width = 900; 
+    canvas.height = 900;
 
-    draw() {
-        const canvas = document.getElementById('wheelCanvas');
-        if (!canvas) return;
-        const ctx = canvas.getContext('2d');
-        const center = canvas.width / 2;
-        const radius = center - 15;
-        
+    const center = canvas.width / 2;
+    const radius = center - 15;
+       
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
         if (this.names.length === 0) {
@@ -565,6 +582,28 @@ finish() {
     localStorage.setItem('ts_lifetime_spins', this.totalSpins); 
     document.getElementById('valTotalSpins').innerText = this.totalSpins;
 
+    // --- 3. EFFECTS & ALERTS ---finish() {
+    this.isSpinning = false;
+    
+    // 1. Calculate the arc width per name
+    const arc = (Math.PI * 2) / this.names.length;
+    
+    // 2. Normalize angle to 0 - 2PI range
+    const normalizedAngle = this.angle % (Math.PI * 2);
+    
+    // 3. The pointer is at the top (1.5 * PI). 
+    // We calculate index by rotating the coordinate system back.
+    let idx = Math.floor((Math.PI * 2 - (normalizedAngle + Math.PI / 2) % (Math.PI * 2)) / arc);
+    
+    // Double check bounds for safety
+    idx = (idx + this.names.length) % this.names.length;
+    const winner = this.names[idx];
+
+    // --- 2. UPDATE & SAVE LIFETIME SPINS ---
+    this.totalSpins++; 
+    localStorage.setItem('ts_lifetime_spins', this.totalSpins); 
+    document.getElementById('valTotalSpins').innerText = this.totalSpins;
+
     // --- 3. EFFECTS & ALERTS ---
     confetti({ 
         particleCount: 150, 
@@ -581,20 +620,19 @@ finish() {
 
     Swal.fire({
         title: this.translations[this.lang].winner,
-        html: `<h2 style="color:#2563eb; font-size:3rem;">${winner}</h2>`,
+        html: `<h2 style="color:#2563eb; font-size:3rem; margin:10px 0;">${winner}</h2>`,
         icon: 'success',
         confirmButtonColor: '#2563eb'
     });
 
     this.addToHistory(winner);
     
-    // --- 4. AUTO-REMOVE LOGIC ---
     if (document.getElementById('cfgRemove').checked) {
         this.names.splice(idx, 1);
         document.getElementById('mainInput').value = this.names.join('\n');
         this.sync();
     }
-},
+}
     addToHistory(name) {
         const time = new Date().toLocaleTimeString();
         this.history.unshift({name, time});
@@ -626,18 +664,35 @@ finish() {
     },
 
    /* --- REPLACE THE OLD toggleFullscreen WITH THIS --- */
+/* --- Replace the toggleFullscreen block inside logic: { ... } --- */
 toggleFullscreen() {
     const elem = document.querySelector('.canvas-wrapper');
-    if (!document.fullscreenElement) {
-        elem.requestFullscreen().then(() => {
-            // This forces the browser to re-render the wheel 
-            // so it stays sharp in full screen
-            setTimeout(() => this.draw(), 100);
-        }).catch(err => {
-            console.error(`Error: ${err.message}`);
-        });
+    
+    // Check for standard or vendor-prefixed fullscreen methods
+    const requestMethod = elem.requestFullscreen || 
+                          elem.webkitRequestFullscreen || 
+                          elem.mozRequestFullScreen || 
+                          elem.msRequestFullscreen;
+
+    if (!document.fullscreenElement && !document.webkitFullscreenElement) {
+        if (requestMethod) {
+            // Use .call(elem) because these methods must be executed on the element
+            requestMethod.call(elem).then(() => {
+                // Force a redraw after a tiny delay to ensure proper scaling
+                setTimeout(() => this.draw(), 150);
+            }).catch(err => {
+                console.error(`Fullscreen failed: ${err.message}`);
+            });
+        } else {
+            // Fallback for iOS Safari which doesn't support Div fullscreen
+            Swal.fire('Notice', 'Fullscreen for containers is not supported on this mobile browser. Please use a desktop or Android device.', 'info');
+        }
     } else {
-        document.exitFullscreen();
+        const exitMethod = document.exitFullscreen || 
+                           document.webkitExitFullscreen || 
+                           document.mozCancelFullScreen || 
+                           document.msExitFullscreen;
+        if (exitMethod) exitMethod.call(document);
     }
 }
 handleLogoUpload(e) {
@@ -702,6 +757,7 @@ window.onload = () => logic.init();
 </script>
 </body>
 </html>
+
 
 
 
