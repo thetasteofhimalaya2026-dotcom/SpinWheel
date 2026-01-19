@@ -363,39 +363,32 @@ const logic = {
         }
     },
 
-init() {
-    this.logoImg = new Image();
-    
-    // Load custom logo or default
-    const savedLogo = localStorage.getItem('ts_custom_logo');
-    this.logoImg.src = savedLogo || 'logo.jpg'; 
+    init() {
+        this.logoImg = new Image();
+        const savedLogo = localStorage.getItem('ts_custom_logo');
+        this.logoImg.src = savedLogo || 'logo.jpg'; 
+        this.logoImg.onload = () => this.draw();
+        
+        const logoInput = document.getElementById('logoUpload');
+        if(logoInput) logoInput.addEventListener('change', (e) => this.handleLogoUpload(e));
 
-    this.logoImg.onload = () => this.draw();
-    
-    // Cleanup: Attach listeners only if elements exist
-    const logoInput = document.getElementById('logoUpload');
-    if(logoInput) logoInput.addEventListener('change', (e) => this.handleLogoUpload(e));
+        let savedSpins = localStorage.getItem('ts_lifetime_spins');
+        if (!savedSpins) {
+            this.totalSpins = 25000;
+            localStorage.setItem('ts_lifetime_spins', 25000);
+        } else {
+            this.totalSpins = parseInt(savedSpins);
+        }
+        document.getElementById('valTotalSpins').innerText = this.totalSpins;
+        
+        document.getElementById('mainInput').addEventListener('input', () => this.sync());
+        const fsBtn = document.getElementById('btnFullScreen');
+        if(fsBtn) fsBtn.addEventListener('click', () => this.toggleFullscreen());
 
-   // Load Lifetime Spins
-let savedSpins = localStorage.getItem('ts_lifetime_spins');
-if (!savedSpins) {
-    // If it's a new user, start at 25000
-    this.totalSpins = 25000;
-    localStorage.setItem('ts_lifetime_spins', 25000);
-} else {
-    // If they have spun before, use the saved number
-    this.totalSpins = parseInt(savedSpins);
-}
-document.getElementById('valTotalSpins').innerText = this.totalSpins;
-    
-    document.getElementById('mainInput').addEventListener('input', () => this.sync());
-    
-    const fsBtn = document.getElementById('btnFullScreen');
-    if(fsBtn) fsBtn.addEventListener('click', () => this.toggleFullscreen());
+        this.sync();
+        this.changeLang(this.lang);
+    },
 
-    this.sync();
-    this.changeLang(this.lang);
-},
     changeLang(val) {
         this.lang = val;
         const t = this.translations[val];
@@ -426,7 +419,6 @@ document.getElementById('valTotalSpins').innerText = this.totalSpins;
         const val = document.getElementById('mainInput').value;
         const rawNames = val.split('\n').map(n => n.trim()).filter(n => n !== "");
         
-        // Duplicate Detection
         const seen = new Set();
         const duplicates = rawNames.filter(name => {
             const lower = name.toLowerCase();
@@ -440,15 +432,15 @@ document.getElementById('valTotalSpins').innerText = this.totalSpins;
         
         if (duplicates.length > 0) {
             const uniqueDupes = [...new Set(duplicates)];
-            if(iconEl) { iconEl.innerText = "⚠️"; iconEl.style.color = "var(--danger)"; }
+            if(iconEl) { iconEl.innerText = "⚠️"; iconEl.style.color = "red"; }
             if(statusEl) {
-                statusEl.style.color = "var(--danger)";
+                statusEl.style.color = "red";
                 statusEl.innerText = (this.lang === 'np' ? "दोहोरिएका नामहरू: " : "Duplicates: ") + uniqueDupes.join(', ');
             }
         } else {
-            if(iconEl) { iconEl.innerText = "✔"; iconEl.style.color = "var(--success)"; }
+            if(iconEl) { iconEl.innerText = "✔"; iconEl.style.color = "green"; }
             if(statusEl) {
-                statusEl.style.color = "var(--success)";
+                statusEl.style.color = "green";
                 statusEl.innerText = this.translations[this.lang].status;
             }
         }
@@ -457,18 +449,15 @@ document.getElementById('valTotalSpins').innerText = this.totalSpins;
         document.getElementById('valCount').innerText = this.names.length;
         this.draw();
     },
-        draw() {
-    const canvas = document.getElementById('wheelCanvas');
-    if (!canvas) return;
-    const ctx = canvas.getContext('2d');
-    
-    // Add these two lines to ensure internal resolution matches
-    canvas.width = 900; 
-    canvas.height = 900;
 
-    const center = canvas.width / 2;
-    const radius = center - 15;
-       
+    draw() {
+        const canvas = document.getElementById('wheelCanvas');
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
+        canvas.width = 900; 
+        canvas.height = 900;
+        const center = canvas.width / 2;
+        const radius = center - 15;
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
         if (this.names.length === 0) {
@@ -489,7 +478,6 @@ document.getElementById('valTotalSpins').innerText = this.totalSpins;
             ctx.moveTo(center, center);
             ctx.arc(center, center, radius, ang, ang + arc);
             ctx.fill();
-            
             ctx.strokeStyle = ui.theme === 'light' ? '#fff' : '#0f172a';
             ctx.lineWidth = 2;
             ctx.stroke();
@@ -504,33 +492,17 @@ document.getElementById('valTotalSpins').innerText = this.totalSpins;
             ctx.restore();
         });
 
-        // --- MOBILE RESPONSIVE LOGO ---
-        const logoSize = canvas.width * 0.14; // Scales with wheel size
+        const logoSize = canvas.width * 0.14;
         ctx.save();
-        
-        // Glow/Border
         ctx.beginPath();
         ctx.arc(center, center, (logoSize/2) + 6, 0, Math.PI * 2);
         ctx.fillStyle = "white";
-        ctx.shadowBlur = 15;
-        ctx.shadowColor = "rgba(0,0,0,0.15)";
         ctx.fill();
-
-        // Clip Circle
         ctx.beginPath();
         ctx.arc(center, center, logoSize/2, 0, Math.PI * 2);
         ctx.clip();
-
         if (this.logoImg && this.logoImg.complete && this.logoImg.naturalWidth !== 0) {
             ctx.drawImage(this.logoImg, center - logoSize/2, center - logoSize/2, logoSize, logoSize);
-        } else {
-            ctx.fillStyle = "#2563eb";
-            ctx.fillRect(center - logoSize/2, center - logoSize/2, logoSize, logoSize);
-            ctx.fillStyle = "white";
-            ctx.font = `bold ${logoSize/2.5}px Inter`;
-            ctx.textAlign = "center";
-            ctx.textBaseline = "middle";
-            ctx.fillText("T", center, center);
         }
         ctx.restore();
     },
@@ -538,13 +510,8 @@ document.getElementById('valTotalSpins').innerText = this.totalSpins;
     spin() {
         if (this.isSpinning || this.names.length < 2) return;
         this.isSpinning = true;
-        
         const sndSpin = document.getElementById('sndSpin');
-        const sndWin = document.getElementById('sndWin');
-
-        if (document.getElementById('cfgSound').checked) {
-            // Unlock audio
-            sndWin.play().then(() => { sndWin.pause(); sndWin.currentTime = 0; }).catch(() => {});
+        if (document.getElementById('cfgSound').checked && sndSpin) {
             sndSpin.currentTime = 0;
             sndSpin.play().catch(() => {});
         }
@@ -558,81 +525,48 @@ document.getElementById('valTotalSpins').innerText = this.totalSpins;
             const elapsed = time - start;
             const progress = Math.min(elapsed / duration, 1);
             const ease = 1 - Math.pow(1 - progress, 4); 
-            
             this.angle = startAngle + (spinRotation * ease);
             this.draw();
-            
             if (progress < 1) requestAnimationFrame(animate);
             else this.finish();
         };
         requestAnimationFrame(animate);
     },
-finish() {
-    this.isSpinning = false;
-    
-    // --- 1. CALCULATE THE WINNER (The Missing Part) ---
-    const arc = (Math.PI * 2) / this.names.length;
-    // Calculate which segment is at the top (12 o'clock position)
-    const normalizedAngle = ((this.angle % (Math.PI * 2)) + (Math.PI * 2)) % (Math.PI * 2);
-    const idx = Math.floor(( (Math.PI * 2) - (normalizedAngle + Math.PI / 2) % (Math.PI * 2) + (Math.PI * 2) ) % (Math.PI * 2) / arc);
-    const winner = this.names[idx];
 
-    // --- 2. UPDATE & SAVE LIFETIME SPINS ---
-    this.totalSpins++; 
-    localStorage.setItem('ts_lifetime_spins', this.totalSpins); 
-    document.getElementById('valTotalSpins').innerText = this.totalSpins;
+    finish() {
+        this.isSpinning = false;
+        const arc = (Math.PI * 2) / this.names.length;
+        const normalizedAngle = ((this.angle % (Math.PI * 2)) + (Math.PI * 2)) % (Math.PI * 2);
+        let idx = Math.floor(((Math.PI * 2) - (normalizedAngle + Math.PI / 2) % (Math.PI * 2) + (Math.PI * 2)) % (Math.PI * 2) / arc);
+        idx = (idx + this.names.length) % this.names.length;
+        const winner = this.names[idx];
 
-    // --- 3. EFFECTS & ALERTS ---finish() {
-    this.isSpinning = false;
-    
-    // 1. Calculate the arc width per name
-    const arc = (Math.PI * 2) / this.names.length;
-    
-    // 2. Normalize angle to 0 - 2PI range
-    const normalizedAngle = this.angle % (Math.PI * 2);
-    
-    // 3. The pointer is at the top (1.5 * PI). 
-    // We calculate index by rotating the coordinate system back.
-    let idx = Math.floor((Math.PI * 2 - (normalizedAngle + Math.PI / 2) % (Math.PI * 2)) / arc);
-    
-    // Double check bounds for safety
-    idx = (idx + this.names.length) % this.names.length;
-    const winner = this.names[idx];
+        this.totalSpins++; 
+        localStorage.setItem('ts_lifetime_spins', this.totalSpins); 
+        document.getElementById('valTotalSpins').innerText = this.totalSpins;
 
-    // --- 2. UPDATE & SAVE LIFETIME SPINS ---
-    this.totalSpins++; 
-    localStorage.setItem('ts_lifetime_spins', this.totalSpins); 
-    document.getElementById('valTotalSpins').innerText = this.totalSpins;
+        confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+        
+        if (document.getElementById('cfgSound').checked) {
+            const winSnd = document.getElementById('sndWin');
+            if(winSnd) { winSnd.currentTime = 0; winSnd.play().catch(() => {}); }
+        }
 
-    // --- 3. EFFECTS & ALERTS ---
-    confetti({ 
-        particleCount: 150, 
-        spread: 70, 
-        origin: { y: 0.6 },
-        colors: ['#2563eb', '#10b981', '#f59e0b', '#ef4444']
-    });
-    
-    if (document.getElementById('cfgSound').checked) {
-        const winSnd = document.getElementById('sndWin');
-        winSnd.currentTime = 0; 
-        winSnd.play().catch(() => {});
-    }
+        Swal.fire({
+            title: this.translations[this.lang].winner,
+            html: `<h2 style="color:#2563eb; font-size:3rem; margin:10px 0;">${winner}</h2>`,
+            icon: 'success'
+        });
 
-    Swal.fire({
-        title: this.translations[this.lang].winner,
-        html: `<h2 style="color:#2563eb; font-size:3rem; margin:10px 0;">${winner}</h2>`,
-        icon: 'success',
-        confirmButtonColor: '#2563eb'
-    });
+        this.addToHistory(winner);
+        
+        if (document.getElementById('cfgRemove').checked) {
+            this.names.splice(idx, 1);
+            document.getElementById('mainInput').value = this.names.join('\n');
+            this.sync();
+        }
+    },
 
-    this.addToHistory(winner);
-    
-    if (document.getElementById('cfgRemove').checked) {
-        this.names.splice(idx, 1);
-        document.getElementById('mainInput').value = this.names.join('\n');
-        this.sync();
-    }
-}
     addToHistory(name) {
         const time = new Date().toLocaleTimeString();
         this.history.unshift({name, time});
@@ -641,8 +575,33 @@ finish() {
             list.innerHTML = this.history.slice(0, 8).map(h => `
                 <li style="list-style:none; padding:8px; border-bottom:1px solid var(--border); font-size:14px;">
                     <strong>${h.name}</strong> <small style="color:var(--text-muted); float:right;">${h.time}</small>
-                </li>
-            `).join('');
+                </li>`).join('');
+        }
+    },
+
+    handleLogoUpload(e) {
+        const file = e.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = (event) => {
+            const img = new Image();
+            img.onload = () => {
+                this.logoImg = img; 
+                this.draw();
+                localStorage.setItem('ts_custom_logo', event.target.result);
+            };
+            img.src = event.target.result;
+        };
+        reader.readAsDataURL(file);
+    },
+
+    toggleFullscreen() {
+        const elem = document.querySelector('.canvas-wrapper');
+        const req = elem.requestFullscreen || elem.webkitRequestFullscreen || elem.mozRequestFullScreen || elem.msRequestFullscreen;
+        if (!document.fullscreenElement) {
+            if(req) req.call(elem).then(() => setTimeout(() => this.draw(), 150));
+        } else {
+            document.exitFullscreen?.();
         }
     },
 
@@ -656,100 +615,28 @@ finish() {
         const unique = [...new Set(this.names)];
         document.getElementById('mainInput').value = unique.join('\n');
         this.sync();
-        Swal.fire({
-            toast: true, position: 'top-end', icon: 'success',
-            title: this.lang === 'np' ? 'दोहोरिएका नामहरू हटाइयो' : 'Duplicates removed',
-            showConfirmButton: false, timer: 1500
-        });
     },
 
-   /* --- REPLACE THE OLD toggleFullscreen WITH THIS --- */
-/* --- Replace the toggleFullscreen block inside logic: { ... } --- */
-toggleFullscreen() {
-    const elem = document.querySelector('.canvas-wrapper');
-    
-    // Check for standard or vendor-prefixed fullscreen methods
-    const requestMethod = elem.requestFullscreen || 
-                          elem.webkitRequestFullscreen || 
-                          elem.mozRequestFullScreen || 
-                          elem.msRequestFullscreen;
-
-    if (!document.fullscreenElement && !document.webkitFullscreenElement) {
-        if (requestMethod) {
-            // Use .call(elem) because these methods must be executed on the element
-            requestMethod.call(elem).then(() => {
-                // Force a redraw after a tiny delay to ensure proper scaling
-                setTimeout(() => this.draw(), 150);
-            }).catch(err => {
-                console.error(`Fullscreen failed: ${err.message}`);
-            });
-        } else {
-            // Fallback for iOS Safari which doesn't support Div fullscreen
-            Swal.fire('Notice', 'Fullscreen for containers is not supported on this mobile browser. Please use a desktop or Android device.', 'info');
-        }
-    } else {
-        const exitMethod = document.exitFullscreen || 
-                           document.webkitExitFullscreen || 
-                           document.mozCancelFullScreen || 
-                           document.msExitFullscreen;
-        if (exitMethod) exitMethod.call(document);
-    }
-}
-handleLogoUpload(e) {
-    const file = e.target.files[0];
-    if (!file) return;
-
-    const reader = new FileReader();
-    reader.onload = (event) => {
-        const img = new Image();
-        img.onload = () => {
-            this.logoImg = img; 
-            this.draw(); // Instantly update the wheel center
-            localStorage.setItem('ts_custom_logo', event.target.result); // Save for next time
-        };
-        img.src = event.target.result;
-    };
-    reader.readAsDataURL(file);
-
-    Swal.fire({
-        toast: true,
-        position: 'top-end',
-        icon: 'success',
-        title: 'Logo Updated!',
-        showConfirmButton: false,
-        timer: 1500
-    });
-},
     resetLogo() {
-    localStorage.removeItem('ts_custom_logo');
-    this.logoImg.src = 'logo.jpg';
-    this.draw();
-    Swal.fire({
-        toast: true,
-        position: 'top-end',
-        icon: 'info',
-        title: this.lang === 'np' ? 'लोगो रिसेट गरियो' : 'Logo Reset to Default',
-        showConfirmButton: false,
-        timer: 1500
-    });
-},
-    reset() { 
-    const msg = this.lang === 'np' ? this.translations.np.confirmClear : "Clear everything?";
-    if(confirm(msg)) { 
-        document.getElementById('mainInput').value = ""; 
-        this.sync(); 
-    } 
-},
-    clearHistory() { this.history = []; document.getElementById('historyList').innerHTML = ""; },
-    importFile(e) {
-        const reader = new FileReader();
-        reader.onload = (ev) => { document.getElementById('mainInput').value = ev.target.result; this.sync(); };
-        reader.readAsText(e.target.files[0]);
+        localStorage.removeItem('ts_custom_logo');
+        this.logoImg = new Image();
+        this.logoImg.src = 'logo.jpg';
+        this.logoImg.onload = () => this.draw();
     },
+
+    reset() { 
+        if(confirm("Clear everything?")) { 
+            document.getElementById('mainInput').value = ""; 
+            this.sync(); 
+        } 
+    },
+
     exportNames() {
         const blob = new Blob([this.names.join('\n')], {type: 'text/plain'});
-        const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
-        a.download = "TeamSpin_List.txt"; a.click();
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = "TeamSpin_List.txt";
+        a.click();
     }
 };
 
@@ -757,6 +644,7 @@ window.onload = () => logic.init();
 </script>
 </body>
 </html>
+
 
 
 
